@@ -40,9 +40,47 @@ Bem-vindo ao repositório do **Voxy Digital**, um projeto de catálogo online. E
 ├── [package.json](http://_vscodecontentref_/3)        # Dependências Node.js
 └── [vite.config.ts](http://_vscodecontentref_/4)      # Configuração do Vite
 
+```
 ## ⚙️ Configuração do Ambiente
 
+1 - Clone o repositório
 ```
 git clone https://github.com/seu-usuario/seu-repositorio.git
 cd seu-repositorio
 ```
+
+2 - Instale as dependências do backend
+```
+composer install
+```
+
+3 - Instale as dependências do frontend
+```
+npm install
+```
+
+4 - Configure o arquivo .env
+```
+cp .env.example .env
+```
+-- Atualize as variáveis de ambiente conforme necessário.
+
+5 - Gere a chave da aplicação
+```
+php artisan key:generate
+```
+
+6 - Execute as migrações do banco de dados
+```
+php artisan migrate
+```
+
+7 - Inicie o servidor de desenvolvimento
+```
+npm run dev
+php artisan serve
+```
+
+## 📄 Licença
+
+- Esse projeto foi desenvolvido pela equipe da Voxy Digital.
