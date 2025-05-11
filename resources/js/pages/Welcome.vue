@@ -21,7 +21,7 @@ import LeadForm from "../components/LeadForm.vue";
       <meta property="og:url" content="https://www.voxydigital.com" />
       <meta name="twitter:card" content="summary_large_image" />
 
-      <!-- Google Analytics -->
+      <!-- Google Analytics
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
       <script>
         window.dataLayer = window.dataLayer || [];
@@ -33,7 +33,7 @@ import LeadForm from "../components/LeadForm.vue";
       </script>
 
       <!-- Meta Pixel -->
-      <script>
+      <!-- <script>
         !(function (f, b, e, v, n, t, s) {
           if (f.fbq) return;
           n = f.fbq = function () {
@@ -52,14 +52,14 @@ import LeadForm from "../components/LeadForm.vue";
         })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
         fbq("init", "XXXXXXXXXXXXXXX");
         fbq("track", "PageView");
-      </script>
-      <noscript
+      </script> -->
+      <!-- <noscript
         ><img
           height="1"
           width="1"
           style="display: none"
           src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXX&ev=PageView&noscript=1"
-      /></noscript>
+      /></noscript>  -->
     </Head>
 
     <!-- Header + CTA Section -->
