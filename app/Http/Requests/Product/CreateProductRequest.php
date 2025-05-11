@@ -29,7 +29,7 @@ class CreateProductRequest extends FormRequest
             'sale' => 'nullable|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'video' => 'nullable|url',
-            'notes' => 'nullable|string',
+            'note' => 'nullable|string',
         ];
     }
 }
