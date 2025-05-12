@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductsController;
 use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [HomeController::class, 'home'])
-    ->middleware(TenantMiddleware::class)
-    ->name('home');
+Route::middleware(TenantMiddleware::class)->group(function () {
+    Route::get('/', [HomeController::class, 'home']);
+    Route::post('/orders', [OrderController::class, 'store']);
+});
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');

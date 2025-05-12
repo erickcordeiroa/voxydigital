@@ -24,7 +24,7 @@
     <div class="fixed bottom-4 right-4 z-50" v-if="!isCartOpen">
       <button
         @click="isCartOpen = true"
-        class="bg-primary text-white px-4 py-2 rounded-full shadow-lg"
+        class="bg-primary text-white px-4 py-2 rounded-full shadow-lg cursor-pointer"
       >
         🛒 Carrinho ({{ cart.length }})
       </button>
@@ -33,76 +33,23 @@
     <!-- Main Content -->
     <div class="p-4 md:p-6 lg:p-10">
       <!-- Categorias com slider -->
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold mb-2">Categorias</h2>
-        <div class="flex overflow-x-auto gap-4">
-          <div
-            @click="filterByCategory(null)"
-            :class="{
-              'bg-primary text-white': selectedCategory === null,
-              'bg-muted hover:bg-primary/10 text-muted-foreground':
-                selectedCategory !== null,
-            }"
-            class="flex-shrink-0 px-4 py-2 rounded-lg cursor-pointer transition-colors whitespace-nowrap"
-          >
-            Todos os Itens
-          </div>
-          <div
-            v-for="category in categories"
-            :key="category.id"
-            @click="filterByCategory(category.id)"
-            :class="{
-              'bg-primary text-white': category.id === selectedCategory,
-              'bg-muted hover:bg-primary/10 text-muted-foreground':
-                category.id !== selectedCategory,
-            }"
-            class="flex-shrink-0 px-4 py-2 rounded-lg cursor-pointer transition-colors whitespace-nowrap"
-          >
-            {{ category.name }}
-          </div>
-        </div>
-      </div>
+      <CategorySlider
+        :categories="categories"
+        :selectedCategory="selectedCategory"
+        @categorySelect="filterByCategory"
+      />
 
       <!-- Produtos por categoria com slider -->
-      <div class="mb-10" v-for="category in categories" :key="category.id">
+      <div class="mb-8" v-for="category in categories" :key="category.id">
         <template v-if="selectedCategory === null || selectedCategory === category.id">
           <h3 class="text-lg font-bold mb-3">{{ category.name }}</h3>
           <div class="flex overflow-x-auto gap-4">
-            <Card
-              v-for="product in products.filter((p) => p.category_id === category.id)"
+            <ProductCard
+              v-for="product in filteredProductsByCategory(category.id)"
               :key="product.id"
-              class="w-64 flex-shrink-0 hover:shadow-lg transition-shadow"
-            >
-              <CardHeader>
-                <img
-                  :src="`/storage/${product.uri}`"
-                  :alt="product.name"
-                  class="rounded-md w-full h-40 object-cover"
-                />
-              </CardHeader>
-              <CardContent>
-                <h3 class="text-md font-semibold truncate">{{ product.name }}</h3>
-
-                <div v-if="product.sale">
-                  <p class="text-gray-500 line-through text-xs" >
-                  R$ {{ (product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2,}) }}
-                  </p>
-                  <p class="text-black font-bold">
-                  R$ {{ (product.sale ? product.sale / 100 : product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2,})}}
-                  </p>
-                </div>
-                <div v-else >
-                   <p class="text-black font-bold" >
-                  R$ {{ (product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2,}) }}
-                  </p>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="default" class="w-full" @click="addToCart(product)">
-                  Adicionar ao Carrinho
-                </Button>
-              </CardFooter>
-            </Card>
+              :product="product"
+              :addToCart="addToCart"
+            />
           </div>
         </template>
       </div>
@@ -169,7 +116,10 @@
                   <p class="mt-2 font-semibold whitespace-nowrap">
                     R$
                     {{
-                      (((item.sale ? item.sale : item.price) * item.quantity) / 100).toLocaleString("pt-BR", {
+                      (
+                        ((item.sale ? item.sale : item.price) * item.quantity) /
+                        100
+                      ).toLocaleString("pt-BR", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })
@@ -179,19 +129,6 @@
               </div>
             </li>
           </ul>
-
-          <div class="mb-4">
-            <label for="obs" class="block text-sm font-medium mb-1"
-              >Observações do Pedido</label
-            >
-            <textarea
-              id="obs"
-              v-model="orderNote"
-              rows="3"
-              placeholder="Ex: Entregar após às 18h"
-              class="w-full border border-gray-300 rounded px-3 py-2"
-            ></textarea>
-          </div>
 
           <div class="mb-4 text-right text-lg">
             <p>
@@ -203,19 +140,10 @@
                 })
               }}
             </p>
-            <p v-if="discountValue > 0" class="text-green-600">
-              Desconto: - R$
-              {{
-                (discountValue / 100).toLocaleString("pt-BR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-              }}
-            </p>
             <p class="font-bold text-primary mt-2">
               Total: R$
               {{
-                ((cartTotal - discountValue) / 100).toLocaleString("pt-BR", {
+                (cartTotal / 100).toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
@@ -232,29 +160,114 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal de Confirmação de Pedido -->
+  <div
+    v-if="showOrderConfirmation"
+    class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center"
+  >
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Confirmar Pedido</h2>
+        <button
+          @click="showOrderConfirmation = false"
+          class="text-gray-500 hover:text-gray-700"
+        >
+          ✖
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="customer_name" class="block text-sm font-medium mb-1"
+            >Nome para contato</label
+          >
+          <input
+            id="customer_name"
+            v-model="customerInfo.name"
+            type="text"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="customer_phone" class="block text-sm font-medium mb-1"
+            >Telefone</label
+          >
+          <input
+            id="customer_phone"
+            v-model="customerInfo.phone"
+            type="tel"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="delivery_address" class="block text-sm font-medium mb-1"
+            >Endereço de entrega</label
+          >
+          <textarea
+            id="delivery_address"
+            v-model="customerInfo.address"
+            rows="3"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+            required
+          ></textarea>
+        </div>
+
+        <div>
+          <label for="delivery_note" class="block text-sm font-medium mb-1"
+            >Observações adicionais</label
+          >
+          <textarea
+            id="delivery_note"
+            v-model="customerInfo.note"
+            rows="2"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+          ></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-4">
+          <Button variant="outline" @click="showOrderConfirmation = false"
+            >Cancelar</Button
+          >
+          <Button @click="submitOrder">Confirmar Pedido</Button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { ref, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
-
-const selectedCategory = ref(null);
-const cart = ref([]);
-const isCartOpen = ref(false);
-const discountCode = ref("");
-const orderNote = ref("");
+import CategorySlider from "@/components/home/CategorySlider.vue";
+import ProductCard from "@/components/home/ProductCard.vue";
+import { Button } from "@/components/ui/button";
+import { router } from "@inertiajs/vue3";
 
 const { props } = usePage();
-
 const categories = ref(props.categories);
 const products = ref(props.products);
 const tenant = ref(props.tenant);
 
+const selectedCategory = ref(null);
+const cart = ref([]);
+const isCartOpen = ref(false);
+const orderNote = ref("");
+
 const filterByCategory = (categoryId) => {
   selectedCategory.value = categoryId;
+};
+
+const filteredProductsByCategory = (categoryId) => {
+  return products.value.filter(
+    (product) =>
+      product.category_id === categoryId &&
+      (!selectedCategory.value || product.category_id === selectedCategory.value)
+  );
 };
 
 const addToCart = (product) => {
@@ -285,28 +298,54 @@ const getCategoryName = (categoryId) => {
 };
 
 const cartTotal = computed(() => {
-  return cart.value.reduce((total, item) => total + (item.sale ? item.sale : item.price) * item.quantity, 0);
+  return cart.value.reduce(
+    (total, item) => total + (item.sale ? item.sale : item.price) * item.quantity,
+    0
+  );
 });
 
-const discountValue = computed(() => {
-  if (discountCode.value === "DESCONTO10") {
-    return cartTotal.value * 0.1;
-  }
-  return 0;
+// Finalização do pedido
+const showOrderConfirmation = ref(false);
+const customerInfo = ref({
+  name: "",
+  phone: "",
+  address: "",
+  note: "",
 });
 
 const finalizarPedido = () => {
-  const resumo = cart.value.map((item) => `${item.name} (x${item.quantity})`).join(", ");
-  const mensagem = `Olá, gostaria de fazer um pedido: ${resumo}. Total: R$ ${(
-    cartTotal.value - discountValue.value
-  ).toFixed(2)}. Observações: ${orderNote.value}`;
-  const url = `https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, "_blank");
+  if (!cart.value.length) return;
+  showOrderConfirmation.value = true;
+};
 
+const submitOrder = async () => {
+  const orderData = {
+    tenant_id: tenant.value.id,
+    customer_name: customerInfo.value.name,
+    customer_phone: customerInfo.value.phone,
+    delivery_address: customerInfo.value.address,
+    note: customerInfo.value.note || orderNote.value,
+    items: cart.value.map((item) => ({
+      product_id: item.id,
+      quantity: item.quantity,
+      price: item.sale ? item.sale : item.price,
+    })),
+    total: cartTotal.value,
+  };
+
+  router.post("/orders", orderData);
+
+  // Limpar carrinho e mostrar mensagem de sucesso
   cart.value = [];
-  discountCode.value = "";
   orderNote.value = "";
+  customerInfo.value = {
+    name: "",
+    phone: "",
+    address: "",
+    note: "",
+  };
   isCartOpen.value = false;
+  showOrderConfirmation.value = false;
 };
 </script>
 
