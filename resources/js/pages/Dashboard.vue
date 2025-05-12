@@ -2,35 +2,255 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import BarChart from '@/components/ui/chart/BarChart.vue';
+import LineChart from '@/components/ui/chart/LineChart.vue';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {ref} from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
+  {
+    title: 'Dashboard',
+    href: '/dashboard',
+  },
 ];
+
+// Dados mockados
+const metrics = {
+  totalProducts: 124,
+  totalOrders: 42,
+  totalRevenue: 12560.80,
+  weeklyGrowth: 12.5,
+};
+
+const weeklyOrdersData = ref([
+  { name: 'Seg', value: 12 },
+  { name: 'Ter', value: 19 },
+  { name: 'Qua', value: 15 },
+  { name: 'Qui', value: 8 },
+  { name: 'Sex', value: 22 },
+  { name: 'Sáb', value: 18 },
+  { name: 'Dom', value: 10 },
+]);
+
+const revenueData = ref([
+  { name: 'Seg', value: 1850 },
+  { name: 'Ter', value: 3200 },
+  { name: 'Qua', value: 2800 },
+  { name: 'Qui', value: 1500 },
+  { name: 'Sex', value: 4200 },
+  { name: 'Sáb', value: 3800 },
+  { name: 'Dom', value: 2100 },
+]);
+
+const recentOrders = [
+  { id: '#1025', customer: 'João Silva', amount: 189.90, status: 'completed', date: '2023-11-15' },
+  { id: '#1024', customer: 'Maria Oliveira', amount: 245.50, status: 'processing', date: '2023-11-14' },
+  { id: '#1023', customer: 'Carlos Souza', amount: 89.90, status: 'pending', date: '2023-11-14' },
+  { id: '#1022', customer: 'Ana Costa', amount: 320.75, status: 'completed', date: '2023-11-13' },
+  { id: '#1021', customer: 'Pedro Santos', amount: 156.30, status: 'completed', date: '2023-11-12' },
+];
+
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(value);
+};
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('pt-BR');
+};
+
+const getStatusColor = (status: string) => {
+  const statusColors = {
+    completed: 'bg-green-100 text-green-800',
+    processing: 'bg-blue-100 text-blue-800',
+    pending: 'bg-yellow-100 text-yellow-800',
+    cancelled: 'bg-red-100 text-red-800',
+  };
+  return statusColors[status] || 'bg-gray-100 text-gray-800';
+};
+
+const getStatusText = (status: string) => {
+  const statusTexts = {
+    completed: 'Concluído',
+    processing: 'Em preparo',
+    pending: 'Pendente',
+    cancelled: 'Cancelado',
+  };
+  return statusTexts[status] || status;
+};
 </script>
 
 <template>
-    <Head title="Dashboard" />
+  <Head title="Dashboard" />
 
-    <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
+  <AppLayout :breadcrumbs="breadcrumbs">
+    <div class="flex h-full flex-1 flex-col gap-6 p-6">
+      <!-- Cards de Métricas -->
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle class="text-sm font-medium">Produtos Cadastrados</CardTitle>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              class="h-4 w-4 text-muted-foreground"
+            >
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div class="text-2xl font-bold">{{ metrics.totalProducts }}</div>
+            <p class="text-xs text-muted-foreground">Total de produtos no sistema</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle class="text-sm font-medium">Pedidos Recebidos</CardTitle>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              class="h-4 w-4 text-muted-foreground"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div class="text-2xl font-bold">{{ metrics.totalOrders }}</div>
+            <p class="text-xs text-muted-foreground">
+              <span
+                :class="metrics.weeklyGrowth >= 0 ? 'text-green-500' : 'text-red-500'"
+              >
+                {{ metrics.weeklyGrowth >= 0 ? "+" : "" }}{{ metrics.weeklyGrowth }}%
+              </span>
+              em relação à semana passada
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle class="text-sm font-medium">Valor Total</CardTitle>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              class="h-4 w-4 text-muted-foreground"
+            >
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div class="text-2xl font-bold">
+              {{ formatCurrency(metrics.totalRevenue) }}
             </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
-                <PlaceholderPattern />
+            <p class="text-xs text-muted-foreground">Faturamento total</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle class="text-sm font-medium">Média por Pedido</CardTitle>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              class="h-4 w-4 text-muted-foreground"
+            >
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div class="text-2xl font-bold">
+              {{ formatCurrency(metrics.totalRevenue / metrics.totalOrders) }}
             </div>
-        </div>
-    </AppLayout>
+            <p class="text-xs text-muted-foreground">Ticket médio</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="grid gap-4 md:grid-cols-2">
+        <Card class="p-4">
+          <CardHeader>
+            <CardTitle>Pedidos na Última Semana</CardTitle>
+          </CardHeader>
+          <CardContent class="h-[300px]">
+            <BarChart :data="weeklyOrdersData" />
+          </CardContent>
+        </Card>
+
+        <Card class="p-4">
+          <CardHeader>
+            <CardTitle>Faturamento Diário</CardTitle>
+          </CardHeader>
+          <CardContent class="h-[300px]">
+            <LineChart :data="revenueData" />
+          </CardContent>
+        </Card>
+      </div>
+
+      <!-- Últimos Pedidos -->
+      <Card>
+        <CardHeader>
+          <CardTitle>Últimos Pedidos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead class="w-[100px]">Pedido</TableHead>
+                <TableHead>Cliente</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead class="text-right">Valor</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow v-for="order in recentOrders" :key="order.id">
+                <TableCell class="font-medium">{{ order.id }}</TableCell>
+                <TableCell>{{ order.customer }}</TableCell>
+                <TableCell>{{ formatDate(order.date) }}</TableCell>
+                <TableCell>
+                  <span
+                    class="rounded-full px-3 py-1 text-xs font-medium"
+                    :class="getStatusColor(order.status)"
+                  >
+                    {{ getStatusText(order.status) }}
+                  </span>
+                </TableCell>
+                <TableCell class="text-right">{{
+                  formatCurrency(order.amount)
+                }}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  </AppLayout>
 </template>
