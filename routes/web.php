@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware(TenantMiddleware::class)->group(function () {
-    Route::get('/', [HomeController::class, 'home']);
+    Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::post('/orders', [OrderController::class, 'store']);
 });
 
@@ -18,6 +18,8 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function () {
+    Route::get('orders', [OrderController::class, 'index']);
+
     Route::resource('categories', CategoriesController::class);
 
     Route::get('products', [ProductsController::class, "index"]);

@@ -6,10 +6,31 @@ use App\Http\Requests\Order\CreateOrderRequest;
 use App\Models\Order;
 use App\Models\OrderItems;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = Order::with('items.product')->latest();
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('customer_name', 'like', "%{$search}%")
+                    ->orWhere('customer_phone', 'like', "%{$search}%")
+                    ->orWhere('id', 'like', "%{$search}%");
+            });
+        }
+
+        $orders = $query->paginate(10);
+
+        return Inertia::render('orders/Index', [
+            'orders' => $orders,
+            'filters' => $request->only(['search']),
+        ]);
+    }
+
     public function store(CreateOrderRequest $request)
     {
         $data = $request->validated();
