@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Trait\Tenantable;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+
+    use Tenantable;
+    
     protected $fillable = [
         'id',
         'tenant_id',

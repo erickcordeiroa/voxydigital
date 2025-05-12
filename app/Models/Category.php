@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Trait\Tenantable;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+
+    use Tenantable;
+
     protected $fillable = [
         'id',
         'tenant_id',

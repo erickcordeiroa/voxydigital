@@ -9,12 +9,14 @@
         class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white"
       >
         <img
-          src="https://placehold.co/100"
+          :src="`/storage/${tenant.logo}`"
           alt="Logo da Loja"
-          class="rounded-full mb-2"
+          class="rounded-full mb-2 w-26 h-26"
         />
-        <h1 class="text-3xl font-bold">Loja Exemplo</h1>
-        <p class="text-sm">Contato: (11) 99999-9999 | Seg a Sex: 08h - 18h</p>
+        <h1 class="text-3xl font-bold">{{ tenant.name }}</h1>
+        <p class="text-sm">
+          Contato: {{ formatPhoneNumber(tenant.whatsapp) }} | Seg a Sex: 08h - 18h
+        </p>
       </div>
     </div>
 
@@ -67,20 +69,33 @@
           <h3 class="text-lg font-bold mb-3">{{ category.name }}</h3>
           <div class="flex overflow-x-auto gap-4">
             <Card
-              v-for="product in products.filter((p) => p.category === category.id)"
+              v-for="product in products.filter((p) => p.category_id === category.id)"
               :key="product.id"
               class="w-64 flex-shrink-0 hover:shadow-lg transition-shadow"
             >
               <CardHeader>
                 <img
-                  :src="product.image"
+                  :src="`/storage/${product.uri}`"
                   :alt="product.name"
                   class="rounded-md w-full h-40 object-cover"
                 />
               </CardHeader>
               <CardContent>
                 <h3 class="text-md font-semibold truncate">{{ product.name }}</h3>
-                <p class="text-primary font-bold">R$ {{ product.price.toFixed(2) }}</p>
+
+                <div v-if="product.sale">
+                  <p class="text-gray-500 line-through text-xs" >
+                  R$ {{ (product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2,}) }}
+                  </p>
+                  <p class="text-black font-bold">
+                  R$ {{ (product.sale ? product.sale / 100 : product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2,})}}
+                  </p>
+                </div>
+                <div v-else >
+                   <p class="text-black font-bold" >
+                  R$ {{ (product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2,}) }}
+                  </p>
+                </div>
               </CardContent>
               <CardFooter>
                 <Button variant="default" class="w-full" @click="addToCart(product)">
@@ -115,7 +130,7 @@
           >
             <li v-for="item in cart" :key="item.id" class="py-4 flex gap-4">
               <img
-                :src="item.image"
+                :src="`/storage/${item.uri}`"
                 alt="imagem do produto"
                 class="w-16 h-16 rounded object-cover"
               />
@@ -154,7 +169,7 @@
                   <p class="mt-2 font-semibold whitespace-nowrap">
                     R$
                     {{
-                      (item.price * item.quantity).toLocaleString("pt-BR", {
+                      (((item.sale ? item.sale : item.price) * item.quantity) / 100).toLocaleString("pt-BR", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })
@@ -182,7 +197,7 @@
             <p>
               Subtotal: R$
               {{
-                cartTotal.toLocaleString("pt-BR", {
+                (cartTotal / 100).toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
@@ -191,7 +206,7 @@
             <p v-if="discountValue > 0" class="text-green-600">
               Desconto: - R$
               {{
-                discountValue.toLocaleString("pt-BR", {
+                (discountValue / 100).toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
@@ -200,7 +215,7 @@
             <p class="font-bold text-primary mt-2">
               Total: R$
               {{
-                (cartTotal - discountValue).toLocaleString("pt-BR", {
+                ((cartTotal - discountValue) / 100).toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })
@@ -224,6 +239,7 @@ import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ref, computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
 const selectedCategory = ref(null);
 const cart = ref([]);
@@ -231,84 +247,11 @@ const isCartOpen = ref(false);
 const discountCode = ref("");
 const orderNote = ref("");
 
-const categories = ref([
-  { id: 1, name: "Eletrônicos" },
-  { id: 2, name: "Roupas" },
-  { id: 3, name: "Livros" },
-]);
+const { props } = usePage();
 
-const products = ref([
-  {
-    id: 1,
-    name: "Smartphone",
-    price: 1999.99,
-    category: 1,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 2,
-    name: "Camiseta",
-    price: 49.99,
-    category: 2,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 3,
-    name: "Livro de Programação",
-    price: 89.99,
-    category: 3,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 4,
-    name: "Notebook",
-    price: 3299.99,
-    category: 1,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 5,
-    name: "Fone Bluetooth",
-    price: 199.99,
-    category: 1,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 6,
-    name: "Calça Jeans",
-    price: 129.99,
-    category: 2,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 7,
-    name: "Vestido Floral",
-    price: 159.99,
-    category: 2,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 8,
-    name: "Livro de Marketing",
-    price: 99.9,
-    category: 3,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 9,
-    name: "Tablet Android",
-    price: 1499.99,
-    category: 1,
-    image: "https://placehold.co/400",
-  },
-  {
-    id: 10,
-    name: "Camisa Polo",
-    price: 89.99,
-    category: 2,
-    image: "https://placehold.co/400",
-  },
-]);
+const categories = ref(props.categories);
+const products = ref(props.products);
+const tenant = ref(props.tenant);
 
 const filterByCategory = (categoryId) => {
   selectedCategory.value = categoryId;
@@ -323,6 +266,15 @@ const addToCart = (product) => {
   }
 };
 
+const formatPhoneNumber = (whatsapp) => {
+  const cleaned = whatsapp.replace(/\D/g, "");
+  const match = cleaned.match(/^(\d{2})(\d{4,5})(\d{4})$/);
+  if (match) {
+    return `(${match[1]}) ${match[2]}-${match[3]}`;
+  }
+  return whatsapp;
+};
+
 const removeFromCart = (productId) => {
   cart.value = cart.value.filter((item) => item.id !== productId);
 };
@@ -333,7 +285,7 @@ const getCategoryName = (categoryId) => {
 };
 
 const cartTotal = computed(() => {
-  return cart.value.reduce((total, item) => total + item.price * item.quantity, 0);
+  return cart.value.reduce((total, item) => total + (item.sale ? item.sale : item.price) * item.quantity, 0);
 });
 
 const discountValue = computed(() => {
