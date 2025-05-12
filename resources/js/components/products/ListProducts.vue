@@ -28,7 +28,7 @@ defineEmits(["edit", "delete"]);
         <img
           :src="product.uri"
           alt="Imagem do produto"
-          class="h-16 w-16 object-cover rounded-md border"
+          class="h-24 w-24 object-cover rounded-md border"
         />
         <div>
           <h3 class="text-lg font-semibold">{{ product.name }}</h3>

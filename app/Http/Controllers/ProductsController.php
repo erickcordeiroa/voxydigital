@@ -52,17 +52,18 @@ class ProductsController extends Controller
         Product::create($data);
     }
 
-    public function update(int $id, array $data)
+    public function update(int $id, Request $request)
     {
         $product = Product::find($id);
+        $data = $request->all();
 
-        if (isset($data['image'])) {
+        if ($request->hasFile('image')) {
             // Remove a imagem antiga, se existir
             if ($product->uri) {
                 $this->deleteImage($product->uri);
             }
 
-            $data['uri'] = $this->uploadImage($data['image']);
+            $data['uri'] = $this->uploadImage($request->file('image'));
         }
 
         $product->update($data);

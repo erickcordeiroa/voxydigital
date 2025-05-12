@@ -20,6 +20,7 @@ const props = defineProps<{
     description: string;
     image: string | null;
     video?: string;
+    note: string;
   } | null;
   isEditing?: boolean;
   categories: { id: number; name: string }[];
@@ -88,6 +89,7 @@ watch(
       form.value.description = newProduct.description;
       form.value.video = newProduct.video || "";
       imagePreview.value = newProduct.image || null;
+      form.value.note = newProduct.note || null;
     } else {
       form.value.name = "";
       form.value.price = "";
@@ -98,6 +100,7 @@ watch(
       form.value.image = null;
       form.value.video = "";
       imagePreview.value = null;
+      form.value.note = null;
     }
   },
   { immediate: true }
@@ -157,14 +160,14 @@ function submit() {
     form.value.sale ? parseCurrencyToCents(form.value.sale).toString() : ""
   );
   formData.append("category_id", form.value.category_id);
-  formData.append("status", form.value.status);
+  formData.append("status", form.value.status == 'active'? 1:0);
   formData.append("description", form.value.description);
   formData.append("video", form.value.video || "");
   formData.append("note", form.value.note || "");
   formData.append("image", form.value.image);
 
   if (props.isEditing && props.product) {
-    router.put(`/products/${props.product.id}`, formData, {
+    router.post(`/products/${props.product.id}`, formData, {
       onSuccess: (response) => {
         emit("product-saved", response.data);
         emit("update:open", false);
