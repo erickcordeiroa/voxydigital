@@ -4,9 +4,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { Chart, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import { Chart, BarElement, CategoryScale, LinearScale, BarController } from 'chart.js';
 
-Chart.register(BarElement, CategoryScale, LinearScale);
+Chart.register(BarElement, CategoryScale, LinearScale, BarController);
 
 const props = defineProps({
   data: {

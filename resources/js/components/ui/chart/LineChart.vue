@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import { Chart, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Filler } from 'chart.js';
+import { Chart, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Filler, LineController } from 'chart.js';
 
 // Registra os componentes necessários do Chart.js
 Chart.register(
@@ -13,7 +13,8 @@ Chart.register(
   CategoryScale,
   LinearScale,
   Tooltip,
-  Filler
+  Filler,
+  LineController
 );
 
 const props = defineProps({
