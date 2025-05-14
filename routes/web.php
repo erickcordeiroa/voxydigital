@@ -10,7 +10,7 @@ use Inertia\Inertia;
 
 Route::middleware(TenantMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
-    Route::post('/orders', [OrderController::class, 'store']);
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });
 
 Route::get('dashboard', function () {

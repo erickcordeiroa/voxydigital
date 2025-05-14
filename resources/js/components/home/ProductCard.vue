@@ -24,7 +24,11 @@
       </div>
     </CardContent>
     <CardFooter>
-      <Button variant="default" class="w-full cursor-pointer" @click="addToCart(product)">
+      <Button 
+        variant="default" 
+        class="w-full cursor-pointer" 
+        @click="handleAddToCart"
+      >
         Adicionar ao Carrinho
       </Button>
     </CardFooter>
@@ -34,10 +38,17 @@
 <script setup lang="ts">
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { defineProps } from "vue";
 
 const props = defineProps({
-  product: Object,
-  addToCart: Function,
+  product: {
+    type: Object,
+    required: true
+  }
 });
+
+const emit = defineEmits(['add-to-cart']);
+
+const handleAddToCart = () => {
+  emit('add-to-cart', props.product);
+};
 </script>
