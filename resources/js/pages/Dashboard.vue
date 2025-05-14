@@ -6,7 +6,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import BarChart from '@/components/ui/chart/BarChart.vue';
 import LineChart from '@/components/ui/chart/LineChart.vue';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import {ref} from 'vue';
+import {ref, defineProps} from 'vue';
+
+const props = defineProps<{
+  totalProducts: number;
+  totalOrdersReceived: number;
+  totalOrderValues: number;
+  averageOrderValue: number;
+  recentOrders: Array;
+  weeklyOrdersData: Array;
+  revenueData: Array;
+}>();
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -15,41 +25,16 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-// Dados mockados
 const metrics = {
-  totalProducts: 124,
-  totalOrders: 42,
-  totalRevenue: 12560.80,
-  weeklyGrowth: 12.5,
+  totalProducts: props.totalProducts || 0,
+  totalOrders: props.totalOrdersReceived || 0,
+  totalRevenue: ((props.totalOrderValues) /100).toFixed(2),
+  weeklyGrowth: ((props.averageOrderValue) / 100).toFixed(2),
 };
 
-const weeklyOrdersData = ref([
-  { name: 'Seg', value: 12 },
-  { name: 'Ter', value: 19 },
-  { name: 'Qua', value: 15 },
-  { name: 'Qui', value: 8 },
-  { name: 'Sex', value: 22 },
-  { name: 'Sáb', value: 18 },
-  { name: 'Dom', value: 10 },
-]);
-
-const revenueData = ref([
-  { name: 'Seg', value: 1850 },
-  { name: 'Ter', value: 3200 },
-  { name: 'Qua', value: 2800 },
-  { name: 'Qui', value: 1500 },
-  { name: 'Sex', value: 4200 },
-  { name: 'Sáb', value: 3800 },
-  { name: 'Dom', value: 2100 },
-]);
-
-const recentOrders = [
-  { id: '#1025', customer: 'João Silva', amount: 189.90, status: 'completed', date: '2023-11-15' },
-  { id: '#1024', customer: 'Maria Oliveira', amount: 245.50, status: 'processing', date: '2023-11-14' },
-  { id: '#1023', customer: 'Carlos Souza', amount: 89.90, status: 'pending', date: '2023-11-14' },
-  { id: '#1022', customer: 'Ana Costa', amount: 320.75, status: 'completed', date: '2023-11-13' },
-  { id: '#1021', customer: 'Pedro Santos', amount: 156.30, status: 'completed', date: '2023-11-12' },
-];
+const weeklyOrdersData = ref(props.weeklyOrdersData);
+const revenueData = ref(props.revenueData);
+const recentOrders = props.recentOrders;
 
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('pt-BR', {
@@ -232,9 +217,9 @@ const getStatusText = (status: string) => {
             </TableHeader>
             <TableBody>
               <TableRow v-for="order in recentOrders" :key="order.id">
-                <TableCell class="font-medium">{{ order.id }}</TableCell>
-                <TableCell>{{ order.customer }}</TableCell>
-                <TableCell>{{ formatDate(order.date) }}</TableCell>
+                <TableCell class="font-medium">#{{ order.id }}</TableCell>
+                <TableCell>{{ order.customer_name }}</TableCell>
+                <TableCell>{{ formatDate(order.created_at) }}</TableCell>
                 <TableCell>
                   <span
                     class="rounded-full px-3 py-1 text-xs font-medium"
@@ -244,7 +229,7 @@ const getStatusText = (status: string) => {
                   </span>
                 </TableCell>
                 <TableCell class="text-right">{{
-                  formatCurrency(order.amount)
+                  formatCurrency((order.total/100))
                 }}</TableCell>
               </TableRow>
             </TableBody>
