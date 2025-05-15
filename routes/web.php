@@ -9,15 +9,16 @@ use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::domain('localhost')->group(function () {
-    Route::get('/', function(){
-        return Inertia::render('Welcome'); // Página da sua empresa
-    });
+Route::domain('localhost')->get('/', function(){
+    return Inertia::render('Welcome');
 });
 
-Route::domain('{tenant}.localhost')->middleware(TenantMiddleware::class)->group(function () {
+require __DIR__.'/auth_public.php';
+
+Route::middleware(TenantMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    require __DIR__.'/auth.php';
 });
 
 Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function () {
@@ -33,7 +34,4 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
 
 });
 
-
-
 require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
