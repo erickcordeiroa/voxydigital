@@ -45,7 +45,7 @@ const renderChart = () => {
         datasets: [
           {
             label: 'Faturamento (R$)',
-            data: props.data.map(item => item.value),
+            data: props.data.map(item => (item.value / 100)),
             backgroundColor: 'rgba(16, 185, 129, 0.1)',
             borderColor: 'rgba(16, 185, 129, 1)',
             borderWidth: 2,

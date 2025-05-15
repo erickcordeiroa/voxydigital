@@ -171,7 +171,7 @@ const getStatusText = (status: string) => {
           </CardHeader>
           <CardContent>
             <div class="text-2xl font-bold">
-              {{ formatCurrency(metrics.totalRevenue / metrics.totalOrders) }}
+              {{ formatCurrency(metrics.totalRevenue / metrics.totalOrders) || 0 }}
             </div>
             <p class="text-xs text-muted-foreground">Ticket médio</p>
           </CardContent>
@@ -229,7 +229,7 @@ const getStatusText = (status: string) => {
                   </span>
                 </TableCell>
                 <TableCell class="text-right">{{
-                  formatCurrency((order.total/100))
+                  formatCurrency(order.total / 100)
                 }}</TableCell>
               </TableRow>
             </TableBody>
