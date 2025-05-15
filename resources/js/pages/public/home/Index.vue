@@ -7,26 +7,55 @@
       :contact-phone="tenant.whatsapp"
     />
 
-    <CartButton 
-      v-if="!isCartOpen" 
-      :item-count="cart.length" 
+    <CartButton
+      v-if="!isCartOpen"
+      :item-count="cart.length"
       @open-cart="isCartOpen = true"
     />
 
     <div class="p-4 md:p-6 lg:p-10">
-      <CategorySlider
-        :categories="categories"
-        :selected-category="selectedCategory"
-        @category-select="filterByCategory"
-      />
 
-      <ProductSection
-        v-for="category in filteredCategories"
-        :key="category.id"
-        :category="category"
-        :products="products"
-        @add-to-cart="addToCart"
-      />
+      <!-- Verificação para exibir mensagem caso não haja produtos nem categorias -->
+      <div
+        v-if="categories.length == 0 && products.length == 0"
+        class="text-center text-gray-500"
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-16 w-16 text-gray-400 mb-4 mx-auto"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.75 9.75h4.5m-2.25-2.25v4.5m-7.5 9h15a2.25 2.25 0 002.25-2.25v-15A2.25 2.25 0 0019.5 3h-15A2.25 2.25 0 002.25 5.25v15A2.25 2.25 0 004.5 22.5z"
+          />
+        </svg>
+        <p class="text-lg font-semibold">Nenhuma informação disponível</p>
+        <p class="text-sm">
+          Esta empresa ainda não cadastrou produtos ou categorias. Volte mais tarde para conferir as novidades!
+        </p>
+      </div>
+
+      <div v-else>
+        <CategorySlider
+          :categories="categories"
+          :selected-category="selectedCategory"
+          @category-select="filterByCategory"
+        />
+
+        <ProductSection
+          v-for="category in filteredCategories"
+          :key="category.id"
+          :category="category"
+          :products="products"
+          @add-to-cart="addToCart"
+        />
+      </div>
     </div>
 
     <CartSidebar
@@ -58,7 +87,7 @@ import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vu
 import ProductSection from "@/components/products/ProductSection.vue";
 import CategorySlider from "@/components/home/CategorySlider.vue";
 import { Toaster } from "@/components/ui/sonner";
-import { toast } from 'vue-sonner'
+import { toast } from "vue-sonner";
 
 const { props } = usePage();
 const categories = ref(props.categories);
@@ -72,16 +101,16 @@ const showOrderConfirmation = ref(false);
 
 // Computed properties
 const filteredCategories = computed(() => {
-  return selectedCategory.value 
-    ? categories.value.filter(c => c.id === selectedCategory.value)
+  return selectedCategory.value
+    ? categories.value.filter((c) => c.id === selectedCategory.value)
     : categories.value;
 });
 
 const cartWithCategoryNames = computed(() => {
-  return cart.value.map(item => ({
+  return cart.value.map((item) => ({
     ...item,
     categoryName: getCategoryName(item.category_id),
-    imageUrl: `/storage/${item.uri}`
+    imageUrl: `/storage/${item.uri}`,
   }));
 });
 
@@ -101,16 +130,16 @@ const addToCart = (product) => {
   const existing = cart.value.find((item) => item.id === product.id);
   if (existing) {
     existing.quantity++;
-    toast.info('Quantidade atualizada', {
+    toast.info("Quantidade atualizada", {
       description: `${product.name} (${existing.quantity}x)`,
     });
   } else {
     cart.value.push({ ...product, quantity: 1 });
-    toast.success('Adicionado ao carrinho', {
+    toast.success("Adicionado ao carrinho", {
       description: product.name,
       action: {
-        label: 'Ver carrinho',
-        onClick: () => isCartOpen.value = true
+        label: "Ver carrinho",
+        onClick: () => (isCartOpen.value = true),
       },
     });
   }
@@ -121,12 +150,12 @@ const removeFromCart = (productId) => {
 };
 
 const increaseQuantity = (productId) => {
-  const item = cart.value.find(item => item.id === productId);
+  const item = cart.value.find((item) => item.id === productId);
   if (item) item.quantity++;
 };
 
 const decreaseQuantity = (productId) => {
-  const item = cart.value.find(item => item.id === productId);
+  const item = cart.value.find((item) => item.id === productId);
   if (item && item.quantity > 1) item.quantity--;
 };
 
@@ -163,22 +192,23 @@ const submitOrder = async (customerData) => {
           cart.value = [];
           showOrderConfirmation.value = false;
           isCartOpen.value = false;
-          
-          toast.success('Pedido realizado com sucesso!', {
-            description: 'Enviaremos todas as informações do seu pedido via whatsapp informado!',
+
+          toast.success("Pedido realizado com sucesso!", {
+            description:
+              "Enviaremos todas as informações do seu pedido via whatsapp informado!",
           });
         },
         onError: (errors) => {
-          toast.error('Erro ao enviar pedido', {
-            description: Object.values(errors).join('\n'),
+          toast.error("Erro ao enviar pedido", {
+            description: Object.values(errors).join("\n"),
           });
-        }
+        },
       }
     );
   } catch (error) {
     console.error("Erro ao enviar pedido:", error);
-    toast.error('Erro inesperado', {
-      description: 'Ocorreu um erro ao processar seu pedido. Tente novamente.',
+    toast.error("Erro inesperado", {
+      description: "Ocorreu um erro ao processar seu pedido. Tente novamente.",
     });
   }
 };
