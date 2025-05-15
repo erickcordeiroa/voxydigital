@@ -17,6 +17,7 @@ require __DIR__.'/auth_public.php';
 
 Route::middleware(TenantMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('/product/{slug}', [ProductsController::class, 'show'])->name('product.show');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     require __DIR__.'/auth.php';
 });

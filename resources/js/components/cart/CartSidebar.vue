@@ -56,7 +56,7 @@
                   </button>
                 </div>
                 <p class="mt-2 font-semibold whitespace-nowrap">
-                  {{ formatCurrency(item.price * item.quantity) }}
+                  {{ formatCurrency((item.sale ? item.sale : item.price) * item.quantity) }}
                 </p>
               </div>
             </div>

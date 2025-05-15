@@ -77,8 +77,8 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from "vue";
+<script setup lang="ts">
+import { ref, computed, watch } from "vue";
 import { usePage, router } from "@inertiajs/vue3";
 import StoreHeader from "@/components/store/StoreHeader.vue";
 import CartButton from "@/components/cart/CartButton.vue";
@@ -95,7 +95,7 @@ const products = ref(props.products);
 const tenant = ref(props.tenant);
 
 const selectedCategory = ref(null);
-const cart = ref([]);
+const cart = ref(JSON.parse(localStorage.getItem("cart") || "[]")); // Carregar carrinho do localStorage
 const isCartOpen = ref(false);
 const showOrderConfirmation = ref(false);
 
@@ -116,10 +116,15 @@ const cartWithCategoryNames = computed(() => {
 
 const cartTotal = computed(() => {
   return cart.value.reduce(
-    (total, item) => total + (item.sale ? item.sale : item.price) * item.quantity,
+    (total, item) => total + ((item.sale !== null && item.sale !== undefined ? item.sale : item.price) * item.quantity),
     0
   );
 });
+
+// Watcher para salvar o carrinho no localStorage sempre que ele for atualizado
+watch(cart, (newCart) => {
+  localStorage.setItem("cart", JSON.stringify(newCart));
+}, { deep: true });
 
 // Methods
 const filterByCategory = (categoryId) => {
@@ -190,6 +195,7 @@ const submitOrder = async (customerData) => {
         preserveScroll: true,
         onSuccess: () => {
           cart.value = [];
+          localStorage.removeItem("cart"); // Limpar o carrinho do localStorage
           showOrderConfirmation.value = false;
           isCartOpen.value = false;
 

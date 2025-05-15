@@ -4,7 +4,7 @@
       <img
         :src="`/storage/${product.uri}`"
         :alt="product.name"
-        class="rounded-md w-full h-40 object-cover"
+        class="rounded-md w-full h-full object-cover"
       />
     </CardHeader>
     <CardContent>
@@ -23,13 +23,20 @@
         </p>
       </div>
     </CardContent>
-    <CardFooter>
+    <CardFooter class="flex-wrap gap-y-2">
       <Button 
         variant="default" 
         class="w-full cursor-pointer" 
         @click="handleAddToCart"
       >
         Adicionar ao Carrinho
+      </Button>
+      <Button 
+        variant="default" 
+        class="w-full cursor-pointer" 
+        @click="handleViewProduct"
+      >
+        Ver Produto
       </Button>
     </CardFooter>
   </Card>
@@ -38,6 +45,7 @@
 <script setup lang="ts">
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
   product: {
@@ -51,4 +59,10 @@ const emit = defineEmits(['add-to-cart']);
 const handleAddToCart = () => {
   emit('add-to-cart', props.product);
 };
+
+const handleViewProduct = () => {
+  router.get(
+      route("product.show", {slug: props.product.slug})
+    )
+}
 </script>

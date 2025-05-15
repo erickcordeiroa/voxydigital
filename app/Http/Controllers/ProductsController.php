@@ -39,6 +39,16 @@ class ProductsController extends Controller
         ]);
     }
 
+    public function show(string $slug) {
+        $product = Product::with('category')
+                ->where('slug', $slug)->first();
+
+        return Inertia::render('public/products/Index', [
+            'product' => $product,
+            'tenant' => app('tenant')
+        ]);
+    }
+
     public function store(CreateProductRequest $request)
     {
         $data = $request->validated();
