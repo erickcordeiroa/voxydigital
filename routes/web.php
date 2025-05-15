@@ -7,8 +7,15 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductsController;
 use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::middleware(TenantMiddleware::class)->group(function () {
+Route::domain('localhost')->group(function () {
+    Route::get('/', function(){
+        return Inertia::render('Welcome'); // Página da sua empresa
+    });
+});
+
+Route::domain('{tenant}.localhost')->middleware(TenantMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });
