@@ -39,9 +39,10 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function show(string $slug) {
+    public function show(string $slug)
+    {
         $product = Product::with('category')
-                ->where('slug', $slug)->first();
+            ->where('slug', $slug)->first();
 
         return Inertia::render('public/products/Index', [
             'product' => $product,
@@ -51,44 +52,70 @@ class ProductsController extends Controller
 
     public function store(CreateProductRequest $request)
     {
-        $data = $request->validated();
-        $data['slug'] = Str::slug($data['name']);
-        $data['tenant_id'] = 1;
+        try {
+            $data = $request->validated();
+            $data['slug'] = Str::slug($data['name']);
+            $data['tenant_id'] = app('tenant_id');
 
-        if (isset($data['image'])) {
-            $data['uri'] = $this->uploadImage($data['image']);
+            if (isset($data['image'])) {
+                $data['uri'] = $this->uploadImage($data['image']);
+            }
+
+            $product = Product::create($data);
+
+            return redirect()->route('products.index')
+                ->with('success', 'Produto criado com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erro ao criar produto: ' . $e->getMessage())
+                ->withInput();
         }
-
-        Product::create($data);
     }
 
     public function update(int $id, Request $request)
     {
-        $product = Product::find($id);
-        $data = $request->all();
 
-        if ($request->hasFile('image')) {
-            // Remove a imagem antiga, se existir
-            if ($product->uri) {
-                $this->deleteImage($product->uri);
+        try {
+            $product = Product::find($id);
+            $data = $request->all();
+
+            if ($request->hasFile('image')) {
+                // Remove a imagem antiga, se existir
+                if ($product->uri) {
+                    $this->deleteImage($product->uri);
+                }
+
+                $data['uri'] = $this->uploadImage($request->file('image'));
             }
 
-            $data['uri'] = $this->uploadImage($request->file('image'));
-        }
+            $product->update($data);
 
-        $product->update($data);
+            return redirect()->route('products.index')
+                ->with('success', 'Produto atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')
+                ->with('error', 'Erro ao atualizar produto: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function destroy($id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::find($id);
 
-        // Remove a imagem vinculada, se existir
-        if ($product->image) {
-            $this->deleteImage($product->image);
+            // Remove a imagem vinculada, se existir
+            if ($product->uri) {
+                $this->deleteImage($product->uri);
+            }
+
+            $product->delete();
+            return redirect()->route('products.index')
+                ->with('success', 'Produto excluído com sucesso!');
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')
+                ->with('error', 'Erro ao excluir produto: ' . $e->getMessage());
         }
-
-        $product->delete();
     }
 
     protected function uploadImage($image)

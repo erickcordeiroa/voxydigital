@@ -1,11 +1,11 @@
 <template>
   <Card class="hover:shadow-lg transition-shadow max-w-[250px] min-w-[250px]">
-    <CardHeader class="min-h-[180px]">
+    <CardHeader class="min-h-[220px]">
       <img
         :src="`/storage/${product.uri}`"
         :alt="product.name"
         class="rounded-md w-full object-cover"
-        style="width: 220px; object-fit: cover; margin: 0 auto;"
+        style="width: 220px; height: 220px; object-fit: cover; margin: 0 auto;"
       />
     </CardHeader>
     <CardContent class="flex flex-col items-center text-center">

@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
 
     Route::resource('categories', CategoriesController::class);
 
-    Route::get('products', [ProductsController::class, "index"]);
+    Route::get('products', [ProductsController::class, "index"])->name('products.index');
     Route::post('products', [ProductsController::class, "store"]);
     Route::post('products/{id}', [ProductsController::class, 'update']);
     Route::delete('products/{id}', [ProductsController::class, 'destroy']);

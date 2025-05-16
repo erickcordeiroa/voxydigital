@@ -229,9 +229,9 @@ const submitOrder = async (customerData) => {
           showOrderConfirmation.value = false;
           isCartOpen.value = false;
 
-          toast.success("Pedido realizado com sucesso!", {
+          toast.success("Pedido enviado com sucesso!", {
             description:
-              "Enviaremos todas as informações do seu pedido via whatsapp informado!",
+              "Recebemos seu pedido! Em breve você receberá todos os detalhes e o acompanhamento pelo WhatsApp informado.",
           });
         },
         onError: (errors) => {

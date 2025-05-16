@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
-import { Edit, Trash2 } from "lucide-vue-next"; // Importa os ícones do Lucide
+import { Edit, Trash2 } from "lucide-vue-next";
 
 // Define as props recebidas
 defineProps({
@@ -18,24 +18,24 @@ defineProps({
 defineEmits(["edit", "delete"]);
 </script>
 <template>
-  <div class="grid gap-4 px-6 pb-6">
+  <div class="grid gap-4 px-4 pb-6 sm:px-6">
     <div
       v-for="product in products"
       :key="product.id"
-      class="flex items-center justify-between rounded-lg border p-4 shadow-sm bg-white"
+      class="flex flex-col sm:flex-row sm:items-center justify-between rounded-lg border p-4 shadow-sm bg-white"
     >
-      <div class="flex items-center gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-4 sm:mb-0">
         <img
           :src="product.uri"
           alt="Imagem do produto"
-          class="h-24 w-24 object-cover rounded-md border"
+          class="h-24 w-24 object-cover rounded-md border mx-auto sm:mx-0"
         />
-        <div>
+        <div class="text-center sm:text-left">
           <h3 class="text-lg font-semibold">{{ product.name }}</h3>
           <p class="text-sm text-muted-foreground">
             {{ product.category?.name || "Sem categoria" }}
           </p>
-          <p class="text-sm mt-1 text-gray-500 truncate max-w-md">
+          <p class="text-sm mt-1 text-gray-500 line-clamp-2 max-w-md">
             {{ product.description }}
           </p>
           <span
@@ -51,7 +51,7 @@ defineEmits(["edit", "delete"]);
         </div>
       </div>
 
-      <div class="text-right">
+      <div class="text-center sm:text-right">
         <p :class="product.sale ? 'text-gray-500 line-through' : 'font-semibold'">
           {{
             (product.price / 100).toLocaleString("pt-BR", {
@@ -68,7 +68,7 @@ defineEmits(["edit", "delete"]);
             })
           }}
         </p>
-        <div class="mt-2 flex gap-2 justify-end">
+        <div class="mt-2 flex gap-2 justify-center sm:justify-end">
           <!-- Ícone de Editar -->
           <button
             @click="$emit('edit', product)"
@@ -90,7 +90,7 @@ defineEmits(["edit", "delete"]);
 
   <!-- Paginação -->
   <div v-if="pagination.links.length > 3" class="flex justify-center mt-4 mb-10">
-    <nav class="flex gap-2">
+    <nav class="flex flex-wrap gap-2 justify-center">
       <button
         v-for="link in pagination.links"
         :key="link.label"

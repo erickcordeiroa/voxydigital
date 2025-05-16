@@ -4,6 +4,8 @@ import { Head, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/AppLayout.vue";
 import CreateProductModal from "@/components/products/CreateProductModal.vue";
 import ListProduct from "@/components/products/ListProducts.vue";
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'vue-sonner';
 
 const props = defineProps({
   categories: Array,
@@ -63,6 +65,7 @@ function deleteProduct(id: number) {
   if (confirm("Tem certeza que deseja excluir este produto?")) {
     router.delete(`/products/${id}`, {
       onSuccess: () => {
+        toast.success('Produto excluido com sucesso!');
         products.value = products.value.filter((product) => product.id !== id);
       },
     });
@@ -71,6 +74,7 @@ function deleteProduct(id: number) {
 </script>
 <template>
   <Head title="Produtos" />
+  <Toaster />
   <AppLayout :breadcrumbs="[{ title: 'Produtos', href: '/products' }]">
     <!-- Header -->
     <div class="flex items-center justify-between m-6">
@@ -126,7 +130,6 @@ function deleteProduct(id: number) {
       :product="selectedProduct"
       :categories="categories"
       @update:open="(value) => (showModal = value)"
-      @product-saved="(product) => console.log('Produto salvo:', product)"
     />
   </AppLayout>
 </template>

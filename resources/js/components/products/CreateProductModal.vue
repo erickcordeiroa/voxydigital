@@ -6,7 +6,9 @@ import {
   DialogOverlay,
 } from "@/components/ui/dialog";
 import { ref, watch } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "vue-sonner";
 
 const props = defineProps<{
   open: boolean;
@@ -27,6 +29,30 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(["update:open", "product-saved"]);
+const page = usePage();
+
+function resetForm() {
+  form.value = {
+    name: "",
+    price: "",
+    sale: "",
+    category_id: "",
+    status: "active",
+    description: "",
+    image: null,
+    video: "",
+    note: ""
+  };
+  imagePreview.value = null;
+  errors.value = {
+    name: "",
+    price: "",
+    sale: "",
+    category_id: "",
+    status: "",
+    description: "",
+  };
+}
 
 const form = ref({
   name: "",
@@ -169,21 +195,43 @@ function submit() {
   if (props.isEditing && props.product) {
     router.post(`/products/${props.product.id}`, formData, {
       onSuccess: (response) => {
-        emit("product-saved", response.data);
+         toast.success('Produto alterado com sucesso')
+         resetForm();
         emit("update:open", false);
       },
       onError: (serverErrors) => {
-        console.error(serverErrors);
+        if (page.props.errors) {
+          for (const [field, messages] of Object.entries(page.props.errors)) {
+            if (Array.isArray(messages)) {
+              messages.forEach(message => {
+                toast.error(`${field}: ${message}`)
+              })
+            } else {
+              toast.error(`${field}: ${messages}`)
+            }
+          }
+        }
       },
     });
   } else {
     router.post("/products", formData, {
       onSuccess: (response) => {
-        emit("product-saved", response.data);
+        toast.success('Produto Salvo com sucesso')
+        resetForm();
         emit("update:open", false);
       },
       onError: (serverErrors) => {
-        console.error(serverErrors);
+        if (page.props.errors) {
+          for (const [field, messages] of Object.entries(page.props.errors)) {
+            if (Array.isArray(messages)) {
+              messages.forEach(message => {
+                toast.error(`${field}: ${message}`)
+              })
+            } else {
+              toast.error(`${field}: ${messages}`)
+            }
+          }
+        }
       },
     });
   }
@@ -191,6 +239,7 @@ function submit() {
 </script>
 
 <template>
+  <Toaster />
   <Dialog :open="open" @update:open="(value) => emit('update:open', value)">
     <DialogOverlay class="fixed inset-0 bg-black/50 z-40" />
 

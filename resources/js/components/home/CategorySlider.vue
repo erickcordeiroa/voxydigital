@@ -7,9 +7,10 @@
           'bg-primary text-white': selectedCategory === null,
           'bg-gray-200 text-gray-800': selectedCategory !== null,
         }"
-        class="px-4 py-2 rounded-full cursor-pointer whitespace-nowrap hover:bg-primary hover:text-white transition"
+        class="px-4 py-2 rounded-md cursor-pointer whitespace-nowrap hover:bg-primary hover:text-white transition"
       >
         Todos os Itens
+
       </li>
       <li
         v-for="category in categories"
@@ -19,7 +20,7 @@
           'bg-primary text-white': category.id === selectedCategory,
           'bg-gray-200 text-gray-800': category.id !== selectedCategory,
         }"
-        class="px-4 py-2 rounded-full cursor-pointer whitespace-nowrap hover:bg-primary hover:text-white transition"
+        class="px-4 py-2 rounded-md cursor-pointer whitespace-nowrap hover:bg-primary hover:text-white transition"
       >
         {{ category.name }}
       </li>

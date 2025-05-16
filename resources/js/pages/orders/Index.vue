@@ -175,6 +175,13 @@ const getStatusColor = (status: string) => {
                   {{ order.delivery_address }}
                 </p>
 
+                <h3 class="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+                  Telefone
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  {{ formatPhone(order.customer_phone) }}
+                </p>
+
                 <h3 class="mb-2 mt-4 font-semibold text-gray-700 dark:text-gray-300">
                   Observações
                 </h3>
