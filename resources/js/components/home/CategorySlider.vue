@@ -4,7 +4,7 @@
       <li
         @click="onCategorySelect(null)"
         :class="{
-          'bg-primary text-white': selectedCategory === null,
+          'bg-[var(--custom-button)] text-[var(--custom-button-text)]': selectedCategory === null,
           'bg-gray-200 text-gray-800': selectedCategory !== null,
         }"
         class="px-4 py-2 rounded-md cursor-pointer whitespace-nowrap hover:bg-primary hover:text-white transition"
@@ -17,7 +17,7 @@
         :key="category.id"
         @click="onCategorySelect(category.id)"
         :class="{
-          'bg-primary text-white': category.id === selectedCategory,
+          'bg-[var(--custom-button)] text-[var(--custom-button-text)]': category.id === selectedCategory,
           'bg-gray-200 text-gray-800': category.id !== selectedCategory,
         }"
         class="px-4 py-2 rounded-md cursor-pointer whitespace-nowrap hover:bg-primary hover:text-white transition"

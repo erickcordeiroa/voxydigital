@@ -138,6 +138,11 @@
   /* change to any hsl value you want */
   --vis-secondary-color: 160 81% 40%;
   --vis-text-color: var(--muted-foreground);
+
+  /* Customização de cores */
+  --custom-button: var(--primary);
+  --custom-button-text: var(--primary-foreground);
+  --custom-title-color: var(--foreground);
 }
 
 .dark {
@@ -199,4 +204,13 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.custom_button {
+  background-color: var(--custom-button);
+  color: var(--custom-button-text);
+}
+
+.custom_title {
+  color: var(--custom-title-color);
 }

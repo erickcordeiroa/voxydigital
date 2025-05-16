@@ -1,6 +1,6 @@
 <template>
   <div class="mb-8">
-    <h3 class="text-lg font-bold mb-3">{{ category.name }}</h3>
+    <h3 class="text-[var(--custom-title-color)] text-lg font-bold mb-3">{{ category.name }}</h3>
     <div class="flex overflow-x-auto gap-4">
       <ProductCard
         v-for="product in filteredProducts"

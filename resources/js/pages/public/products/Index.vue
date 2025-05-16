@@ -10,7 +10,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 class="text-lg font-bold text-gray-800 truncate">{{ product.name }}</h1>
+          <h1 class="text-lg font-bold text-gray-800 truncate text-[var(--custom-title-color)]">{{ product.name }}</h1>
         </div>
         <!-- Botão do Carrinho -->
         <CartButton
@@ -44,7 +44,7 @@
         <Button 
           @click="handleAddToCart(product)" 
           variant="default" 
-          class="w-full cursor-pointer" 
+          class="w-full cursor-pointer bg-[var(--custom-button)] text-[var(--custom-button-text)]" 
         >
           Adicionar ao Carrinho
         </Button>

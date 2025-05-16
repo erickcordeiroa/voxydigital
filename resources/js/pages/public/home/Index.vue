@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { usePage, router } from "@inertiajs/vue3";
 import StoreHeader from "@/components/store/StoreHeader.vue";
 import CartButton from "@/components/cart/CartButton.vue";
@@ -155,6 +155,18 @@ const cartTotal = computed(() => {
 watch(cart, (newCart) => {
   localStorage.setItem("cart", JSON.stringify(newCart));
 }, { deep: true });
+
+onMounted(() => {
+  if (tenant.value.custom_button) {
+    document.documentElement.style.setProperty('--custom-button', tenant.value.custom_button);
+  }
+  if (tenant.value.custom_button_text) {
+    document.documentElement.style.setProperty('--custom-button-text', tenant.value.custom_button_text);
+  }
+  if (tenant.value.custom_title_color) {
+    document.documentElement.style.setProperty('--custom-title-color', tenant.value.custom_title_color);
+  }
+});
 
 // Methods
 const filterByCategory = (categoryId) => {
