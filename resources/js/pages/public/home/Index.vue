@@ -1,10 +1,11 @@
 <template>
   <Toaster />
-  <div>
+  <div class="bg-gray-50 min-h-screen">
     <StoreHeader
       :logo-url="`/storage/${tenant.logo}`"
       :store-name="tenant.name"
       :contact-phone="tenant.whatsapp"
+      :coverImage="`/storage/${tenant.cover}`"
     />
 
     <CartButton
@@ -14,6 +15,16 @@
     />
 
     <div class="p-4 md:p-6 lg:p-10">
+
+       <!-- Campo de pesquisa -->
+      <div class="mb-6 max-w-lg mx-auto">
+        <input
+          v-model="search"
+          type="text"
+          placeholder="Pesquisar produto..."
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
 
       <!-- Verificação para exibir mensagem caso não haja produtos nem categorias -->
       <div
@@ -52,7 +63,7 @@
           v-for="category in filteredCategories"
           :key="category.id"
           :category="category"
-          :products="products"
+          :products="filteredProducts(category.id)"
           @add-to-cart="addToCart"
         />
       </div>
@@ -93,18 +104,38 @@ const { props } = usePage();
 const categories = ref(props.categories);
 const products = ref(props.products);
 const tenant = ref(props.tenant);
+const search = ref("");
 
 const selectedCategory = ref(null);
 const cart = ref(JSON.parse(localStorage.getItem("cart") || "[]")); // Carregar carrinho do localStorage
 const isCartOpen = ref(false);
 const showOrderConfirmation = ref(false);
 
-// Computed properties
 const filteredCategories = computed(() => {
+  if (search.value.trim()) {
+    const filteredProducts = products.value.filter((p) =>
+      p.name.toLowerCase().includes(search.value.toLowerCase())
+    );
+
+    return categories.value.filter((category) =>
+      filteredProducts.some((p) => p.category_id === category.id)
+    );
+  }
+
   return selectedCategory.value
     ? categories.value.filter((c) => c.id === selectedCategory.value)
     : categories.value;
 });
+
+const filteredProducts = (categoryId) => {
+  let filtered = products.value.filter((p) => p.category_id === categoryId);
+  if (search.value.trim()) {
+    filtered = filtered.filter((p) =>
+      p.name.toLowerCase().includes(search.value.toLowerCase())
+    );
+  }
+  return filtered;
+};
 
 const cartWithCategoryNames = computed(() => {
   return cart.value.map((item) => ({
@@ -121,7 +152,6 @@ const cartTotal = computed(() => {
   );
 });
 
-// Watcher para salvar o carrinho no localStorage sempre que ele for atualizado
 watch(cart, (newCart) => {
   localStorage.setItem("cart", JSON.stringify(newCart));
 }, { deep: true });

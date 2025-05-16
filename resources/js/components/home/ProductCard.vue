@@ -1,15 +1,18 @@
 <template>
-  <Card class="hover:shadow-lg transition-shadow">
-    <CardHeader>
+  <Card class="hover:shadow-lg transition-shadow max-w-[250px] min-w-[250px]">
+    <CardHeader class="min-h-[180px]">
       <img
         :src="`/storage/${product.uri}`"
         :alt="product.name"
-        class="rounded-md w-full h-full object-cover"
+        class="rounded-md w-full object-cover"
+        style="width: 220px; object-fit: cover; margin: 0 auto;"
       />
     </CardHeader>
-    <CardContent>
-      <h3 class="text-md font-semibold truncate">{{ product.name }}</h3>
-      <div v-if="product.sale">
+    <CardContent class="flex flex-col items-center text-center">
+      <h3 class="text-md font-semibold truncate w-full" style="max-width: 200px;">
+        {{ product.name }}
+      </h3>
+      <div v-if="product.sale" class="flex flex-col items-center">
         <p class="text-gray-500 line-through text-xs">
           R$ {{ (product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 }) }}
         </p>
@@ -17,7 +20,7 @@
           R$ {{ (product.sale / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 }) }}
         </p>
       </div>
-      <div v-else>
+      <div v-else class="flex flex-col items-center">
         <p class="text-black font-bold">
           R$ {{ (product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 }) }}
         </p>

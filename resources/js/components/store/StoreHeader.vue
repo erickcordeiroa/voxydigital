@@ -1,18 +1,23 @@
 <template>
-  <div
-    class="relative h-64 w-full bg-cover bg-center"
-    :style="`background-image: url('${coverImage}')`"
-  >
+  <div>
+    <!-- Cover -->
     <div
-      class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white"
+      class="relative h-40 w-full bg-no-repeat bg-center md:h-64 md:bg-cover"
+      :style="`background-image: url('${coverImage}')`"
     >
-      <img
-        :src="logoUrl"
-        alt="Logo da Loja"
-        class="rounded-full mb-2 w-26 h-26"
-      />
-      <h1 class="text-3xl font-bold">{{ storeName }}</h1>
-      <p class="text-sm">
+      <!-- Logo sobreposta ao bottom do cover -->
+      <div class="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2 z-20">
+        <img
+          :src="logoUrl"
+          alt="Logo da Loja"
+          class="rounded-full border-4 border-white shadow-lg w-28 h-28 md:w-32 md:h-32 object-cover"
+        />
+      </div>
+    </div>
+    <!-- Informações da empresa -->
+    <div class="flex flex-col items-center mt-20">
+      <h1 class="text-3xl font-bold mb-1">{{ storeName }}</h1>
+      <p class="text-sm text-gray-600">
         Contato: {{ formatPhoneNumber(contactPhone) }} | {{ businessHours }}
       </p>
     </div>
@@ -21,10 +26,7 @@
 
 <script setup lang="ts">
 const props = defineProps({
-  coverImage: {
-    type: String,
-    default: 'https://placehold.co/1200x300'
-  },
+  coverImage: String,
   logoUrl: String,
   storeName: String,
   contactPhone: String,
