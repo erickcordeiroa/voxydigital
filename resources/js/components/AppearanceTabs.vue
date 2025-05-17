@@ -25,10 +25,13 @@ const storeData = ref({
   current_cover: `/storage/${props.tenant.cover}`,
 });
 
-// Carregar dados existentes
+// Referências para os inputs de arquivo
 const loading = ref(false);
 const error = ref("");
 const success = ref("");
+
+const logoInput = ref<HTMLInputElement | null>(null);
+const coverInput = ref<HTMLInputElement | null>(null);
 
 // Manipuladores de arquivos
 const handleLogoUpload = (event: Event) => {
@@ -69,13 +72,7 @@ const submitForm = () => {
       preserveScroll: true,
       onSuccess: () => {
         toast.success("Configurações salvas com sucesso!");
-        // Atualiza as imagens atuais se foram enviadas novas
-        if (storeData.value.logo) {
-          storeData.value.current_logo = URL.createObjectURL(storeData.value.logo);
-        }
-        if (storeData.value.cover) {
-          storeData.value.current_cover = URL.createObjectURL(storeData.value.cover);
-        }
+        window.location.reload();
       },
       onError: (errors) => {
         toast.error("Ocorreu um erro ao salvar as configurações");
@@ -166,22 +163,17 @@ const submitForm = () => {
         <h2 class="text-lg font-medium mb-4">Imagens</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Logo -->
           <div>
             <label class="block text-sm font-medium mb-2">Logo</label>
-            <div class="flex items-center gap-4">
+            <div class="flex flex-col gap-4">
               <div
                 class="w-20 h-20 rounded-md overflow-hidden bg-neutral-100 dark:bg-neutral-700"
               >
                 <img
-                  v-if="storeData.current_logo && !storeData.logo"
+                  v-if="storeData.current_logo"
                   :src="storeData.current_logo"
                   alt="Logo atual"
-                  class="w-full h-full object-contain"
-                />
-                <img
-                  v-else-if="storeData.logo"
-                  :src="URL.createObjectURL(storeData.logo)"
-                  alt="Novo logo"
                   class="w-full h-full object-contain"
                 />
                 <div
@@ -192,38 +184,37 @@ const submitForm = () => {
                 </div>
               </div>
               <div>
-                <label
-                  class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer hover:bg-blue-600"
-                >
-                  <Upload class="h-4 w-4 mr-2" />
-                  <span>Alterar</span>
-                  <input
-                    type="file"
-                    class="hidden"
-                    accept="image/*"
-                    @change="handleLogoUpload"
-                  />
-                </label>
+                <label class="block text-sm font-medium mb-1">Selecionar novo logo</label>
+                <input
+                  type="file"
+                  class="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-md file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100"
+                  accept="image/*"
+                  @change="handleLogoUpload"
+                  ref="logoInput"
+                />
+                <p v-if="storeData.logo" class="mt-1 text-sm text-gray-500">
+                  Novo arquivo selecionado: {{ storeData.logo.name }}
+                </p>
               </div>
             </div>
           </div>
 
+          <!-- Capa -->
           <div>
             <label class="block text-sm font-medium mb-2">Capa</label>
-            <div class="flex items-center gap-4">
+            <div class="flex flex-col gap-4">
               <div
                 class="w-20 h-20 rounded-md overflow-hidden bg-neutral-100 dark:bg-neutral-700"
               >
                 <img
-                  v-if="storeData.current_cover && !storeData.cover"
+                  v-if="storeData.current_cover"
                   :src="storeData.current_cover"
                   alt="Capa atual"
-                  class="w-full h-full object-cover"
-                />
-                <img
-                  v-else-if="storeData.cover"
-                  :src="URL.createObjectURL(storeData.cover)"
-                  alt="Nova capa"
                   class="w-full h-full object-cover"
                 />
                 <div
@@ -234,18 +225,22 @@ const submitForm = () => {
                 </div>
               </div>
               <div>
-                <label
-                  class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer hover:bg-blue-600"
-                >
-                  <Upload class="h-4 w-4 mr-2" />
-                  <span>Alterar</span>
-                  <input
-                    type="file"
-                    class="hidden"
-                    accept="image/*"
-                    @change="handleCoverUpload"
-                  />
-                </label>
+                <label class="block text-sm font-medium mb-1">Selecionar nova capa</label>
+                <input
+                  type="file"
+                  class="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-md file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100"
+                  accept="image/*"
+                  @change="handleCoverUpload"
+                  ref="coverInput"
+                />
+                <p v-if="storeData.cover" class="mt-1 text-sm text-gray-500">
+                  Novo arquivo selecionado: {{ storeData.cover.name }}
+                </p>
               </div>
             </div>
           </div>
