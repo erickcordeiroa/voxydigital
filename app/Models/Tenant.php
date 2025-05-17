@@ -13,6 +13,9 @@ class Tenant extends Model
         'whatsapp',
         'logo',
         'cover',
-        'status'
+        'status',
+        'custom_button',
+        'custom_button_text',
+        'custom_title_color'
     ];
 }
