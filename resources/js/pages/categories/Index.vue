@@ -21,15 +21,8 @@ const isEditing = ref(false);
 const editingCategory = ref(null);
 const categoryToDelete = ref(null);
 
-function handleCategoryCreated(newCategory) {
-  if (isEditing.value && editingCategory.value) {
-    const index = categories.value.findIndex((cat) => cat.id === editingCategory.value.id);
-    if (index !== -1) {
-      categories.value[index] = newCategory;
-    }
-  } else {
-    categories.value.push(newCategory);
-  }
+function handleCategoryCreated(updatedCategories) {
+  categories.value = updatedCategories; // Atualiza com os dados recebidos do servidor
   showModal.value = false;
   isEditing.value = false;
   editingCategory.value = null;

@@ -68,7 +68,7 @@ function submit() {
       onSuccess: (response) => {
         toast.success('Categoria alterada com sucesso!');
         resetForm();
-        emit("category-created", response.data); // Emite a categoria atualizada
+        emit("category-created", response.props.categories.data); // Emite os dados atualizados
         emit("update:open", false);
       },
       onError: (serverErrors) => {
@@ -82,7 +82,7 @@ function submit() {
       onSuccess: (response) => {
         toast.success('Categoria criada com sucesso!');
         resetForm();
-        emit("category-created", response.data); // Emite a nova categoria criada
+        emit("category-created", response.props.categories.data); // Emite os dados atualizados
         emit("update:open", false);
       },
       onError: (serverErrors) => {
