@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Order\CreateOrderRequest;
 use App\Models\Order;
 use App\Models\OrderItems;
+use App\Services\WhatsappService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -35,7 +36,7 @@ class OrderController extends Controller
     {
         $data = $request->validated();
         $order = Order::create([
-            'tenant_id' => $data['tenant_id'],
+            'tenant_id' => app('tenant_id'),
             'customer_name' => $data['customer_name'],
             'customer_phone' => $data['customer_phone'],
             'delivery_address' => $data['delivery_address'],
@@ -51,6 +52,26 @@ class OrderController extends Controller
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
             ]);
+        }
+
+        $order = Order::with('items.product')->find($order->id);
+
+        $tenant = app('tenant');
+        if ($tenant && $tenant->whatsapp) {
+            $msg = "*Novo pedido recebido!*\n";
+            $msg .= "*Cliente:* {$data['customer_name']}\n";
+            $msg .= "*Telefone:* {$data['customer_phone']}\n";
+            $msg .= "*Endereço:* {$data['delivery_address']}\n";
+            $msg .= "*Observação:* {$data['note']}\n";
+            $msg .= "*Itens:*\n";
+            foreach ($order->items as $item) {
+                $price = number_format($item->price / 100, 2, ',', '.');
+                $msg .= "- # {$item->product_id} - {$item->product->name} x{$item->quantity} R$ {$price}\n ";
+            }
+            $msg .= "*Total:* R$ " . number_format($data['total'] / 100, 2, ',', '.');
+
+            WhatsappService::send("+55{$tenant->whatsapp}", $msg);
+            WhatsappService::sendToClient("+55{$data['customer_phone']}");
         }
     }
 }
