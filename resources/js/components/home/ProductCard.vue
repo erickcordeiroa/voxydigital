@@ -34,13 +34,13 @@
       >
         Adicionar ao Carrinho
       </Button>
-      <Button 
+      <!-- <Button 
         variant="default" 
         class="w-full cursor-pointer bg-[var(--custom-button)] text-[var(--custom-button-text)]" 
         @click="handleViewProduct"
       >
         Ver Produto
-      </Button>
+      </Button> -->
     </CardFooter>
   </Card>
 </template>

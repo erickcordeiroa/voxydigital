@@ -65,8 +65,9 @@ class OrderController extends Controller
             $msg .= "*Observação:* {$data['note']}\n";
             $msg .= "*Itens:*\n";
             foreach ($order->items as $item) {
-                $price = number_format($item->price / 100, 2, ',', '.');
-                $msg .= "- # {$item->product_id} - {$item->product->name} x{$item->quantity} R$ {$price}\n ";
+                $unitPrice = number_format($item->price / 100, 2, ',', '.');
+                $subtotal = number_format(($item->price * $item->quantity) / 100, 2, ',', '.');
+                $msg .= "- {$item->quantity}x {$item->product->name} | Unitário: R$ {$unitPrice} | Subtotal: R$ {$subtotal}\n";
             }
             $msg .= "*Total:* R$ " . number_format($data['total'] / 100, 2, ',', '.');
 
