@@ -26,6 +26,14 @@ class TenantMiddleware
             throw new Exception('Nenhuma empresa encontrada');
         }
 
+        $user = $request->user();
+        if ($user && $user->tenant_id !== $tenant->id) {
+            auth()->logout();
+            return redirect()->route('login')->withErrors([
+                'auth' => 'Acesso negado ao subdomínio.',
+            ]);
+        }
+
         app()->instance('tenant_id', $tenant->id);
         app()->instance('tenant', $tenant);
 
