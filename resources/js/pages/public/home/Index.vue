@@ -89,8 +89,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { ref, computed, onMounted } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import StoreHeader from "@/components/store/StoreHeader.vue";
 import CartButton from "@/components/cart/CartButton.vue";
 import CartSidebar from "@/components/cart/CartSidebar.vue";
@@ -98,36 +98,46 @@ import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vu
 import ProductSection from "@/components/products/ProductSection.vue";
 import CategorySlider from "@/components/home/CategorySlider.vue";
 import { Toaster } from "@/components/ui/sonner";
-import { toast } from "vue-sonner";
+import { useCart } from "@/composables/useCart";
+import type { Category, Product, Tenant } from "@/types/cart"; // Use apenas o composable
 
 const { props } = usePage();
-const categories = ref(props.categories);
-const products = ref(props.products);
-const tenant = ref(props.tenant);
+const categories = ref<Category[]>(props.categories as Category[]);
+const products = ref<Product[]>(props.products as Product[]);
+const tenant = ref<Tenant>(props.tenant as Tenant);
 const search = ref("");
+const selectedCategory = ref<number | null>(null);
 
-const selectedCategory = ref(null);
-const cart = ref(JSON.parse(localStorage.getItem("cart") || "[]")); // Carregar carrinho do localStorage
-const isCartOpen = ref(false);
-const showOrderConfirmation = ref(false);
+// Use apenas o composable para o carrinho e pedidos
+const {
+  cart,
+  isCartOpen,
+  showOrderConfirmation,
+  cartWithCategoryNames,
+  cartTotal,
+  addToCart,
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+  finalizarPedido,
+  submitOrder,
+} = useCart(categories, tenant);
 
 const filteredCategories = computed(() => {
   if (search.value.trim()) {
     const filteredProducts = products.value.filter((p) =>
       p.name.toLowerCase().includes(search.value.toLowerCase())
     );
-
     return categories.value.filter((category) =>
       filteredProducts.some((p) => p.category_id === category.id)
     );
   }
-
   return selectedCategory.value
     ? categories.value.filter((c) => c.id === selectedCategory.value)
     : categories.value;
 });
 
-const filteredProducts = (categoryId) => {
+const filteredProducts = (categoryId: number) => {
   let filtered = products.value.filter((p) => p.category_id === categoryId);
   if (search.value.trim()) {
     filtered = filtered.filter((p) =>
@@ -136,25 +146,6 @@ const filteredProducts = (categoryId) => {
   }
   return filtered;
 };
-
-const cartWithCategoryNames = computed(() => {
-  return cart.value.map((item) => ({
-    ...item,
-    categoryName: getCategoryName(item.category_id),
-    imageUrl: `/storage/${item.uri}`,
-  }));
-});
-
-const cartTotal = computed(() => {
-  return cart.value.reduce(
-    (total, item) => total + ((item.sale !== null && item.sale !== undefined ? item.sale : item.price) * item.quantity),
-    0
-  );
-});
-
-watch(cart, (newCart) => {
-  localStorage.setItem("cart", JSON.stringify(newCart));
-}, { deep: true });
 
 onMounted(() => {
   if (tenant.value.custom_button) {
@@ -168,97 +159,8 @@ onMounted(() => {
   }
 });
 
-// Methods
-const filterByCategory = (categoryId) => {
+const filterByCategory = (categoryId: number) => {
   selectedCategory.value = categoryId;
-};
-
-const addToCart = (product) => {
-  const existing = cart.value.find((item) => item.id === product.id);
-  if (existing) {
-    existing.quantity++;
-    toast.info("Quantidade atualizada", {
-      description: `${product.name} (${existing.quantity}x)`,
-    });
-  } else {
-    cart.value.push({ ...product, quantity: 1 });
-    toast.success("Adicionado ao carrinho", {
-      description: product.name,
-      action: {
-        label: "Ver carrinho",
-        onClick: () => (isCartOpen.value = true),
-      },
-    });
-  }
-};
-
-const removeFromCart = (productId) => {
-  cart.value = cart.value.filter((item) => item.id !== productId);
-};
-
-const increaseQuantity = (productId) => {
-  const item = cart.value.find((item) => item.id === productId);
-  if (item) item.quantity++;
-};
-
-const decreaseQuantity = (productId) => {
-  const item = cart.value.find((item) => item.id === productId);
-  if (item && item.quantity > 1) item.quantity--;
-};
-
-const getCategoryName = (categoryId) => {
-  const category = categories.value.find((cat) => cat.id === categoryId);
-  return category ? category.name : "Desconhecida";
-};
-
-const finalizarPedido = () => {
-  if (!cart.value.length) return;
-  showOrderConfirmation.value = true;
-};
-
-const submitOrder = async (customerData) => {
-  try {
-    await router.post(
-      route("orders.store"),
-      {
-        tenant_id: tenant.value.id,
-        customer_name: customerData.name,
-        customer_phone: customerData.phone,
-        delivery_address: customerData.address,
-        note: customerData.note,
-        total: cartTotal.value,
-        items: cart.value.map((item) => ({
-          product_id: item.id,
-          quantity: item.quantity,
-          price: item.sale ?? item.price,
-        })),
-      },
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          cart.value = [];
-          localStorage.removeItem("cart"); // Limpar o carrinho do localStorage
-          showOrderConfirmation.value = false;
-          isCartOpen.value = false;
-
-          toast.success("Pedido enviado com sucesso!", {
-            description:
-              "Recebemos seu pedido! Em breve você receberá todos os detalhes e o acompanhamento pelo WhatsApp informado.",
-          });
-        },
-        onError: (errors) => {
-          toast.error("Erro ao enviar pedido", {
-            description: Object.values(errors).join("\n"),
-          });
-        },
-      }
-    );
-  } catch (error) {
-    console.error("Erro ao enviar pedido:", error);
-    toast.error("Erro inesperado", {
-      description: "Ocorreu um erro ao processar seu pedido. Tente novamente.",
-    });
-  }
 };
 </script>
 

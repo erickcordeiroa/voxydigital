@@ -75,4 +75,43 @@ class OrderController extends Controller
             WhatsappService::sendToClient("+55{$data['customer_phone']}");
         }
     }
+
+    public function update(Request $request)
+    {
+        $data = $request->validate([
+            'id' => 'required|exists:orders,id',
+            'status' => 'required|in:pending,preparing,delivering,delivered,canceled',
+        ]);
+
+        $order = Order::find($data['id']);
+        $order->update([
+            'status' => $data['status'],
+        ]);
+
+        switch($data['status']) {
+            case 'pending':
+                $status = 'Pendente';
+                break;
+            case 'preparing':
+                $status = 'Preparando';
+                break;
+            case 'delivering':
+                $status = 'Entregando';
+                break;
+            case 'delivered':
+                $status = 'Entregue';
+                break;
+            case 'canceled':
+                $status = 'Cancelado';
+                break;
+        }
+
+        $msg = "*Pedido atualizado!*\n";
+        $msg .= "O seu pedido foi atualizado para *{$status}*.\n";
+        $msg .= "Agradecemos pela preferência!";
+        
+         WhatsappService::send("+55{$order->customer_phone}", $msg);
+
+        return redirect()->back()->with('success', 'Pedido atualizado com sucesso!');
+    }
 }

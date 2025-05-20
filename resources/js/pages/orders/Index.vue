@@ -3,6 +3,9 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage, router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'vue-sonner';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -69,11 +72,101 @@ const formatPhone = (phone: string) => {
 const getStatusColor = (status: string) => {
     const statusColors: Record<string, string> = {
         pending: 'bg-yellow-100 text-yellow-800',
-        processing: 'bg-blue-100 text-blue-800',
-        completed: 'bg-green-100 text-green-800',
+        preparing: 'bg-blue-100 text-blue-800',
+        delivered: 'bg-green-100 text-green-800',
         cancelled: 'bg-red-100 text-red-800',
     };
     return statusColors[status] || 'bg-gray-100 text-gray-800';
+};
+
+const getStatusText = (status: string) => {
+    const statusText: Record<string, string> = {
+        pending: 'Pendente',
+        preparing: 'Preparando',
+        delivered: 'Concluído',
+        cancelled: 'Cancelado',
+    };
+    return statusText[status] || 'Cancelado';
+};
+
+const printOrder = (order: any) => {
+  const printContent = `
+    <html>
+      <head>
+        <title>Pedido #${order.id}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 40px; color: #222; }
+          h2 { margin-bottom: 0; }
+          .info { margin-bottom: 20px; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+          th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+          th { background: #f5f5f5; }
+          .total { font-weight: bold; font-size: 1.1em; }
+          .label { font-weight: bold; }
+        </style>
+      </head>
+      <body>
+        <h2>Pedido #${order.id}</h2>
+        <div class="info">
+          <div><span class="label">Status:</span> ${getStatusText(order.status)}</div>
+          <div><span class="label">Data:</span> ${new Date(order.created_at).toLocaleString('pt-BR')}</div>
+          <div><span class="label">Cliente:</span> ${order.customer_name || ''}</div>
+          <div><span class="label">Telefone:</span> ${order.customer_phone}</div>
+          <div><span class="label">Endereço:</span> ${order.delivery_address}</div>
+          <div><span class="label">Observações:</span> ${order.note || 'Nenhuma'}</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Qtd</th>
+              <th>Preço Unitário</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${order.items.map((item: any) => `
+              <tr>
+                <td>${item.product.name}</td>
+                <td>${item.quantity}</td>
+                <td>${formatCurrency(item.price / 100)}</td>
+                <td>${formatCurrency((item.price * item.quantity) / 100)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="total">Total do Pedido: ${formatCurrency(order.total / 100)}</div>
+      </body>
+    </html>
+  `;
+  const win = window.open('', '', 'width=800,height=700');
+  if (win) {
+    win.document.write(printContent);
+    win.document.close();
+    win.focus();
+    setTimeout(() => {
+      win.print();
+    }, 300);
+  }
+};
+
+const updateStatus = (orderId: number, status: string) => {
+  router.post(route('orders.update'), {
+    status: status,
+    id: orderId,
+   }, {
+    onSuccess: (pageProps) => {
+      const updatedOrder = pageProps.props.orders.data.find((order: any) => order.id === orderId);
+      if (updatedOrder) {
+        const index = orders.value.findIndex((order: any) => order.id === orderId);
+        if (index !== -1) {
+          orders.value[index] = updatedOrder;
+        }
+      }
+
+      toast.success(`Pedido #${orderId} atualizado para ${getStatusText(status)}`);
+    },
+  });
 };
 </script>
 
@@ -81,6 +174,7 @@ const getStatusColor = (status: string) => {
   <Head title="Pedidos" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
+    <Toaster />
     <div class="flex h-full flex-1 flex-col gap-6 p-6">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
@@ -127,15 +221,7 @@ const getStatusColor = (status: string) => {
                     class="ml-2 rounded-full px-3 py-1 text-xs font-medium"
                     :class="getStatusColor(order.status)"
                   >
-                    {{
-                      order.status === "pending"
-                        ? "Pendente"
-                        : order.status === "processing"
-                        ? "Em preparo"
-                        : order.status === "completed"
-                        ? "Concluído"
-                        : "Cancelado"
-                    }}
+                    {{ getStatusText(order.status) }}
                   </span>
                 </h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -214,10 +300,10 @@ const getStatusColor = (status: string) => {
                     </div>
                     <div class="flex-1">
                       <p class="font-medium text-gray-900 dark:text-white">
-                        Produto #{{ item.product_id }}
+                        {{ item.product.name }}
                       </p>
                       <p class="text-sm text-gray-500 dark:text-gray-400">
-                        {{ item.quantity }} × {{ formatCurrency((item.price / 100)) }}
+                        {{ item.quantity }} × {{ formatCurrency(item.price / 100) }}
                       </p>
                     </div>
                     <div class="ml-2 font-medium text-gray-900 dark:text-white">
@@ -233,17 +319,20 @@ const getStatusColor = (status: string) => {
             >
               <button
                 v-if="order.status === 'pending'"
+                @click.stop="updateStatus(order.id, 'preparing')"
                 class="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
               >
                 Marcar como Preparando
               </button>
               <button
-                v-if="order.status === 'processing'"
+                @click.stop="updateStatus(order.id, 'delivered')"
+                v-if="order.status === 'preparing'"
                 class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
               >
                 Marcar como Enviado
               </button>
               <button
+                @click.stop="printOrder(order)"
                 class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
               >
                 Imprimir
