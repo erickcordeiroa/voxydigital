@@ -30,15 +30,16 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
+import { Category } from "@/types/cart";
 
-const props = defineProps({
-  categories: Array,
-  selectedCategory: Number,
-});
+const props = defineProps<{
+  categories: Category[];
+  selectedCategory: number;
+}>();
 
 const emit = defineEmits(["categorySelect"]);
 
-const onCategorySelect = (categoryId) => {
+const onCategorySelect = (categoryId: number | null) => {
   emit("categorySelect", categoryId);
 };
 </script>

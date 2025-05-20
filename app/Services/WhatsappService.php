@@ -24,8 +24,10 @@ class WhatsappService
         $token = config('services.whatsapp.token');
 
         $tenant = app('tenant');
-        $msg = "Olá, somos da empresa {$tenant->name}. \n";
-        $msg .= "Seu pedido foi recebido com sucesso! Aguarde nosso contato.";
+        $msg = "Olá, somos da empresa Voxy Digital. \n";
+        $msg .= "Você realizou um pedido para a empresa {$tenant->name}.\n";
+        $msg .= "Informaremos o status do pedido pelo whatsapp!.\n";
+        $msg .= "Agradecemos pela preferência!";
 
         return Http::post($url, [
             'token' => $token,
@@ -33,4 +35,6 @@ class WhatsappService
             'body' => $msg,
         ]);
     }
+
+    
 }

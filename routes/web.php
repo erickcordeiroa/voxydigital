@@ -25,6 +25,7 @@ Route::middleware(TenantMiddleware::class)->group(function () {
 Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('orders', [OrderController::class, 'index']);
+    Route::post('orders/update-status', [OrderController::class, 'update'])->name('orders.update');
 
     Route::resource('categories', CategoriesController::class);
 
