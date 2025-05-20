@@ -46,7 +46,8 @@ class ProductsController extends Controller
 
         return Inertia::render('public/products/Index', [
             'product' => $product,
-            'tenant' => app('tenant')
+            'tenant' => app('tenant'),
+            'categories' => Category::all(),
         ]);
     }
 
