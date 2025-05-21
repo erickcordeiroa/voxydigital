@@ -62,42 +62,34 @@ const formatPhoneNumber = (whatsapp: string) => {
 <template>
   <Toaster />
   <div class="min-h-screen bg-white flex flex-col">
-    <!-- Header -->
-    <header class="sticky top-0 z-10 bg-white shadow-sm">
-      <div class="flex items-center justify-between px-4 py-3">
-        <div class="flex items-center">
-          <button @click="$inertia.visit('/')" class="mr-2 text-gray-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <h1
-            class="text-lg font-bold text-gray-800 truncate text-[var(--custom-title-color)]"
-          >
-            {{ product.name }}
-          </h1>
-        </div>
-        <CartButton
-          v-if="!isCartOpen"
-          :item-count="cart.length"
-          @open-cart="isCartOpen = true"
-        />
-      </div>
-    </header>
+    <CartButton
+      v-if="!isCartOpen"
+      :item-count="cart.length"
+      @open-cart="isCartOpen = true"
+    />
 
     <!-- Imagem do Produto -->
-    <div class="w-full">
+    <div class="w-full relative">
+      <button
+        @click="$inertia.visit('/')"
+        class="absolute top-2 left-2 z-20 p-1 bg-white hover:bg-black/10 rounded transition"
+        style="box-shadow: none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-gray-700"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
       <img
         :src="`/storage/${product.uri}`"
         :alt="product.name"
