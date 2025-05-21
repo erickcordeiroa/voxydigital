@@ -55,7 +55,9 @@ class ProductsController extends Controller
     {
         try {
             $data = $request->validated();
-            $data['slug'] = Str::slug($data['name']);
+            $baseSlug = Str::slug($data['name']);
+            $slug = $baseSlug . '-' . time();
+            $data['slug'] = $slug;
             $data['tenant_id'] = app('tenant_id');
 
             if (isset($data['image'])) {
@@ -79,6 +81,10 @@ class ProductsController extends Controller
         try {
             $product = Product::find($id);
             $data = $request->all();
+
+            $baseSlug = Str::slug($data['name']);
+            $slug = $baseSlug . '-' . time();
+            $data['slug'] = $slug;
 
             if ($request->hasFile('image')) {
                 // Remove a imagem antiga, se existir
