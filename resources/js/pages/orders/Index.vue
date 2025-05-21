@@ -102,6 +102,7 @@ const printOrder = (order: any) => {
           th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
           th { background: #f5f5f5; }
           .total { font-weight: bold; font-size: 1.1em; }
+          .tax { font-weight: bold; font-size: 0.975em; }
           .label { font-weight: bold; }
         </style>
       </head>
@@ -135,6 +136,7 @@ const printOrder = (order: any) => {
             `).join('')}
           </tbody>
         </table>
+        <div class="tax">Taxa Entrega: ${formatCurrency(order.tax_fixed / 100)}</div>
         <div class="total">Total do Pedido: ${formatCurrency(order.total / 100)}</div>
       </body>
     </html>
@@ -254,25 +256,32 @@ const updateStatus = (orderId: number, status: string) => {
           >
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <h3 class="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+                <h3 class="mb-1 font-semibold text-gray-700 dark:text-gray-300">
                   Endereço de Entrega
                 </h3>
-                <p class="text-gray-600 dark:text-gray-300">
+                <p class="text-gray-600 dark:text-gray-300 mb-2">
                   {{ order.delivery_address }}
                 </p>
 
-                <h3 class="mb-2 font-semibold text-gray-700 dark:text-gray-300">
+                <h3 class="mb-1 font-semibold text-gray-700 dark:text-gray-300">
                   Telefone
                 </h3>
-                <p class="text-gray-600 dark:text-gray-300">
+                <p class="text-gray-600 dark:text-gray-300 mb-2">
                   {{ formatPhone(order.customer_phone) }}
                 </p>
 
-                <h3 class="mb-2 mt-4 font-semibold text-gray-700 dark:text-gray-300">
+                <h3 class="mb-1 mt-4 font-semibold text-gray-700 dark:text-gray-300">
                   Observações
                 </h3>
-                <p class="text-gray-600 dark:text-gray-300">
+                <p class="text-gray-600 dark:text-gray-300 mb-2">
                   {{ order.note || "Nenhuma observação adicional" }}
+                </p>
+
+                <h3 class="mb-1 mt-4 font-semibold text-gray-700 dark:text-gray-300">
+                  Taxa de Entrega
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-2">
+                  {{ formatCurrency(order.tax_fixed / 100) }}
                 </p>
               </div>
 

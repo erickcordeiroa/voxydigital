@@ -132,6 +132,7 @@ const formatPhoneNumber = (whatsapp: string) => {
       v-if="isCartOpen"
       :items="cartWithCategoryNames"
       :total="cartTotal"
+      :taxFixed="tenant.tax_fixed"
       @close-cart="isCartOpen = false"
       @remove-item="removeFromCart"
       @increase-quantity="increaseQuantity"

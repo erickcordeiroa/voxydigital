@@ -1,13 +1,30 @@
 <script setup lang="ts">
-import { ref, defineProps } from "vue";
-import { Upload, Save } from "lucide-vue-next";
+import { ref, defineProps, watch } from "vue";
+import { Save } from "lucide-vue-next";
 import { router } from "@inertiajs/vue3";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "vue-sonner";
+import type { Tenant } from "@/types/cart";
 
 const props = defineProps<{
-  tenant: Object;
+  tenant: Tenant;
 }>();
+
+// Função para aplicar máscara de reais
+function formatToCurrency(value: string): string {
+  const numericValue = value.replace(/\D/g, ""); // Remove tudo que não for número
+  const formattedValue = (Number(numericValue) / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+  return formattedValue;
+}
+
+function parseCurrencyToCents(value: string): number {
+  // Remove tudo que não for dígito
+  const numeric = value.replace(/\D/g, "");
+  return Number(numeric);
+}
 
 // Dados da loja
 const storeData = ref({
@@ -23,7 +40,16 @@ const storeData = ref({
   custom_title_color: props.tenant.custom_title_color,
   current_logo: `/storage/${props.tenant.logo}`,
   current_cover: `/storage/${props.tenant.cover}`,
+  tax_fixed: formatToCurrency(String(props.tenant.tax_fixed)),
 });
+
+// Watchers para aplicar a máscara nos campos de preço e promoção
+watch(
+  () => storeData.value.tax_fixed,
+  (newValue) => {
+    storeData.value.tax_fixed = formatToCurrency(newValue);
+  }
+);
 
 // Referências para os inputs de arquivo
 const loading = ref(false);
@@ -67,6 +93,7 @@ const submitForm = () => {
       custom_button: storeData.value.custom_button,
       custom_button_text: storeData.value.custom_button_text,
       custom_title_color: storeData.value.custom_title_color,
+      tax_fixed: parseCurrencyToCents(storeData.value.tax_fixed).toString(),
     },
     {
       preserveScroll: true,
@@ -187,12 +214,7 @@ const submitForm = () => {
                 <label class="block text-sm font-medium mb-1">Selecionar novo logo</label>
                 <input
                   type="file"
-                  class="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-md file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                   accept="image/*"
                   @change="handleLogoUpload"
                   ref="logoInput"
@@ -228,12 +250,7 @@ const submitForm = () => {
                 <label class="block text-sm font-medium mb-1">Selecionar nova capa</label>
                 <input
                   type="file"
-                  class="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-md file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                   accept="image/*"
                   @change="handleCoverUpload"
                   ref="coverInput"
@@ -307,6 +324,26 @@ const submitForm = () => {
                 class="flex-1 px-3 py-2 border rounded-md dark:bg-neutral-700 dark:border-neutral-600"
               />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Entregas -->
+      <div class="bg-white dark:bg-neutral-800 rounded-lg shadow p-6">
+        <h2 class="text-lg font-medium mb-4">Entregas</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="tax_fixed" class="block text-sm font-medium mb-1"
+              >Taxa Fixa de Entrega</label
+            >
+            <input
+              id="tax_fixed"
+              v-model="storeData.tax_fixed"
+              type="text"
+              class="w-full px-3 py-2 border rounded-md dark:bg-neutral-700 dark:border-neutral-600"
+              required
+            />
           </div>
         </div>
       </div>

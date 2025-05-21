@@ -32,6 +32,7 @@ class CreateOrderRequest extends FormRequest
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|integer|min:1',
             'total' => 'required|integer|min:1',
+            'tax_fixed' => 'nullable|integer|min:0',
         ];
     }
 }

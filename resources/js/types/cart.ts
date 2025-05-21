@@ -23,4 +23,5 @@ export interface Tenant {
   custom_button?: string;
   custom_button_text?: string;
   custom_title_color?: string;
+  tax_fixed: string;
 }

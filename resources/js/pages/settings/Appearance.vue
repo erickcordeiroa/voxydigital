@@ -11,7 +11,7 @@ import SettingsLayout from '@/layouts/settings/Layout.vue';
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
-        title: 'Aparência',
+        title: 'Configurações',
         href: '/settings/appearance',
     },
 ];
@@ -25,12 +25,12 @@ const tenant = ref(props.tenant);
 
 <template>
   <AppLayout :breadcrumbs="breadcrumbItems">
-  <Head title="Aparência" />
+    <Head title="Configurações" />
 
     <SettingsLayout>
       <div class="space-y-6">
         <HeadingSmall
-          title="Aparência"
+          title="Configurações"
           description="Atualize as informações da sua empresa"
         />
         <AppearanceTabs :tenant="tenant" />

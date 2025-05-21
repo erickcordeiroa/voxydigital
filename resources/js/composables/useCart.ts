@@ -86,7 +86,8 @@ export function useCart(
                     customer_phone: customerData.phone,
                     delivery_address: customerData.address,
                     note: customerData.note,
-                    total: cartTotal.value,
+                    tax_fixed: tenant.value.tax_fixed,
+                    total: cartTotal.value + tenant.value.tax_fixed,
                     items: cart.value.map((item) => ({
                         product_id: item.id,
                         quantity: item.quantity,

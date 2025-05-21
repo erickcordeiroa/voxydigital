@@ -43,6 +43,7 @@ class OrderController extends Controller
             'note' => $data['note'],
             'total' => $data['total'],
             'status' => 'pending',
+            'tax_fixed' => $data['tax_fixed'],
         ]);
 
         foreach ($data['items'] as $item) {
@@ -69,6 +70,7 @@ class OrderController extends Controller
                 $subtotal = number_format(($item->price * $item->quantity) / 100, 2, ',', '.');
                 $msg .= "- {$item->quantity}x {$item->product->name} | Unitário: R$ {$unitPrice} | Subtotal: R$ {$subtotal}\n";
             }
+            $msg .= "*Taxa Entrega:* R$ " . number_format($tenant->tax_fixed / 100, 2, ',', '.');
             $msg .= "*Total:* R$ " . number_format($data['total'] / 100, 2, ',', '.');
 
             WhatsappService::send("+55{$tenant->whatsapp}", $msg);

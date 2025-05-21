@@ -16,6 +16,8 @@ class Tenant extends Model
         'status',
         'custom_button',
         'custom_button_text',
-        'custom_title_color'
+        'custom_title_color',
+        'tax_fixed',
+        'dt_expiration'
     ];
 }

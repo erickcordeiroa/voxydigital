@@ -65,8 +65,9 @@
 
         <div class="mb-4 text-right text-lg">
           <p>Subtotal: {{ formatCurrency(total) }}</p>
+          <p>Taxa de Entrega: {{ formatCurrency(taxFixed) }}</p>
           <p class="font-bold text-primary mt-2">
-            Total: {{ formatCurrency(total) }}
+            Total: {{ formatCurrency(total + taxFixed) }}
           </p>
         </div>
 
@@ -89,6 +90,10 @@ defineProps({
     default: () => []
   },
   total: {
+    type: Number,
+    default: 0
+  },
+  taxFixed: {
     type: Number,
     default: 0
   }
