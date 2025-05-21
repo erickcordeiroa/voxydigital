@@ -18,7 +18,7 @@
     <div class="flex flex-col items-center mt-20">
       <h1 class="text-3xl font-bold mb-1">{{ storeName }}</h1>
       <p class="text-sm text-gray-600">
-        Contato: {{ formatPhoneNumber(contactPhone) }} | {{ businessHours }}
+        Contato: {{ formatPhoneNumber(contactPhone) }}
       </p>
     </div>
   </div>
@@ -30,10 +30,6 @@ const props = defineProps({
   logoUrl: String,
   storeName: String,
   contactPhone: String,
-  businessHours: {
-    type: String,
-    default: 'Seg a Sex: 08h - 18h'
-  }
 });
 
 const formatPhoneNumber = (whatsapp) => {
