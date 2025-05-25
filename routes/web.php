@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ProductVariationController;
 use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,9 +31,14 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
     Route::resource('categories', CategoriesController::class);
 
     Route::get('products', [ProductsController::class, "index"])->name('products.index');
+    Route::get('products/create', [ProductsController::class, "create"])->name('products.create');
     Route::post('products', [ProductsController::class, "store"]);
     Route::post('products/{id}', [ProductsController::class, 'update']);
     Route::delete('products/{id}', [ProductsController::class, 'destroy']);
+
+    Route::post('/products/{id}/variations', [ProductVariationController::class, 'store'])->name('variations.store');
+    Route::put('/products/{id}/variations', [ProductVariationController::class, 'store'])->name('variations.update');
+    Route::delete('/products/{id}/variations', [ProductVariationController::class, 'delete'])->name('variations.delete');
 
 });
 

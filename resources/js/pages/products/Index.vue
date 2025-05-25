@@ -2,7 +2,6 @@
 import { ref, watch } from "vue";
 import { Head, router } from "@inertiajs/vue3";
 import AppLayout from "@/layouts/AppLayout.vue";
-import CreateProductModal from "@/components/products/CreateProductModal.vue";
 import ListProduct from "@/components/products/ListProducts.vue";
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'vue-sonner';
@@ -16,10 +15,7 @@ const props = defineProps({
 const products = ref(props.products.data);
 const pagination = ref(props.products);
 
-const showModal = ref(false);
 const categories = ref(props.categories);
-const isEditing = ref(false);
-const selectedProduct = ref(null);
 
 // Filtros de busca
 const search = ref(props.filters.search || "");
@@ -45,33 +41,18 @@ watch(
   }
 );
 
-function openCreateModal() {
-  isEditing.value = false;
-  selectedProduct.value = null;
-  showModal.value = true;
-}
-
-function openEditModal(product) {
-  isEditing.value = true;
-  selectedProduct.value = {
-    ...product,
-    status: product.status === 1 ? 'active' : 'inactive',
-    image: product.uri
-  };
-  showModal.value = true;
-}
-
 function deleteProduct(id: number) {
   if (confirm("Tem certeza que deseja excluir este produto?")) {
     router.delete(`/products/${id}`, {
       onSuccess: () => {
-        toast.success('Produto excluido com sucesso!');
+        toast.success('Produto excluído com sucesso!');
         products.value = products.value.filter((product) => product.id !== id);
       },
     });
   }
 }
 </script>
+
 <template>
   <Head title="Produtos" />
   <Toaster />
@@ -80,8 +61,8 @@ function deleteProduct(id: number) {
     <div class="flex items-center justify-between m-6">
       <h1 class="text-2xl font-semibold">Produtos</h1>
       <button
-        @click="openCreateModal"
-        class="rounded-lg bg-primary px-4 py-2 text-white hover:bg-primary-dark transition"
+        @click="router.get('/products/create')"
+        class="rounded-lg bg-primary px-4 py-2 text-white hover:bg-primary-dark transition cursor-pointer"
       >
         + Novo Produto
       </button>
@@ -108,10 +89,9 @@ function deleteProduct(id: number) {
       v-if="products.length === 0"
       class="flex flex-col items-center justify-center py-20 text-center text-muted-foreground"
     >
-      <!-- Empty state -->
       <h2 class="text-xl font-semibold mb-2">Nenhum produto encontrado</h2>
       <p class="mb-4 max-w-md text-sm">
-        Verifique os filtros ou cadastre um novo produto.
+        Verifique os filtros.
       </p>
     </div>
 
@@ -119,17 +99,8 @@ function deleteProduct(id: number) {
       <ListProduct
         :products="products"
         :pagination="pagination"
-        @edit="openEditModal"
         @delete="deleteProduct"
       />
     </div>
-    <!-- Modal -->
-    <CreateProductModal
-      :open="showModal"
-      :isEditing="isEditing"
-      :product="selectedProduct"
-      :categories="categories"
-      @update:open="(value) => (showModal = value)"
-    />
   </AppLayout>
 </template>

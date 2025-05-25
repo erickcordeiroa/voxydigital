@@ -51,6 +51,13 @@ class ProductsController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('products/Create', [
+            'categories' => Category::all(),
+        ]);
+    }
+
     public function store(CreateProductRequest $request)
     {
         try {
