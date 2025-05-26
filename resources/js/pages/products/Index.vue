@@ -32,15 +32,6 @@ function applyFilters() {
   );
 }
 
-// Atualizar a lista de produtos quando props.products mudar
-watch(
-  () => props.products,
-  (newProducts) => {
-    products.value = newProducts.data;
-    pagination.value = newProducts;
-  }
-);
-
 function deleteProduct(id: number) {
   if (confirm("Tem certeza que deseja excluir este produto?")) {
     router.delete(`/products/${id}`, {

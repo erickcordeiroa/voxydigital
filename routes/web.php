@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
     Route::get('products', [ProductsController::class, "index"])->name('products.index');
     Route::get('products/create', [ProductsController::class, "create"])->name('products.create');
     Route::post('products', [ProductsController::class, "store"]);
+    Route::get('products/edit/{id}', [ProductsController::class, "edit"])->name('products.edit');
     Route::post('products/{id}', [ProductsController::class, 'update']);
     Route::delete('products/{id}', [ProductsController::class, 'destroy']);
 

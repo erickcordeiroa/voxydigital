@@ -3,6 +3,7 @@ import { ref, watch, defineProps } from "vue";
 import AppLayout from "@/layouts/AppLayout.vue";
 import type { Category } from "@/types/cart";
 import { Button } from "@/components/ui/button";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
   categories: Category[];
@@ -87,37 +88,9 @@ watch(
   }
 );
 
-// Variações
-const showVariationModal = ref(false);
-const editingVariation = ref<number | null>(null);
-const variationForm = ref({
-  sku: "",
-  reference: "",
-  size: "",
-});
-
-function openVariationModal(variation: any = null, idx: number | null = null) {
-  if (variation) {
-    variationForm.value = { ...variation };
-    editingVariation.value = idx;
-  } else {
-    variationForm.value = { sku: "", reference: "", size: "" };
-    editingVariation.value = null;
-  }
-  showVariationModal.value = true;
-}
-
-function saveVariation() {
-  if (editingVariation.value !== null) {
-    product.value.variations[editingVariation.value] = { ...variationForm.value };
-  } else {
-    product.value.variations.push({ ...variationForm.value });
-  }
-  showVariationModal.value = false;
-}
-
-function removeVariation(idx: number) {
-  product.value.variations.splice(idx, 1);
+function parseCurrencyToCents(value: string): number {
+  const numeric = value.replace(/\D/g, "");
+  return Number(numeric);
 }
 
 // Validação simples
@@ -146,8 +119,34 @@ function validate() {
 
 function submit() {
   if (!validate()) return;
-  // Aqui você pode enviar o produto para a API
-  alert("Produto salvo! (simulação)");
+
+  const formData = new FormData();
+  formData.append("name", product.value.name);
+  formData.append("price", parseCurrencyToCents(product.value.price).toString());
+  formData.append(
+    "sale",
+    product.value.sale ? parseCurrencyToCents(product.value.sale).toString() : ""
+  );
+  formData.append("category_id", product.value.category_id);
+  formData.append("status", product.value.status);
+  formData.append("description", product.value.description);
+  formData.append("video", product.value.video);
+  formData.append("note", product.value.note);
+
+  // Imagens
+  product.value.images.forEach((file, idx) => {
+    formData.append(`images[${idx}]`, file);
+  });
+
+  try {
+    router.post(`/products`, formData, {
+      onSuccess: () => {
+        route("products.index");
+      },
+    });
+  } catch (error) {
+    console.error("Erro ao enviar o formulário:", error);
+  }
 }
 </script>
 
@@ -274,128 +273,11 @@ function submit() {
             Nenhuma imagem selecionada
           </div>
         </div>
-        <div class="md:col-span-2">
-          <div class="flex justify-between items-center mb-2 mt-6">
-            <label class="block font-semibold">Variações</label>
-            <Button
-              type="button"
-              @click="openVariationModal()"
-              class="rounded-lg bg-primary px-4 py-2 text-white hover:bg-primary-dark transition cursor-pointer"
-            >
-              + Adicionar Variação
-            </Button>
-          </div>
-          <div
-            class="border rounded overflow-x-auto"
-            style="max-height: 220px; overflow-y: auto"
-          >
-            <table class="min-w-full text-sm">
-              <thead class="bg-gray-100">
-                <tr>
-                  <th class="px-3 py-2 text-left">SKU</th>
-                  <th class="px-3 py-2 text-left">Referencia</th>
-                  <th class="px-3 py-2 text-left">Tamanho</th>
-                  <th class="px-3 py-2"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(variation, idx) in product.variations"
-                  :key="idx"
-                  class="border-t"
-                >
-                  <td class="px-3 py-2">{{ variation.sku }}</td>
-                  <td class="px-3 py-2">{{ variation.reference }}</td>
-                  <td class="px-3 py-2">{{ variation.size }}</td>
-                  <td class="px-3 py-2 flex gap-2">
-                    <button
-                      type="button"
-                      class="text-blue-600"
-                      @click="openVariationModal(variation, idx)"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      type="button"
-                      class="text-red-600"
-                      @click="removeVariation(idx)"
-                    >
-                      Remover
-                    </button>
-                  </td>
-                </tr>
-                <tr v-if="!product.variations.length">
-                  <td colspan="4" class="px-3 py-2 text-center text-gray-400">
-                    Nenhuma variação cadastrada.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+
         <div class="md:col-span-2 mt-6 text-right">
           <Button variant="default"> Salvar Produto </Button>
         </div>
       </form>
-    </div>
-
-    <!-- Modal de Variação -->
-    <div
-      v-if="showVariationModal"
-      class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
-    >
-      <div class="bg-white rounded shadow-lg p-6 w-full max-w-md">
-        <h2 class="text-lg font-bold mb-4">
-          {{ editingVariation !== null ? "Editar" : "Adicionar" }} Variação
-        </h2>
-        <form @submit.prevent="saveVariation">
-          <div class="mb-3">
-            <label class="block mb-1">SKU</label>
-            <input
-              v-model="variationForm.sku"
-              type="text"
-              class="w-full border rounded px-3 py-2"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label class="block mb-1">Referencia</label>
-            <input
-              v-model="variationForm.reference"
-              type="text"
-              min="0"
-              step="0.01"
-              class="w-full border rounded px-3 py-2"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label class="block mb-1">Tamanho</label>
-            <input
-              v-model="variationForm.size"
-              type="text"
-              min="0"
-              class="w-full border rounded px-3 py-2"
-              required
-            />
-          </div>
-          <div class="flex justify-end gap-2 mt-4">
-            <button
-              type="button"
-              class="rounded-lg bg-gray-100 px-4 py-2 text-black hover:bg-primary-dark transition cursor-pointer"
-              @click="showVariationModal = false"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              class="rounded-lg bg-primary px-4 py-2 text-white hover:bg-primary-dark transition cursor-pointer"
-            >
-              Salvar
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
   </AppLayout>
 </template>

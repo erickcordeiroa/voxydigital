@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
 import { Edit, Trash2 } from "lucide-vue-next";
+import { router } from "@inertiajs/vue3";
 
 // Define as props recebidas
 defineProps({
@@ -14,6 +15,19 @@ defineProps({
   },
 });
 
+function getMainImage(product: any) {
+  if (Array.isArray(product.images)) {
+    const main = product.images.find(img => img.thumbnail === 1);
+    return main ? main.uri : (product.images[0]?.uri || product.uri);
+  }
+
+  return product.uri;
+}
+
+function handleEditProduct(id: number) {
+  router.get(route('products.edit', id));
+}
+
 // Define os eventos emitidos
 defineEmits(["edit", "delete"]);
 </script>
@@ -26,7 +40,7 @@ defineEmits(["edit", "delete"]);
     >
       <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-4 sm:mb-0">
         <img
-          :src="product.uri"
+          :src="`/storage/${getMainImage(product)}`"
           alt="Imagem do produto"
           class="h-24 w-24 object-cover rounded-md border mx-auto sm:mx-0"
         />
@@ -71,7 +85,7 @@ defineEmits(["edit", "delete"]);
         <div class="mt-2 flex gap-2 justify-center sm:justify-end">
           <!-- Ícone de Editar -->
           <button
-            @click="$emit('edit', product)"
+            @click="handleEditProduct(product.id)"
             class="text-gray-500 hover:text-blue-500 transition cursor-pointer"
           >
             <Edit class="w-5 h-5" />
