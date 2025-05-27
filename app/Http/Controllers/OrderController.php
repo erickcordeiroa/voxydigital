@@ -13,7 +13,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::with('items.product')->latest();
+        $query = Order::with(['items.product', 'items.variation'])->latest();
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;

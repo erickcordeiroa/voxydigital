@@ -120,6 +120,7 @@ const printOrder = (order: any) => {
           <thead>
             <tr>
               <th>Produto</th>
+              <th>Tamanho</th>
               <th>Qtd</th>
               <th>Preço Unitário</th>
               <th>Total</th>
@@ -129,6 +130,7 @@ const printOrder = (order: any) => {
             ${order.items.map((item: any) => `
               <tr>
                 <td>${item.product.name}</td>
+                <td>${item.variation.size}</td>
                 <td>${item.quantity}</td>
                 <td>${formatCurrency(item.price / 100)}</td>
                 <td>${formatCurrency((item.price * item.quantity) / 100)}</td>
@@ -296,14 +298,14 @@ const updateStatus = (orderId: number, status: string) => {
                     class="flex items-start rounded-lg border border-gray-200 p-3 dark:border-gray-600"
                   >
                     <div
-                      class="mr-3 h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-gray-100"
+                      class="mr-3 h-18 w-18 flex-shrink-0 overflow-hidden rounded-md bg-gray-100"
                     >
                       <!-- Aqui você pode adicionar uma imagem do produto se disponível -->
                       <div class="flex h-full items-center justify-center text-gray-400">
                         <img
                           :src="`/storage/${item.product.uri}`"
                           alt="Imagem do produto"
-                          class="h-16 w-16 object-cover rounded-md border"
+                          class="h-18 w-18 object-cover rounded-md border"
                         />
                       </div>
                     </div>
@@ -313,6 +315,9 @@ const updateStatus = (orderId: number, status: string) => {
                       </p>
                       <p class="text-sm text-gray-500 dark:text-gray-400">
                         {{ item.quantity }} × {{ formatCurrency(item.price / 100) }}
+                      </p>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">
+                        Tamanho:  {{ item.variation?.size || 'N/A' }}
                       </p>
                     </div>
                     <div class="ml-2 font-medium text-gray-900 dark:text-white">
