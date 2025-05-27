@@ -184,6 +184,14 @@ const formatPhoneNumber = (whatsapp: string) => {
             }}
           </p>
         </div>
+        <div v-else>
+          <p class="text-black font-bold text-2xl">
+            R$
+            {{
+              (product.price / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })
+            }}
+          </p>
+        </div>
         <Button
           @click="handleAddToCart"
           variant="default"
@@ -199,7 +207,7 @@ const formatPhoneNumber = (whatsapp: string) => {
       v-if="isCartOpen"
       :items="cartWithCategoryNames"
       :total="cartTotal"
-      :taxFixed="tenant.tax_fixed"
+      :taxFixed="Number(tenant.tax_fixed)"
       @close-cart="isCartOpen = false"
       @remove-item="removeFromCart"
       @increase-quantity="increaseQuantity"
