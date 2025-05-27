@@ -19,14 +19,14 @@ export function useCart(
         }))
     );
 
-    const cartTotal = computed(() =>
-        cart.value.reduce(
+    const cartTotal = computed(() => {
+       return cart.value.reduce(
             (total, item) =>
                 total +
                 (Number(item.sale ?? item.price) * Number(item.quantity || 1)),
             0
-        )
-    );
+        );
+    });
 
     function getCategoryName(categoryId?: number) {
         const category = categories.value.find((cat) => cat.id === categoryId);
