@@ -53,14 +53,12 @@ const {
   submitOrder,
 } = useCart(categories, tenant);
 
-const showModal = ref(false);
-
 function handleAddToCart() {
   addToCart(product.value, selectedVariation.value);
 }
 
 function handleModalClose() {
-  showModal.value = false;
+  showOrderConfirmation.value = false;
 }
 
 function handleModalSubmit(customerInfo: {
@@ -70,7 +68,7 @@ function handleModalSubmit(customerInfo: {
   note?: string;
 }) {
   submitOrder(customerInfo);
-  showModal.value = false;
+  showOrderConfirmation.value = false;
 }
 
 const formatPhoneNumber = (whatsapp: string) => {

@@ -2,10 +2,12 @@
   <div class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
       <!-- ... cabeçalho ... -->
-      
+
       <form @submit.prevent="submitForm" class="space-y-4">
         <div>
-          <label for="customer_name" class="block text-sm font-medium mb-1">Nome para contato*</label>
+          <label for="customer_name" class="block text-sm font-medium mb-1"
+            >Nome para contato*</label
+          >
           <input
             id="customer_name"
             v-model="customerInfo.name"
@@ -17,7 +19,9 @@
         </div>
 
         <div>
-          <label for="customer_phone" class="block text-sm font-medium mb-1">Telefone*</label>
+          <label for="customer_phone" class="block text-sm font-medium mb-1"
+            >Telefone*</label
+          >
           <input
             id="customer_phone"
             v-model="customerInfo.phone"
@@ -29,7 +33,9 @@
         </div>
 
         <div>
-          <label for="delivery_address" class="block text-sm font-medium mb-1">Endereço de entrega*</label>
+          <label for="delivery_address" class="block text-sm font-medium mb-1"
+            >Endereço de entrega*</label
+          >
           <textarea
             id="delivery_address"
             v-model="customerInfo.address"
@@ -37,11 +43,15 @@
             class="w-full border rounded px-3 py-2"
             :class="{ 'border-red-500': errors.address }"
           ></textarea>
-          <p v-if="errors.address" class="text-red-500 text-xs mt-1">{{ errors.address }}</p>
+          <p v-if="errors.address" class="text-red-500 text-xs mt-1">
+            {{ errors.address }}
+          </p>
         </div>
 
         <div>
-          <label for="delivery_note" class="block text-sm font-medium mb-1">Observações</label>
+          <label for="delivery_note" class="block text-sm font-medium mb-1"
+            >Observações</label
+          >
           <textarea
             id="delivery_note"
             v-model="customerInfo.note"
@@ -51,7 +61,9 @@
         </div>
 
         <div class="flex justify-end gap-2 pt-4">
-          <Button variant="outline" @click="$emit('close')">Cancelar</Button>
+          <Button type="button" variant="outline" @click.stop="$emit('close')"
+            >Cancelar</Button
+          >
           <Button type="submit" :disabled="isSubmitting">
             <span v-if="isSubmitting">Enviando...</span>
             <span v-else>Confirmar Pedido</span>
@@ -108,11 +120,12 @@ const validateForm = () => {
   return valid;
 };
 
-const submitForm = () => {
+const submitForm= () =>{
   if (!validateForm()) return;
-  
+
   isSubmitting.value = true;
-  emit('submit', customerInfo.value);
-  isSubmitting.value = false;
+    emit('submit', customerInfo.value); // caso o handler seja async
+    isSubmitting.value = false;
+
 };
 </script>
