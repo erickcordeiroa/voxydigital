@@ -36,7 +36,13 @@
                   <p>
                     <button
                       class="text-red-400 text-sm cursor-pointer whitespace-nowrap"
-                      @click="$emit('remove-item', item.id, item.variation.id)"
+                      @click="
+                        $emit(
+                          'remove-item',
+                          item.id,
+                          item.variation ? item.variation.id : null
+                        )
+                      "
                     >
                       Remover
                     </button>
@@ -44,7 +50,13 @@
                 </div>
                 <div class="flex items-center gap-2 mt-2 flex-shrink-0">
                   <button
-                    @click="$emit('decrease-quantity', item.id, item.variation.id)"
+                    @click="
+                      $emit(
+                        'decrease-quantity',
+                        item.id,
+                        item.variation ? item.variation.id : null
+                      )
+                    "
                     :disabled="item.quantity <= 1"
                     class="px-2 py-1 bg-gray-200 rounded"
                   >
@@ -52,14 +64,22 @@
                   </button>
                   <span class="whitespace-nowrap">{{ item.quantity }}</span>
                   <button
-                    @click="$emit('increase-quantity', item.id, item.variation.id)"
+                    @click="
+                      $emit(
+                        'increase-quantity',
+                        item.id,
+                        item.variation ? item.variation.id : null
+                      )
+                    "
                     class="px-2 py-1 bg-gray-200 rounded"
                   >
                     +
                   </button>
                 </div>
                 <p class="mt-2 font-semibold whitespace-nowrap">
-                  {{ formatCurrency((item.sale ? item.sale : item.price) * item.quantity) }}
+                  {{
+                    formatCurrency((item.sale ? item.sale : item.price) * item.quantity)
+                  }}
                 </p>
               </div>
             </div>
@@ -90,24 +110,24 @@ import { Button } from "@/components/ui/button";
 defineProps({
   items: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   total: {
     type: Number,
-    default: 0
+    default: 0,
   },
   taxFixed: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
 });
 
 defineEmits([
-  'close-cart',
-  'remove-item',
-  'increase-quantity',
-  'decrease-quantity',
-  'checkout'
+  "close-cart",
+  "remove-item",
+  "increase-quantity",
+  "decrease-quantity",
+  "checkout",
 ]);
 
 const formatCurrency = (value) => {

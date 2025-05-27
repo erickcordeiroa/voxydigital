@@ -23,7 +23,7 @@ export function useCart(
         cart.value.reduce(
             (total, item) =>
                 total +
-                ((item.sale !== null && item.sale !== undefined ? item.sale : item.price) * (item.quantity || 1)),
+                (Number(item.sale ?? item.price) * Number(item.quantity || 1)),
             0
         )
     );
@@ -57,24 +57,33 @@ export function useCart(
     }
 
     function removeFromCart(productId: number, variationId?: number) {
-        cart.value = cart.value.filter(
-            (item) =>
-                item.id !== productId ||
-                (variationId !== undefined && item.variation?.id !== variationId)
-        );
+        cart.value = cart.value.filter((item) => {
+            // Se o produto tem variação, remove apenas se id e variation.id batem
+            if (variationId !== null) {
+                return !(item.id === productId && item.variation?.id === variationId);
+            }
+            // Se não tem variação, remove pelo id e item sem variation
+            return !(item.id === productId && !item.variation);
+        });
     }
 
     function increaseQuantity(productId: number, variationId?: number) {
-        const item = cart.value.find(
-            (item) => item.id === productId && item.variation?.id === variationId
+        const item = cart.value.find((item) =>
+            variationId !== null
+                ? item.id === productId && item.variation?.id === variationId
+                : item.id === productId && !item.variation
         );
+
         if (item) item.quantity = (item.quantity || 1) + 1;
     }
 
     function decreaseQuantity(productId: number, variationId?: number) {
-        const item = cart.value.find(
-            (item) => item.id === productId && item.variation?.id === variationId
+        const item = cart.value.find((item) => 
+            variationId !== null
+                ? item.id === productId && item.variation?.id === variationId
+                : item.id === productId && !item.variation
         );
+
         if (item && (item.quantity || 1) > 1) item.quantity!--;
     }
 
