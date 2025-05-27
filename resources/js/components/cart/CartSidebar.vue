@@ -27,8 +27,11 @@
               <div class="flex justify-between items-start gap-2">
                 <div class="min-w-0">
                   <h4 class="font-semibold text-md truncate">{{ item.name }}</h4>
-                  <p class="text-md text-muted-foreground truncate">
+                  <p v-if="item.variation" class="text-md text-muted-foreground truncate">
                     Tamanho: {{ item.variation.size }}
+                  </p>
+                  <p v-else class="text-md text-muted-foreground truncate">
+                    {{ item.categoryName }}
                   </p>
                   <p>
                     <button

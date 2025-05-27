@@ -69,7 +69,8 @@ class OrderController extends Controller
             foreach ($order->items as $item) {
                 $unitPrice = number_format($item->price / 100, 2, ',', '.');
                 $subtotal = number_format(($item->price * $item->quantity) / 100, 2, ',', '.');
-                $msg .= "- {$item->quantity}x {$item->product->name} | Tamanho: {$item->variation->size} | Unitário: R$ {$unitPrice} | Subtotal: R$ {$subtotal}\n";
+                $size = $item->variation ? "Tamanho: {$item->variation->size}" : '';
+                $msg .= "- {$item->quantity}x {$item->product->name} | {$size} | Unitário: R$ {$unitPrice} | Subtotal: R$ {$subtotal}\n";
             }
             $msg .= "*Taxa Entrega:* R$ " . number_format($tenant->tax_fixed / 100, 2, ',', '.'). "\n";
             $msg .= "*Total:* R$ " . number_format($data['total'] / 100, 2, ',', '.');
