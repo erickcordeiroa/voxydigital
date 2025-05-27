@@ -104,6 +104,7 @@ export function useCart(
                         product_id: item.id,
                         quantity: item.quantity,
                         price: item.sale ?? item.price,
+                        variation_id: item.variation?.id,
                     })),
                 },
                 {

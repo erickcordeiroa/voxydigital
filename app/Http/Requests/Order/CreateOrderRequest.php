@@ -31,6 +31,7 @@ class CreateOrderRequest extends FormRequest
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|integer|min:1',
+            'items.*.variation_id' => 'nullable|exists:product_variations,id',
             'total' => 'required|integer|min:1',
             'tax_fixed' => 'nullable|integer|min:0',
         ];
