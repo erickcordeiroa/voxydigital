@@ -7,6 +7,7 @@
         :key="product.id"
         :product="product"
         @add-to-cart="$emit('add-to-cart', product)"
+        @click="handleViewProduct(product.slug)"
       />
     </div>
   </div>
@@ -15,6 +16,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import ProductCard from "@/components/home/ProductCard.vue";
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
   category: {
@@ -32,4 +34,10 @@ defineEmits(['add-to-cart']);
 const filteredProducts = computed(() => {
   return props.products.filter(product => product.category_id === props.category.id);
 });
+
+const handleViewProduct = (slug:string) => {
+  router.get(
+      route("product.show", {slug: slug})
+    )
+}
 </script>
