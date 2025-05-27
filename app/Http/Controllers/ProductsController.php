@@ -42,7 +42,7 @@ class ProductsController extends Controller
 
     public function show(string $slug)
     {
-        $product = Product::with(['category', 'images'])
+        $product = Product::with(['category', 'images', 'variations'])
             ->where('slug', $slug)->first();
 
         return Inertia::render('public/products/Index', [

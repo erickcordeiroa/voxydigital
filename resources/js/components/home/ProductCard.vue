@@ -27,13 +27,13 @@
       </div>
     </CardContent>
     <CardFooter class="flex-wrap gap-y-2">
-      <Button 
+      <!-- <Button 
         variant="default" 
         class="w-full cursor-pointer bg-[var(--custom-button)] text-[var(--custom-button-text)]" 
         @click="handleAddToCart"
       >
         Adicionar ao Carrinho
-      </Button>
+      </Button> -->
       <Button 
         variant="default" 
         class="w-full cursor-pointer bg-[var(--custom-button)] text-[var(--custom-button-text)]" 

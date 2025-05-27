@@ -27,13 +27,13 @@
               <div class="flex justify-between items-start gap-2">
                 <div class="min-w-0">
                   <h4 class="font-semibold text-md truncate">{{ item.name }}</h4>
-                  <p class="text-sm text-muted-foreground truncate">
-                    {{ item.categoryName }}
+                  <p class="text-md text-muted-foreground truncate">
+                    Tamanho: {{ item.variation.size }}
                   </p>
                   <p>
                     <button
                       class="text-red-400 text-sm cursor-pointer whitespace-nowrap"
-                      @click="$emit('remove-item', item.id)"
+                      @click="$emit('remove-item', item.id, item.variation.id)"
                     >
                       Remover
                     </button>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="flex items-center gap-2 mt-2 flex-shrink-0">
                   <button
-                    @click="$emit('decrease-quantity', item.id)"
+                    @click="$emit('decrease-quantity', item.id, item.variation.id)"
                     :disabled="item.quantity <= 1"
                     class="px-2 py-1 bg-gray-200 rounded"
                   >
@@ -49,7 +49,7 @@
                   </button>
                   <span class="whitespace-nowrap">{{ item.quantity }}</span>
                   <button
-                    @click="$emit('increase-quantity', item.id)"
+                    @click="$emit('increase-quantity', item.id, item.variation.id)"
                     class="px-2 py-1 bg-gray-200 rounded"
                   >
                     +
@@ -65,7 +65,7 @@
 
         <div class="mb-4 text-right text-lg">
           <p>Subtotal: {{ formatCurrency(total) }}</p>
-          <p>Taxa de Entrega: {{ formatCurrency(taxFixed) }}</p>
+          <p v-if="taxFixed">Taxa de Entrega: {{ formatCurrency(taxFixed) }}</p>
           <p class="font-bold text-primary mt-2">
             Total: {{ formatCurrency(total + taxFixed) }}
           </p>

@@ -14,7 +14,7 @@ class HomeController extends Controller
         return Inertia::render(
             'public/home/Index',
             [
-                "products" => Product::with('category')->where('status', true)
+                "products" => Product::with(['category', 'variations'])->where('status', true)
                     ->whereHas('category', function ($query) {
                         $query->where('status', true);
                     })->get(),

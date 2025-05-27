@@ -15,8 +15,7 @@
     />
 
     <div class="p-4 md:p-6 lg:p-10">
-
-       <!-- Campo de pesquisa -->
+      <!-- Campo de pesquisa -->
       <div class="mb-6 max-w-lg mx-auto">
         <input
           v-model="search"
@@ -31,7 +30,6 @@
         v-if="categories.length == 0 && products.length == 0"
         class="text-center text-gray-500"
       >
-
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-16 w-16 text-gray-400 mb-4 mx-auto"
@@ -48,7 +46,8 @@
         </svg>
         <p class="text-lg font-semibold">Nenhuma informação disponível</p>
         <p class="text-sm">
-          Esta empresa ainda não cadastrou produtos ou categorias. Volte mais tarde para conferir as novidades!
+          Esta empresa ainda não cadastrou produtos ou categorias. Volte mais tarde para
+          conferir as novidades!
         </p>
       </div>
 
@@ -150,13 +149,22 @@ const filteredProducts = (categoryId: number) => {
 
 onMounted(() => {
   if (tenant.value.custom_button) {
-    document.documentElement.style.setProperty('--custom-button', tenant.value.custom_button);
+    document.documentElement.style.setProperty(
+      "--custom-button",
+      tenant.value.custom_button
+    );
   }
   if (tenant.value.custom_button_text) {
-    document.documentElement.style.setProperty('--custom-button-text', tenant.value.custom_button_text);
+    document.documentElement.style.setProperty(
+      "--custom-button-text",
+      tenant.value.custom_button_text
+    );
   }
   if (tenant.value.custom_title_color) {
-    document.documentElement.style.setProperty('--custom-title-color', tenant.value.custom_title_color);
+    document.documentElement.style.setProperty(
+      "--custom-title-color",
+      tenant.value.custom_title_color
+    );
   }
 });
 

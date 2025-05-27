@@ -33,17 +33,21 @@ export function useCart(
         return category ? category.name : "Desconhecida";
     }
 
-    function addToCart(product: Product) {
-        const existing = cart.value.find((item) => item.id === product.id);
+    function addToCart(product: Product, variation: any) {
+        const existing = cart.value.find(
+            (item) => item.id === product.id && item.variation?.id === variation?.id
+        );
         if (existing) {
             existing.quantity = (existing.quantity || 1) + 1;
             toast.info("Quantidade atualizada", {
                 description: `${product.name} (${existing.quantity}x)`,
             });
         } else {
-            cart.value.push({ ...product, quantity: 1 });
+            cart.value.push({ ...product, quantity: 1, variation });
             toast.success("Adicionado ao carrinho", {
-                description: product.name,
+                description: variation?.size
+                    ? `${product.name} (${variation.size})`
+                    : product.name,
                 action: {
                     label: "Ver carrinho",
                     onClick: () => (isCartOpen.value = true),
@@ -52,17 +56,25 @@ export function useCart(
         }
     }
 
-    function removeFromCart(productId: number) {
-        cart.value = cart.value.filter((item) => item.id !== productId);
+    function removeFromCart(productId: number, variationId?: number) {
+        cart.value = cart.value.filter(
+            (item) =>
+                item.id !== productId ||
+                (variationId !== undefined && item.variation?.id !== variationId)
+        );
     }
 
-    function increaseQuantity(productId: number) {
-        const item = cart.value.find((item) => item.id === productId);
+    function increaseQuantity(productId: number, variationId?: number) {
+        const item = cart.value.find(
+            (item) => item.id === productId && item.variation?.id === variationId
+        );
         if (item) item.quantity = (item.quantity || 1) + 1;
     }
 
-    function decreaseQuantity(productId: number) {
-        const item = cart.value.find((item) => item.id === productId);
+    function decreaseQuantity(productId: number, variationId?: number) {
+        const item = cart.value.find(
+            (item) => item.id === productId && item.variation?.id === variationId
+        );
         if (item && (item.quantity || 1) > 1) item.quantity!--;
     }
 
