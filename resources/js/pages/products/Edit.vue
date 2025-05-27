@@ -4,6 +4,8 @@ import AppLayout from "@/layouts/AppLayout.vue";
 import type { Category, Product } from "@/types/cart";
 import { Button } from "@/components/ui/button";
 import { router } from "@inertiajs/vue3";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "vue-sonner";
 
 const props = defineProps<{
   product: Product;
@@ -36,15 +38,23 @@ onMounted(() => {
     }
   });
 
-   // Formatar preço e promoção ao carregar
+  // Formatar preço e promoção ao carregar
   if (product.value.price && typeof product.value.price === "number") {
     product.value.price = formatToCurrency(product.value.price.toString());
-  } else if (product.value.price && typeof product.value.price === "string" && !product.value.price.includes("R$")) {
+  } else if (
+    product.value.price &&
+    typeof product.value.price === "string" &&
+    !product.value.price.includes("R$")
+  ) {
     product.value.price = formatToCurrency(product.value.price);
   }
   if (product.value.sale && typeof product.value.sale === "number") {
     product.value.sale = formatToCurrency(product.value.sale.toString());
-  } else if (product.value.sale && typeof product.value.sale === "string" && !product.value.sale.includes("R$")) {
+  } else if (
+    product.value.sale &&
+    typeof product.value.sale === "string" &&
+    !product.value.sale.includes("R$")
+  ) {
     product.value.sale = formatToCurrency(product.value.sale);
   }
 });
@@ -134,16 +144,94 @@ function openVariationModal(variation: any = null, idx: number | null = null) {
 }
 
 function saveVariation() {
-  if (editingVariation.value !== null) {
-    product.value.variations[editingVariation.value] = { ...variationForm.value };
-  } else {
-    product.value.variations.push({ ...variationForm.value });
+  const exists = product.value.variations.some(
+    (v) => v.sku.trim().toLowerCase() === variationForm.value.sku.trim().toLowerCase()
+  );
+  if (exists) {
+    toast.error("Já existe uma variação com este SKU para este produto.");
+    return;
   }
-  showVariationModal.value = false;
+
+  const formData = new FormData();
+  formData.append("product_id", String(product.value.id));
+  formData.append("sku", variationForm.value.sku);
+  formData.append("reference", variationForm.value.reference);
+  formData.append("size", variationForm.value.size);
+
+  router.post(route("variations.store", product.value.id), formData, {
+    forceFormData: true,
+    onSuccess: () => {
+      // Adiciona uma cópia dos dados do formulário
+      product.value.variations.push({ ...variationForm.value });
+      toast.success("Variação criada com sucesso!");
+      showVariationModal.value = false;
+      // Limpa o formulário para o próximo uso
+      variationForm.value = { sku: "", reference: "", size: "" };
+      editingVariation.value = null;
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.error || "Erro ao criar variação.");
+    },
+  });
+}
+
+function updateVariation(id: number) {
+  const exists = product.value.variations.some(
+    (v) => v.sku.trim().toLowerCase() === variationForm.value.sku.trim().toLowerCase()
+  );
+  if (exists) {
+    toast.error("Já existe uma variação com este SKU para este produto.");
+    return;
+  }
+
+  router.put(
+    route("variations.update", product.value.id),
+    {
+      product_id: product.value.id,
+      sku: variationForm.value.sku,
+      reference: variationForm.value.reference,
+      size: variationForm.value.size,
+      id: id,
+    },
+    {
+      onSuccess: () => {
+        if (editingVariation.value !== null) {
+          product.value.variations[editingVariation.value] = {
+            ...variationForm.value,
+            id,
+          };
+        }
+        toast.success("Variação atualizada com sucesso!");
+        showVariationModal.value = false;
+        // Limpa o formulário para o próximo uso
+        variationForm.value = { sku: "", reference: "", size: "" };
+        editingVariation.value = null;
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error(error?.error || "Erro ao atualizar variação.");
+      },
+    }
+  );
 }
 
 function removeVariation(idx: number) {
-  product.value.variations.splice(idx, 1);
+  const variation = product.value.variations[idx];
+
+  try {
+    router.delete(route("variations.delete", variation.id), {
+      onSuccess: () => {
+        product.value.variations.splice(idx, 1);
+        toast.success("Variação removida com sucesso!");
+      },
+      onError: (error) => {
+        toast.error(error.response?.data?.error || "Erro ao remover variação.");
+      },
+    });
+  } catch (error) {
+    toast.error("Erro ao remover variação.");
+  }
 }
 
 // Validação simples
@@ -213,6 +301,7 @@ function submit() {
 
 <template>
   <AppLayout :breadcrumbs="[{ title: 'Produtos', href: '/products' }]">
+    <Toaster />
     <div class="p-6 bg-white rounded">
       <h1 class="text-2xl font-bold mb-4">Cadastro de Produto</h1>
       <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -281,6 +370,14 @@ function submit() {
               type="text"
               class="w-full border rounded px-3 py-2"
               placeholder="Link do vídeo"
+            />
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Observação</label>
+            <textarea
+              v-model="product.note"
+              class="w-full border rounded px-3 py-2"
+              rows="2"
             />
           </div>
           <div>
@@ -404,7 +501,13 @@ function submit() {
         <h2 class="text-lg font-bold mb-4">
           {{ editingVariation !== null ? "Editar" : "Adicionar" }} Variação
         </h2>
-        <form @submit.prevent="saveVariation">
+        <form
+          @submit.prevent="
+            editingVariation !== null
+              ? updateVariation(product.variations[editingVariation].id)
+              : saveVariation()
+          "
+        >
           <div class="mb-3">
             <label class="block mb-1">SKU</label>
             <input

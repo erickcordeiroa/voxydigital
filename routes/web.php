@@ -38,8 +38,8 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
     Route::delete('products/{id}', [ProductsController::class, 'destroy']);
 
     Route::post('/products/{id}/variations', [ProductVariationController::class, 'store'])->name('variations.store');
-    Route::put('/products/{id}/variations', [ProductVariationController::class, 'store'])->name('variations.update');
-    Route::delete('/products/{id}/variations', [ProductVariationController::class, 'delete'])->name('variations.delete');
+    Route::put('/products/{id}/variations', [ProductVariationController::class, 'update'])->name('variations.update');
+    Route::delete('/products/{id}/variations', [ProductVariationController::class, 'destroy'])->name('variations.delete');
 
 });
 
