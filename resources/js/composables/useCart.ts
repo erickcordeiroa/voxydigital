@@ -20,13 +20,11 @@ export function useCart(
     );
 
     const cartTotal = computed(() => {
-       return cart.value.reduce(
-            (total, item) =>
-                total +
-                (Number(item.sale ?? item.price) * Number(item.quantity || 1)),
-            0
-        );
-    });
+    return cart.value.reduce((total, item) => {
+        const price = item.sale && item.sale > 0 ? item.sale : item.price;
+        return total + (Number(price) * Number(item.quantity || 1));
+    }, 0);
+});
 
     function getCategoryName(categoryId?: number) {
         const category = categories.value.find((cat) => cat.id === categoryId);

@@ -105,7 +105,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
 import { Button } from "@/components/ui/button";
 
 defineProps({
@@ -131,12 +130,7 @@ defineEmits([
   "checkout",
 ]);
 
-onMounted(() => {
-  console.log('Cart:', cart.value);
-  console.log('Cart Total:', cartTotal.value);
-});
-
-const formatCurrency = (value) => {
+const formatCurrency = (value: number) => {
   return `R$ ${(value / 100).toLocaleString("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
