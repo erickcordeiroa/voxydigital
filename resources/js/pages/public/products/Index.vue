@@ -6,7 +6,7 @@ import CartButton from "@/components/cart/CartButton.vue";
 import CartSidebar from "@/components/cart/CartSidebar.vue";
 import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vue";
 import { useCart } from "@/composables/useCart";
-import type { Product, Tenant, Category, Variation } from "@/types/cart.ts";
+import type { Product, Tenant, Category } from "@/types/cart.ts";
 
 const props = defineProps<{
   product: Product;

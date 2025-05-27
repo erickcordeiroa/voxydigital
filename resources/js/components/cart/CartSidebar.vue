@@ -87,10 +87,10 @@
         </ul>
 
         <div class="mb-4 text-right text-lg">
-          <p>Subtotal: {{ formatCurrency(total) }}</p>
-          <p v-if="taxFixed">Taxa de Entrega: {{ formatCurrency(taxFixed) }}</p>
+          <p>Subtotal: {{ formatCurrency(Number(total)) }}</p>
+          <p v-if="taxFixed">Taxa de Entrega: {{ formatCurrency(Number(taxFixed)) }}</p>
           <p class="font-bold text-primary mt-2">
-            Total: {{ formatCurrency(total + taxFixed) }}
+            Total: {{ formatCurrency(Number(total) + Number(taxFixed)) }}
           </p>
         </div>
 
@@ -104,7 +104,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { onMounted } from "vue";
 import { Button } from "@/components/ui/button";
 
 defineProps({
@@ -129,6 +130,11 @@ defineEmits([
   "decrease-quantity",
   "checkout",
 ]);
+
+onMounted(() => {
+  console.log('Cart:', cart.value);
+  console.log('Cart Total:', cartTotal.value);
+});
 
 const formatCurrency = (value) => {
   return `R$ ${(value / 100).toLocaleString("pt-BR", {
