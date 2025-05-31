@@ -2,13 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Tenant\TenantRequest;
 use App\Models\Tenant;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class TenantController extends Controller
 {
+    public function store(TenantRequest $request) {
+        $data = $request->validated();
+        DB::beginTransaction();
+        try {
+            $tenant = Tenant::create([
+                'name' => $data['name'],
+                'domain' => Str::slug($data['name']),
+                'document' => $data['document'],
+                'whatsapp' => $data['whatsapp'],
+                'status' => false,
+                'dt_expiration' => Carbon::now()->addDays(15),
+            ]);
+
+            $user = User::create([
+                'name' => $data['responsible'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['document']),
+                'tenant_id' => $tenant->id,
+                'whatsapp' => $data['whatsapp'],
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Erro ao cadastrar: ' . $e->getMessage()]);
+        }
+    }
+
     public function show()
     {
         return Inertia::render('settings/Appearance', [

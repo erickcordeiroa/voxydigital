@@ -3,11 +3,14 @@ import { Head } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { toast } from "vue-sonner";
+import { isValidDocument } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
-const company = ref("");
+const name = ref("");
 const responsible = ref("");
 const email = ref("");
 const whatsapp = ref("");
+const document = ref("");
 const loading = ref(false);
 
 const errors = ref<{ [key: string]: string }>({});
@@ -24,7 +27,7 @@ const sendForm = async (e: Event) => {
   e.preventDefault();
   errors.value = {};
 
-  if (!company.value) errors.value.company = "Informe o nome da empresa.";
+  if (!name.value) errors.value.name = "Informe o nome da empresa.";
   if (!responsible.value) errors.value.responsible = "Informe o responsável.";
   if (!email.value) errors.value.email = "Informe o e-mail.";
   else if (!validateEmail(email.value)) errors.value.email = "E-mail inválido.";
@@ -32,28 +35,37 @@ const sendForm = async (e: Event) => {
   else if (!validateWhatsapp(whatsapp.value))
     errors.value.whatsapp = "WhatsApp inválido. Preencha no formato (00) 00000-0000.";
 
+  if (!document.value) errors.value.document = "Informe o CPF ou CNPJ.";
+  else if (!isValidDocument(document.value))
+    errors.value.document = "CPF ou CNPJ inválido.";
+
   if (Object.keys(errors.value).length > 0) {
     toast.error("Preencha corretamente os campos obrigatórios.");
+    loading.value = false;
     return;
   }
 
   loading.value = true;
   try {
     router.post(
-      route("pre-register"),
+      route("tenant.register"),
       {
-        company: company.value,
+        name: name.value,
         responsible: responsible.value,
         email: email.value,
-        whatsapp: whatsapp.value,
+        whatsapp: whatsapp.value.replace(/\D/g, ""),
+        document: document.value.replace(/\D/g, ""),
       },
       {
         onSuccess: () => {
-          toast.success("Pré-cadastro enviado com sucesso!");
-          company.value = "";
+          toast.success(
+            "Pré-cadastro enviado com sucesso! Um agente entrará em contato para finalizar o cadastro da sua loja."
+          );
+          name.value = "";
           responsible.value = "";
           email.value = "";
           whatsapp.value = "";
+          document.value = "";
         },
         onError: () => {
           toast.error("Erro ao enviar pré-cadastro. Tente novamente.");
@@ -70,6 +82,7 @@ const sendForm = async (e: Event) => {
 };
 </script>
 <template>
+  <Toaster />
   <div class="font-sans text-gray-800 bg-white">
     <Head>
       <title>Voxy Digital | Catálogo Digital Inteligente</title>
@@ -121,21 +134,21 @@ const sendForm = async (e: Event) => {
             <h2 class="text-2xl font-bold mb-4 text-center text-black">
               Faça o pré-cadastro da sua empresa
             </h2>
-            <form class="space-y-4" >
+            <form class="space-y-4" @submit="sendForm">
               <div>
                 <label class="block text-gray-700 mb-1 font-semibold"
                   >Nome da Empresa</label
                 >
                 <input
-                disabled
-                  v-model="company"
+                  :disabled="loading"
+                  v-model="name"
                   type="text"
                   class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
                   placeholder="Ex: Loja Exemplo"
                   required
                 />
-                <span v-if="errors.company" class="text-red-600 text-sm">{{
-                  errors.company
+                <span v-if="errors.name" class="text-red-600 text-sm">{{
+                  errors.name
                 }}</span>
               </div>
               <div>
@@ -143,7 +156,7 @@ const sendForm = async (e: Event) => {
                   >Nome do Responsável</label
                 >
                 <input
-                disabled
+                  :disabled="loading"
                   v-model="responsible"
                   type="text"
                   class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
@@ -157,7 +170,7 @@ const sendForm = async (e: Event) => {
               <div>
                 <label class="block text-gray-700 mb-1 font-semibold">E-mail</label>
                 <input
-                disabled
+                  :disabled="loading"
                   v-model="email"
                   type="email"
                   class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
@@ -171,7 +184,7 @@ const sendForm = async (e: Event) => {
               <div>
                 <label class="block text-gray-700 mb-1 font-semibold">WhatsApp</label>
                 <input
-                disabled
+                  :disabled="loading"
                   v-model="whatsapp"
                   type="tel"
                   class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
@@ -182,14 +195,27 @@ const sendForm = async (e: Event) => {
                   errors.whatsapp
                 }}</span>
               </div>
+              <div>
+                <label class="block text-gray-700 mb-1 font-semibold">CPF/CNPJ</label>
+                <input
+                  :disabled="loading"
+                  v-model="document"
+                  type="tel"
+                  class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
+                  placeholder="CPF/CNPJ"
+                  required
+                />
+                <span v-if="errors.document" class="text-red-600 text-sm">{{
+                  errors.document
+                }}</span>
+              </div>
               <button
                 type="submit"
-                class="w-full py-3 mt-4 rounded font-bold text-black flex items-center justify-center"
+                class="w-full py-3 mt-4 rounded font-bold text-black flex items-center justify-center cursor-pointer"
                 style="background: #e1ff00"
-                :disabled="true"
               >
                 <span v-if="loading" class="animate-spin mr-2">&#9696;</span>
-                Pré-cadastro desativado por momento
+                Realizar Pré-Cadastro
               </button>
             </form>
           </div>
