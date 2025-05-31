@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 Route::domain('localhost')->get('/', function(){
     return Inertia::render('Welcome');
-});
+})->name('welcome');
 
 require __DIR__.'/auth_public.php';
 

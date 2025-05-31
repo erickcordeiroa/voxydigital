@@ -2,10 +2,10 @@
 
 namespace App\Middleware;
 
-use App\Exceptions\Auth\TenantNotFoundException;
+use App\Exceptions\TenantNotFoundException;
+use App\Exceptions\TenantInactiveException;
 use App\Models\Tenant;
 use Closure;
-use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +23,11 @@ class TenantMiddleware
 
         $tenant = Tenant::where('domain', $domain)->first();
         if (!$tenant) {
-            throw new Exception('Nenhuma empresa encontrada');
+            throw new TenantNotFoundException('Nenhuma empresa encontrada');
+        }
+
+        if (!$tenant->status) {
+            throw new TenantInactiveException('Empresa inativa');
         }
 
         $user = $request->user();
