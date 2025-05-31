@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Tenant\TenantRequest;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Services\WhatsappService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +38,13 @@ class TenantController extends Controller
             ]);
 
             DB::commit();
+
+            $msg = "Olá, {$tenant->name}! Sua conta foi criada com sucesso. Acesse o sistema através do domínio: {$tenant->domain}.";
+            WhatsappService::send("+55{$tenant->whatsapp}", $msg);
+
+            //Envia mensagem para mim.
+            $msg2 = "Olá, você recebeu uma nova solicitação de cadastro de empresa. Nome: {$tenant->name}, Responsável: {$user->name}, WhatsApp: {$tenant->whatsapp}.";
+            WhatsappService::send("+5513996631713", $msg2);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => 'Erro ao cadastrar: ' . $e->getMessage()]);
