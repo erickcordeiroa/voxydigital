@@ -123,9 +123,9 @@ class ProductsController extends Controller
             $product = Product::with('images')->find($id);
             $data = $request->all();
 
-            $baseSlug = Str::slug($data['name']);
-            $slug = $baseSlug . '-' . time();
-            $data['slug'] = $slug;
+            // $baseSlug = Str::slug($data['name']);
+            // $slug = $baseSlug . '-' . time();
+            // $data['slug'] = $slug;
 
             // Atualiza os dados principais do produto
             $product->update($data);
