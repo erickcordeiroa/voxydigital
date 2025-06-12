@@ -3,37 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Categories\CreateCategoryRequest;
-use App\Models\Category;
-use Illuminate\Support\Str;
+use App\Services\CategoryService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CategoriesController extends Controller
 {
-    public function index()
+    private CategoryService $service;
+
+    public function __construct(CategoryService $service)
     {
-        return Inertia::render(
-            'categories/Index',
-            ["categories" => Category::paginate(15)]
-        );
+        $this->service = $service;
     }
 
-    public function store(CreateCategoryRequest $request)
+    public function index(): Response
     {
-        $data = $request->validated();
-
-        $data['slug'] = Str::slug($data['name']);
-        Category::create($data);
+        $categories = $this->service->paginate(15);
+        return Inertia::render('categories/Index', ['categories' => $categories]);
     }
 
-    public function update(int $id, CreateCategoryRequest $request)
+    public function store(CreateCategoryRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
-        $data['slug'] = Str::slug($data['name']);
-        Category::find($id)->update($data);
+        $this->service->create($request->validated());
+        return redirect()->route('categories.index');
     }
 
-    public function destroy(int $id){
-        Category::find($id)->delete();
+    public function update(int $id, CreateCategoryRequest $request): RedirectResponse
+    {
+        $this->service->update($id, $request->validated());
+        return redirect()->route('categories.index');
+    }
+
+    public function destroy(int $id): RedirectResponse
+    {
+        $this->service->delete($id);
+        return redirect()->route('categories.index');
     }
 }

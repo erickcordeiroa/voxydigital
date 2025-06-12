@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Tenant;
+use App\Services\HomeService;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function home()
+    private HomeService $service;
+
+    public function __construct(HomeService $service)
     {
-        return Inertia::render(
-            'public/home/Index',
-            [
-                "products" => Product::with(['category', 'variations'])->where('status', true)
-                    ->whereHas('category', function ($query) {
-                        $query->where('status', true);
-                    })->get(),
-                "categories" => Category::with('products')->where('status', true)
-                    ->whereHas('products', function($query) {
-                        $query->where('status', true);
-                    })->get(),
-                "tenant" => Tenant::find(app('tenant_id'))
-            ]
-        );
+        $this->service = $service;
+    }
+
+    public function home(): Response
+    {
+        $data = $this->service->getHomeData();
+        return Inertia::render('public/home/Index', $data);
     }
 }
