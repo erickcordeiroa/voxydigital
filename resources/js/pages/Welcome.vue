@@ -1,3 +1,584 @@
+<template>
+  <Toaster />
+  <div class="font-sans text-gray-800 bg-white">
+    <Head>
+      <title>Voxy Digital | Catálogo Digital Inteligente</title>
+      <meta
+        name="description"
+        content="Transforme seus catálogos físicos em experiências digitais interativas e mensuráveis."
+      />
+      <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
+      <meta property="og:title" content="Voxy Digital - Catálogo Digital" />
+      <meta
+        property="og:description"
+        content="Solução completa para criação, gestão e análise de catálogos digitais."
+      />
+      <meta property="og:image" content="/images/social-card.png" />
+      <meta property="og:url" content="https://www.voxydigital.com" />
+      <meta name="twitter:card" content="summary_large_image" />
+    </Head>
+
+    <!-- Hero Section -->
+    <section class="bg-black text-white pt-20 pb-32 px-4">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+        <!-- Texts on the left -->
+        <div class="flex-1 flex flex-col items-start md:pr-12">
+          <img src="/images/logo-voxy.png" alt="Voxy Digital" class="h-16 md:h-20 mb-8" />
+          <span
+            class="mb-4 text-[#E1FF00] font-semibold text-base tracking-wide bg-white/10 px-4 py-1 rounded-full"
+          >
+            Mais de 100 empresas já usam
+          </span>
+          <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-left leading-tight">
+            Uma solução para todas as necessidades do seu catálogo digital
+          </h1>
+          <p class="text-lg text-gray-200 mb-10 text-left max-w-xl">
+            Transforme catálogos físicos em experiências digitais inteligentes,
+            interativas e mensuráveis. Atualize, compartilhe e venda de forma simples e
+            moderna.
+          </p>
+          <a
+            href="#pre-cadastro"
+            class="inline-block bg-[#E1FF00] text-black font-bold rounded-lg px-10 py-4 mb-8 shadow-xl hover:bg-yellow-300 transition text-lg"
+          >
+            Quero fazer o pré-cadastro
+          </a>
+        </div>
+        <!-- Desktop image on the right -->
+        <div class="flex-1 flex justify-center relative w-full">
+          <div
+            class="z-20 bg-white rounded-2xl shadow-2xl border-4 border-white p-2 md:p-2"
+            style="max-width: 360px"
+          >
+            <img
+              src="/images/desktop.png"
+              alt="Catálogo Digital na Web"
+              class="rounded-2xl w-full h-auto"
+              style="display: block"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problema e Solução -->
+    <section class="py-20 bg-gray-50 pt-12">
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <div class="grid md:grid-cols-3 gap-8 w-full mb-24">
+          <div
+            class="bg-white text-black rounded-2xl shadow-lg p-8 flex flex-col items-center"
+          >
+            <span
+              class="mb-4 bg-[#E1FF00] rounded-full p-4 flex items-center justify-center"
+            >
+              <svg
+                class="h-10 w-10 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                />
+              </svg>
+            </span>
+            <h3 class="font-bold text-xl mb-2">Catálogo Digital</h3>
+            <p class="text-gray-700 text-center">
+              Visualização fácil, atualização instantânea e integração com WhatsApp.
+            </p>
+          </div>
+          <div
+            class="bg-white text-black rounded-2xl shadow-lg p-8 flex flex-col items-center"
+          >
+            <span
+              class="mb-4 bg-[#E1FF00] rounded-full p-4 flex items-center justify-center"
+            >
+              <svg
+                class="h-10 w-10 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
+              </svg>
+            </span>
+            <h3 class="font-bold text-xl mb-2">Analytics Avançado</h3>
+            <p class="text-gray-700 text-center">
+              Descubra o que mais interessa seus clientes e otimize suas vendas.
+            </p>
+          </div>
+          <div
+            class="bg-white text-black rounded-2xl shadow-lg p-8 flex flex-col items-center"
+          >
+            <span
+              class="mb-4 bg-[#E1FF00] rounded-full p-4 flex items-center justify-center"
+            >
+              <svg
+                class="h-10 w-10 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+            </span>
+            <h3 class="font-bold text-xl mb-2">Integrações</h3>
+            <p class="text-gray-700 text-center">
+              Conecte seu catálogo a sistemas de pedidos, ERP e CRM.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="text-3xl md:text-4xl font-bold mb-8">
+          Seus clientes querem agilidade. Seu catálogo está pronto para isso?
+        </h2>
+        <p class="text-lg mb-12 max-w-2xl mx-auto">
+          Catálogos físicos são caros, difíceis de atualizar e limitam seu alcance. Com o
+          <strong>catálogo digital Voxy</strong>, você elimina barreiras, reduz custos e
+          conquista mais clientes com uma experiência moderna e eficiente.
+        </p>
+        <div class="flex flex-col md:flex-row justify-center gap-8">
+          <div class="bg-white rounded-xl shadow-md p-8 flex-1 mb-8 md:mb-0">
+            <div class="flex items-center mb-4">
+              <div
+                class="bg-[#E1FF00] rounded-full p-3 mr-3 flex items-center justify-center"
+              >
+                <svg
+                  class="h-6 w-6 text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M18 6L6 18M6 6l12 12"
+                  />
+                </svg>
+              </div>
+              <h3 class="font-bold text-xl text-left">Problemas do Catálogo Físico</h3>
+            </div>
+            <ul class="text-gray-700 text-left list-disc ml-5 space-y-2">
+              <li>Alto custo de impressão e distribuição</li>
+              <li>Dificuldade para atualizar informações</li>
+              <li>Sem dados sobre o interesse dos clientes</li>
+              <li>Alcance limitado e pouca interatividade</li>
+            </ul>
+          </div>
+          <div class="bg-black text-white rounded-xl shadow-md p-8 flex-1">
+            <div class="flex items-center mb-4">
+              <div
+                class="bg-[#E1FF00] rounded-full p-3 mr-3 flex items-center justify-center"
+              >
+                <svg
+                  class="h-6 w-6 text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h3 class="font-bold text-xl text-left">Solução Voxy Digital</h3>
+            </div>
+            <ul class="text-white text-left list-disc ml-5 space-y-2">
+              <li>Atualização instantânea e sem custos extras</li>
+              <li>Distribuição ilimitada: alcance clientes em qualquer lugar</li>
+              <li>Analytics: saiba o que realmente interessa ao seu público</li>
+              <li>Integração com canais de venda e atendimento</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integração com WhatsApp -->
+    <section class="py-20 bg-gray-100">
+      <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1 mb-8 md:mb-0">
+          <h2 class="text-3xl font-bold mb-6 text-black">
+            Integração inteligente com WhatsApp
+          </h2>
+          <p class="text-lg text-gray-700 mb-6">
+            Receba os pedidos do seu catálogo digital diretamente no WhatsApp da sua
+            empresa. Além disso, seus clientes recebem notificações automáticas sobre o
+            andamento de cada pedido, trazendo mais agilidade e transparência para o
+            processo.
+          </p>
+          <ul class="list-disc ml-5 text-gray-600 space-y-2">
+            <li>Pedidos enviados automaticamente para o WhatsApp da empresa</li>
+            <li>Notificações de status de pedido para o cliente via WhatsApp</li>
+            <li>Facilite o acompanhamento e aumente a confiança do seu cliente</li>
+          </ul>
+        </div>
+        <div class="flex-1 flex justify-center">
+          <img
+            src="/images/whatsapp.png"
+            alt="Integração WhatsApp"
+            class="w-72 md:w-96 rounded-xl shadow-md"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre a Empresa -->
+    <section class="py-20 bg-white">
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <h2 class="text-4xl font-bold text-black mb-8">Sobre a Voxy Digital</h2>
+        <p class="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto mb-12">
+          Especialistas em transformação digital para o varejo e indústria, a
+          <span class="font-semibold text-black">Voxy Digital</span> desenvolve soluções
+          que <strong>conectam empresas e clientes</strong> através de experiências
+          digitais intuitivas e ricas em dados.
+        </p>
+        <div class="grid md:grid-cols-3 gap-10 text-left">
+          <div class="bg-gray-50 rounded-2xl shadow-lg p-8 flex flex-col items-center">
+            <span
+              class="mb-4 bg-[#E1FF00] rounded-full p-4 flex items-center justify-center"
+            >
+              <svg
+                class="h-10 w-10 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7a2 2 0 002 2z"
+                />
+              </svg>
+            </span>
+            <h3 class="text-xl font-bold text-black mb-3">5+ Anos de Experiência</h3>
+            <p class="text-base leading-relaxed text-gray-700 text-center">
+              Já ajudamos dezenas de empresas a migrarem seus catálogos para o digital,
+              com resultados comprovados.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-2xl shadow-lg p-8 flex flex-col items-center">
+            <span
+              class="mb-4 bg-[#E1FF00] rounded-full p-4 flex items-center justify-center"
+            >
+              <svg
+                class="h-10 w-10 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"
+                />
+              </svg>
+            </span>
+            <h3 class="text-xl font-bold text-black mb-3">Tecnologia Própria</h3>
+            <p class="text-base leading-relaxed text-gray-700 text-center">
+              Desenvolvemos nossa plataforma específica para catálogos digitais, com foco
+              em usabilidade e performance.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-2xl shadow-lg p-8 flex flex-col items-center">
+            <span
+              class="mb-4 bg-[#E1FF00] rounded-full p-4 flex items-center justify-center"
+            >
+              <svg
+                class="h-10 w-10 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <rect
+                  width="12"
+                  height="20"
+                  x="6"
+                  y="2"
+                  rx="2"
+                  ry="2"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="18"
+                  r="1"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <h3 class="text-xl font-bold text-black mb-3">Mobile First</h3>
+            <p class="text-base leading-relaxed text-gray-700 text-center">
+              Nossas soluções são desenvolvidas pensando primeiro na experiência mobile,
+              onde a maioria dos acessos acontece.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulário de Pré-cadastro -->
+    <section id="pre-cadastro" class="py-20 bg-gray-100 flex justify-center">
+      <div
+        class="bg-white rounded-2xl shadow-xl p-0 md:p-0 flex flex-col md:flex-row max-w-5xl w-full overflow-hidden"
+      >
+        <!-- Texto chamativo -->
+        <div
+          class="flex-1 bg-[#000] flex flex-col justify-center items-start p-8 md:p-12"
+        >
+          <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4 text-left">
+            Dê o próximo passo para o digital!
+          </h2>
+          <p class="text-lg text-white mb-6 text-left">
+            Cadastre sua empresa e seja um dos primeiros a transformar seu catálogo físico
+            em uma experiência digital inteligente, interativa e mensurável.
+          </p>
+          <ul class="text-white text-base space-y-2 mb-4">
+            <li class="flex items-center">
+              <span
+                class="bg-[#E1FF00] rounded-full p-1 mr-2 flex items-center justify-center"
+              >
+                <svg
+                  class="h-5 w-5 text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </span>
+              Atualização instantânea
+            </li>
+            <li class="flex items-center">
+              <span
+                class="bg-[#E1FF00] rounded-full p-1 mr-2 flex items-center justify-center"
+              >
+                <svg
+                  class="h-5 w-5 text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </span>
+              Integração com WhatsApp
+            </li>
+            <li class="flex items-center">
+              <span
+                class="bg-[#E1FF00] rounded-full p-1 mr-2 flex items-center justify-center"
+              >
+                <svg
+                  class="h-5 w-5 text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </span>
+              Analytics avançado
+            </li>
+            <li class="flex items-center">
+              <span
+                class="bg-[#E1FF00] rounded-full p-1 mr-2 flex items-center justify-center"
+              >
+                <svg
+                  class="h-5 w-5 text-black"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </span>
+              Suporte especializado
+            </li>
+          </ul>
+          <span class="text-sm text-white text-left">
+            Pré-cadastro sem compromisso. Nossa equipe entrará em contato!
+          </span>
+        </div>
+        <!-- Formulário -->
+        <div class="flex-1 p-8 md:p-10">
+          <h2 class="text-2xl font-bold mb-4 text-left text-black">
+            Faça o pré-cadastro da sua empresa
+          </h2>
+          <form class="space-y-4" @submit="sendForm">
+            <div>
+              <label class="block text-gray-700 mb-1 font-semibold"
+                >Nome da Empresa</label
+              >
+              <input
+                :disabled="loading"
+                v-model="name"
+                type="text"
+                class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
+                placeholder="Ex: Loja Exemplo"
+                required
+              />
+              <span v-if="errors.name" class="text-red-600 text-sm">{{
+                errors.name
+              }}</span>
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-1 font-semibold"
+                >Nome do Responsável</label
+              >
+              <input
+                :disabled="loading"
+                v-model="responsible"
+                type="text"
+                class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
+                placeholder="Seu nome"
+                required
+              />
+              <span v-if="errors.responsible" class="text-red-600 text-sm">{{
+                errors.responsible
+              }}</span>
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-1 font-semibold">E-mail</label>
+              <input
+                :disabled="loading"
+                v-model="email"
+                type="email"
+                class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
+                placeholder="email@empresa.com"
+                required
+              />
+              <span v-if="errors.email" class="text-red-600 text-sm">{{
+                errors.email
+              }}</span>
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-1 font-semibold">WhatsApp</label>
+              <input
+                :disabled="loading"
+                v-model="whatsapp"
+                type="tel"
+                class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
+                placeholder="(00) 00000-0000"
+                required
+              />
+              <span v-if="errors.whatsapp" class="text-red-600 text-sm">{{
+                errors.whatsapp
+              }}</span>
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-1 font-semibold">CPF/CNPJ</label>
+              <input
+                :disabled="loading"
+                v-model="document"
+                type="tel"
+                class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
+                placeholder="CPF/CNPJ"
+                required
+              />
+              <span v-if="errors.document" class="text-red-600 text-sm">{{
+                errors.document
+              }}</span>
+            </div>
+            <button
+              type="submit"
+              class="w-full py-3 mt-4 rounded font-bold text-black flex items-center justify-center cursor-pointer"
+              style="background: #e1ff00"
+            >
+              <span v-if="loading" class="animate-spin mr-2">&#9696;</span>
+              Realizar Pré-Cadastro
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-black text-white py-12">
+      <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+        <!-- Logo e descrição -->
+        <div>
+          <img src="/images/logo-voxy.png" alt="Voxy Digital" class="h-16 md:h-20 mb-4" />
+          <p class="text-gray-400 text-sm">
+            Transformando catálogos físicos em experiências digitais inteligentes desde
+            2020.
+          </p>
+        </div>
+
+        <!-- Links rápidos -->
+        <div>
+          <h4 class="font-bold mb-4 text-white">Nossas Soluções</h4>
+          <ul class="space-y-2 text-sm text-gray-300">
+            <li><a href="#" class="hover:text-gray-100">Catálogo Digital</a></li>
+            <li><a href="#" class="hover:text-gray-100">Analytics Avançado</a></li>
+            <li><a href="#" class="hover:text-gray-100">Integrações</a></li>
+          </ul>
+        </div>
+
+        <!-- Contato -->
+        <div>
+          <h4 class="font-bold mb-4 text-white">Fale Conosco</h4>
+          <p class="text-sm text-gray-300">Whatsapp: (13) 99663-1713</p>
+          <p class="text-sm text-gray-300">Email: contato@voxydigital.com</p>
+          <div class="flex space-x-4 mt-4">
+            <a
+              href="https://instagram.com/voxy.digital"
+              class="text-gray-300 hover:text-white"
+              >Instagram</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center text-gray-500 text-sm">
+        &copy; 2025 Voxy Digital. Todos os direitos reservados.
+      </div>
+    </footer>
+  </div>
+</template>
+
 <script lang="ts" setup>
 import { Head } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
@@ -81,445 +662,3 @@ const sendForm = async (e: Event) => {
   }
 };
 </script>
-<template>
-  <Toaster />
-  <div class="font-sans text-gray-800 bg-white">
-    <Head>
-      <title>Voxy Digital | Catálogo Digital Inteligente</title>
-      <meta
-        name="description"
-        content="Transforme seus catálogos físicos em experiências digitais interativas e mensuráveis."
-      />
-      <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
-      <meta property="og:title" content="Voxy Digital - Catálogo Digital" />
-      <meta
-        property="og:description"
-        content="Solução completa para criação, gestão e análise de catálogos digitais."
-      />
-      <meta property="og:image" content="/images/social-card.png" />
-      <meta property="og:url" content="https://www.voxydigital.com" />
-      <meta name="twitter:card" content="summary_large_image" />
-    </Head>
-
-    <!-- Header + CTA Section -->
-    <section class="bg-black text-white py-20 px-4">
-      <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-        <!-- Chamada -->
-        <div class="flex flex-col items-center md:items-start text-center md:text-left">
-          <img src="/images/logo-voxy.png" alt="Voxy Digital" class="h-16 md:h-20 mb-8" />
-          <h1 class="text-4xl md:text-4xl font-extrabold mb-6 leading-tight">
-            Seu catálogo ainda é físico?
-            <span class="block" style="color: #e1ff00">Chegou a hora de evoluir!</span>
-          </h1>
-          <p class="text-xl md:text-1xl mb-8 font-medium max-w-2xl">
-            Pare de perder vendas e oportunidades por falta de presença digital.
-          </p>
-          <p class="text-lg text-gray-200 mb-8 font-medium max-w-2xl">
-            Com a <strong class="text-[#E1FF00] font-bold">Voxy Digital</strong>,
-            transforme seu catálogo em uma experiência online interativa, acessível de
-            qualquer lugar e pronta para converter mais clientes.
-          </p>
-          <ul
-            class="text-lg list-disc list-inside space-y-2 font-normal max-w-xl text-left"
-          >
-            <li>Visualização fácil em qualquer dispositivo</li>
-            <li>Atualização instantânea de produtos e preços</li>
-            <li>Dados em tempo real sobre o interesse dos clientes</li>
-            <li>Integração com WhatsApp, CRM e sistemas de pedidos</li>
-          </ul>
-        </div>
-        <!-- Formulário -->
-        <div class="mt-12 md:mt-0">
-          <div class="bg-gray-50 rounded-xl shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4 text-center text-black">
-              Faça o pré-cadastro da sua empresa
-            </h2>
-            <form class="space-y-4" @submit="sendForm">
-              <div>
-                <label class="block text-gray-700 mb-1 font-semibold"
-                  >Nome da Empresa</label
-                >
-                <input
-                  :disabled="loading"
-                  v-model="name"
-                  type="text"
-                  class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
-                  placeholder="Ex: Loja Exemplo"
-                  required
-                />
-                <span v-if="errors.name" class="text-red-600 text-sm">{{
-                  errors.name
-                }}</span>
-              </div>
-              <div>
-                <label class="block text-gray-700 mb-1 font-semibold"
-                  >Nome do Responsável</label
-                >
-                <input
-                  :disabled="loading"
-                  v-model="responsible"
-                  type="text"
-                  class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
-                  placeholder="Seu nome"
-                  required
-                />
-                <span v-if="errors.responsible" class="text-red-600 text-sm">{{
-                  errors.responsible
-                }}</span>
-              </div>
-              <div>
-                <label class="block text-gray-700 mb-1 font-semibold">E-mail</label>
-                <input
-                  :disabled="loading"
-                  v-model="email"
-                  type="email"
-                  class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
-                  placeholder="email@empresa.com"
-                  required
-                />
-                <span v-if="errors.email" class="text-red-600 text-sm">{{
-                  errors.email
-                }}</span>
-              </div>
-              <div>
-                <label class="block text-gray-700 mb-1 font-semibold">WhatsApp</label>
-                <input
-                  :disabled="loading"
-                  v-model="whatsapp"
-                  type="tel"
-                  class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
-                  placeholder="(00) 00000-0000"
-                  required
-                />
-                <span v-if="errors.whatsapp" class="text-red-600 text-sm">{{
-                  errors.whatsapp
-                }}</span>
-              </div>
-              <div>
-                <label class="block text-gray-700 mb-1 font-semibold">CPF/CNPJ</label>
-                <input
-                  :disabled="loading"
-                  v-model="document"
-                  type="tel"
-                  class="w-full text-black border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#E1FF00]"
-                  placeholder="CPF/CNPJ"
-                  required
-                />
-                <span v-if="errors.document" class="text-red-600 text-sm">{{
-                  errors.document
-                }}</span>
-              </div>
-              <button
-                type="submit"
-                class="w-full py-3 mt-4 rounded font-bold text-black flex items-center justify-center cursor-pointer"
-                style="background: #e1ff00"
-              >
-                <span v-if="loading" class="animate-spin mr-2">&#9696;</span>
-                Realizar Pré-Cadastro
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Problema e Solução -->
-    <section class="py-20 bg-gray-50">
-      <div class="max-w-5xl mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-8">
-          Seus clientes querem agilidade. Seu catálogo está pronto para isso?
-        </h2>
-        <p class="text-lg mb-12 max-w-2xl mx-auto">
-          Catálogos físicos são caros, difíceis de atualizar e limitam seu alcance. Com o
-          <strong>catálogo digital Voxy</strong>, você elimina barreiras, reduz custos e
-          conquista mais clientes com uma experiência moderna e eficiente.
-        </p>
-        <div class="flex flex-col md:flex-row justify-center gap-8">
-          <div class="bg-white rounded-xl shadow-md p-8 flex-1 mb-8 md:mb-0">
-            <h3 class="font-bold text-xl mb-4">❌ Problemas do Catálogo Físico</h3>
-            <ul class="text-gray-700 text-left list-disc ml-5 space-y-2">
-              <li>Alto custo de impressão e distribuição</li>
-              <li>Dificuldade para atualizar informações</li>
-              <li>Sem dados sobre o interesse dos clientes</li>
-              <li>Alcance limitado e pouca interatividade</li>
-            </ul>
-          </div>
-          <div class="bg-gray-900 text-white rounded-xl shadow-md p-8 flex-1">
-            <h3 class="font-bold text-xl mb-4">✅ Solução Voxy Digital</h3>
-            <ul class="text-primary-300 text-left list-disc ml-5 space-y-2">
-              <li>Atualização instantânea e sem custos extras</li>
-              <li>Distribuição ilimitada: alcance clientes em qualquer lugar</li>
-              <li>Analytics: saiba o que realmente interessa ao seu público</li>
-              <li>Integração com canais de venda e atendimento</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Benefícios -->
-    <section class="py-20 bg-white">
-      <div class="max-w-5xl mx-auto px-4">
-        <h2 class="text-4xl font-bold text-black mb-12 text-center">
-          Vantagens do Catálogo Digital
-        </h2>
-        <div class="grid md:grid-cols-2 gap-12">
-          <div class="flex items-start mb-8 md:mb-0">
-            <div class="bg-gray-200 rounded-full p-4 mr-6 flex-shrink-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-7 w-7 text-black"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-black mb-2">Redução de Custos</h3>
-              <p class="text-gray-700">
-                Elimine os altos custos de impressão, distribuição e atualização de
-                catálogos físicos.
-              </p>
-            </div>
-          </div>
-          <div class="flex items-start mb-8 md:mb-0">
-            <div class="bg-gray-200 rounded-full p-4 mr-6 flex-shrink-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-7 w-7 text-black"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-black mb-2">Dados em Tempo Real</h3>
-              <p class="text-gray-700">
-                Tenha acesso imediato a dados valiosos sobre o comportamento de seus
-                clientes.
-              </p>
-            </div>
-          </div>
-          <div class="flex items-start">
-            <div class="bg-gray-200 rounded-full p-4 mr-6 flex-shrink-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-7 w-7 text-black"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-black mb-2">Distribuição Ilimitada</h3>
-              <p class="text-gray-700">
-                Seu catálogo pode ser acessado de qualquer lugar, a qualquer momento, sem
-                limites geográficos.
-              </p>
-            </div>
-          </div>
-          <div class="flex items-start">
-            <div class="bg-gray-200 rounded-full p-4 mr-6 flex-shrink-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-7 w-7 text-black"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-black mb-2">Integração Completa</h3>
-              <p class="text-gray-700">
-                Conecte seu catálogo digital ao seu ERP, CRM ou sistema de pedidos para um
-                fluxo completo.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Integração com WhatsApp -->
-    <section class="py-20 bg-gray-100">
-      <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
-        <div class="flex-1 mb-8 md:mb-0">
-          <h2 class="text-3xl font-bold mb-6 text-black">
-            Integração inteligente com WhatsApp
-          </h2>
-          <p class="text-lg text-gray-700 mb-6">
-            Receba os pedidos do seu catálogo digital diretamente no WhatsApp da sua
-            empresa. Além disso, seus clientes recebem notificações automáticas sobre o
-            andamento de cada pedido, trazendo mais agilidade e transparência para o
-            processo.
-          </p>
-          <ul class="list-disc ml-5 text-gray-600 space-y-2">
-            <li>Pedidos enviados automaticamente para o WhatsApp da empresa</li>
-            <li>Notificações de status de pedido para o cliente via WhatsApp</li>
-            <li>Facilite o acompanhamento e aumente a confiança do seu cliente</li>
-          </ul>
-        </div>
-        <div class="flex-1 flex justify-center">
-          <img
-            src="/images/whatsapp.png"
-            alt="Integração WhatsApp"
-            class="w-72 md:w-96 rounded-xl shadow-md"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Serviços Section -->
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 text-center">
-        <h2 class="text-4xl font-bold mb-8 text-black">
-          O que a Voxy Digital faz por você?
-        </h2>
-        <p class="text-lg text-gray-600 mb-14 max-w-3xl mx-auto">
-          Plataforma completa para criar, distribuir e analisar catálogos digitais. Foco
-          total em experiência do usuário, automação e resultados mensuráveis para seu
-          negócio crescer.
-        </p>
-        <div class="grid md:grid-cols-3 gap-10">
-          <div
-            class="bg-gray-50 border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition"
-          >
-            <h3 class="text-xl font-semibold text-black mb-4">
-              📱 Catálogo Digital Interativo
-            </h3>
-            <p class="text-gray-600 text-base leading-relaxed">
-              Experiência digital rica, com zoom em produtos, links diretos para compra e
-              integração com WhatsApp.
-            </p>
-          </div>
-          <div
-            class="bg-gray-50 border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition"
-          >
-            <h3 class="text-xl font-semibold text-black mb-4">📊 Analytics Avançado</h3>
-            <p class="text-gray-600 text-base leading-relaxed">
-              Descubra quais produtos mais atraem seus clientes e quando estão prontos
-              para comprar.
-            </p>
-          </div>
-          <div
-            class="bg-gray-50 border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition"
-          >
-            <h3 class="text-xl font-semibold text-black mb-4">
-              🔄 Atualização em Tempo Real
-            </h3>
-            <p class="text-gray-600 text-base leading-relaxed">
-              Altere preços, adicione produtos ou promova itens instantaneamente, sem
-              reimpressão.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sobre a Empresa -->
-    <section class="py-20 bg-gray-100">
-      <div class="max-w-5xl mx-auto px-4 text-center">
-        <h2 class="text-4xl font-bold text-black mb-8">Sobre a Voxy Digital</h2>
-        <p class="text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto mb-12">
-          Especialistas em transformação digital para o varejo e indústria, a
-          <span class="font-semibold text-black">Voxy Digital</span> desenvolve soluções
-          que <strong>conectam empresas e clientes</strong> através de experiências
-          digitais intuitivas e ricas em dados.
-        </p>
-        <div class="grid md:grid-cols-3 gap-10 text-left text-gray-700">
-          <div>
-            <h3 class="text-xl font-bold text-black mb-3">📅 5+ Anos de Experiência</h3>
-            <p class="text-base leading-relaxed">
-              Já ajudamos dezenas de empresas a migrarem seus catálogos para o digital,
-              com resultados comprovados.
-            </p>
-          </div>
-          <div>
-            <h3 class="text-xl font-bold text-black mb-3">🛠️ Tecnologia Própria</h3>
-            <p class="text-base leading-relaxed">
-              Desenvolvemos nossa plataforma específica para catálogos digitais, com foco
-              em usabilidade e performance.
-            </p>
-          </div>
-          <div>
-            <h3 class="text-xl font-bold text-black mb-3">📱 Mobile First</h3>
-            <p class="text-base leading-relaxed">
-              Nossas soluções são desenvolvidas pensando primeiro na experiência mobile,
-              onde a maioria dos acessos acontece.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Rodapé -->
-    <footer class="bg-black text-white py-12">
-      <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
-        <!-- Logo e descrição -->
-        <div>
-          <img src="/images/logo-voxy.png" alt="Voxy Digital" class="h-16 md:h-20 mb-4" />
-          <p class="text-gray-400 text-sm">
-            Transformando catálogos físicos em experiências digitais inteligentes desde
-            2020.
-          </p>
-        </div>
-
-        <!-- Links rápidos -->
-        <div>
-          <h4 class="font-bold mb-4 text-white">Nossas Soluções</h4>
-          <ul class="space-y-2 text-sm text-gray-300">
-            <li><a href="#" class="hover:text-gray-100">Catálogo Digital</a></li>
-            <li><a href="#" class="hover:text-gray-100">Analytics Avançado</a></li>
-            <li><a href="#" class="hover:text-gray-100">Integrações</a></li>
-          </ul>
-        </div>
-
-        <!-- Contato -->
-        <div>
-          <h4 class="font-bold mb-4 text-white">Fale Conosco</h4>
-          <p class="text-sm text-gray-300">Whatsapp: (13) 99663-1713</p>
-          <p class="text-sm text-gray-300">Email: contato@voxydigital.com</p>
-          <div class="flex space-x-4 mt-4">
-            <a
-              href="https://instagram.com/voxy.digital"
-              class="text-gray-300 hover:text-white"
-              >Instagram</a
-            >
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-12 text-center text-gray-500 text-sm">
-        &copy; 2025 Voxy Digital. Todos os direitos reservados.
-      </div>
-    </footer>
-  </div>
-</template>

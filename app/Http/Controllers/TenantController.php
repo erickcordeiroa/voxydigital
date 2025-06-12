@@ -39,7 +39,7 @@ class TenantController extends Controller
 
             DB::commit();
 
-            $msg = "Olá, {$tenant->name}! Sua conta foi criada com sucesso. Acesse o sistema através do domínio: {$tenant->domain}.";
+            $msg = "Olá, {$tenant->name}! Seu Pré-cadastro foi realizado com sucesso. Um dos nossos agentes entrará em contato para finalizar o seu acesso.";
             WhatsappService::send("+55{$tenant->whatsapp}", $msg);
 
             //Envia mensagem para mim.
