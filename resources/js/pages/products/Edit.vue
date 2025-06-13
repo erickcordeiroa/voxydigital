@@ -177,9 +177,11 @@ function saveVariation() {
 }
 
 function updateVariation(id: number) {
-  const exists = product.value.variations.some(
-    (v) => v.sku.trim().toLowerCase() === variationForm.value.sku.trim().toLowerCase()
-  );
+  const exists = product.value.variations.some((v, idx) => {
+    if (editingVariation.value !== null && idx === editingVariation.value) return false;
+    return v.sku.trim().toLowerCase() === variationForm.value.sku.trim().toLowerCase();
+  });
+  
   if (exists) {
     toast.error("Já existe uma variação com este SKU para este produto.");
     return;
