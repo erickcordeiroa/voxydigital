@@ -12,9 +12,9 @@ class DashboardService
     public function getDashboardData(): array
     {
         // Utilize cache para melhorar performance dos totais e agregações
-        $totalProducts = Cache::remember('dashboard.total_products', 60, fn() => Product::count());
-        $totalOrdersReceived = Cache::remember('dashboard.total_orders', 60, fn() => Order::count());
-        $totalOrderValues = Cache::remember('dashboard.total_order_values', 60, fn() => (float) Order::sum('total'));
+        $totalProducts = Product::count();
+        $totalOrdersReceived = Order::count();
+        $totalOrderValues = (float) Order::sum('total');
 
         $averageOrderValue = $totalOrdersReceived > 0 ? $totalOrderValues / $totalOrdersReceived : 0.0;
 
@@ -22,8 +22,7 @@ class DashboardService
         $recentOrders = Order::latest()->take(10)->get();
 
         // Dados semanais podem ser cacheados por 10 minutos
-        $weeklyStats = Cache::remember('dashboard.weekly_stats', 10 * 60, function () {
-            return Order::selectRaw('
+        $weeklyStats = Order::selectRaw('
                     DAYNAME(created_at) as day, 
                     COUNT(*) as order_count, 
                     SUM(total) as revenue
@@ -31,7 +30,6 @@ class DashboardService
                 ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
                 ->groupBy('day')
                 ->get();
-        });
 
         $weeklyOrdersData = $this->formatWeeklyData($weeklyStats, 'order_count');
         $revenueData = $this->formatWeeklyData($weeklyStats, 'revenue');
