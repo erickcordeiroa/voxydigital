@@ -5,25 +5,24 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 
 class DashboardService
 {
     public function getDashboardData(): array
     {
-        // Utilize cache para melhorar performance dos totais e agregações
+        // Busca dados diretamente do banco sem cache
         $totalProducts = Product::count();
         $totalOrdersReceived = Order::count();
         $totalOrderValues = (float) Order::sum('total');
 
         $averageOrderValue = $totalOrdersReceived > 0 ? $totalOrderValues / $totalOrdersReceived : 0.0;
 
-        // Recentes normalmente mudam, não cachear
+        // Busca pedidos recentes
         $recentOrders = Order::latest()->take(10)->get();
 
-        // Dados semanais podem ser cacheados por 10 minutos
+        // Dados semanais - compatível com PostgreSQL
         $weeklyStats = Order::selectRaw('
-                    DAYNAME(created_at) as day, 
+                    TO_CHAR(created_at, \'Day\') as day, 
                     COUNT(*) as order_count, 
                     SUM(total) as revenue
                 ')
@@ -47,18 +46,22 @@ class DashboardService
 
     private function formatWeeklyData(Collection $weeklyStats, string $valueField): array
     {
+        // PostgreSQL retorna nomes dos dias em português (com espaços extras)
         $daysOfWeek = [
-            'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+            'monday   ', 'tuesday  ', 'wednesday', 'thursday ', 'friday   ', 'saturday ', 'sunday   '
         ];
 
         // Garante que todos os dias estejam representados (mesmo se zerados)
-        $statsByDay = $weeklyStats->keyBy('day');
+        $statsByDay = $weeklyStats->keyBy(function ($item) {
+            return trim($item->day); // Remove espaços extras
+        });
 
         $result = [];
         foreach ($daysOfWeek as $day) {
-            $item = $statsByDay->get($day);
+            $cleanDay = trim($day);
+            $item = $statsByDay->get($cleanDay);
             $result[] = [
-                'name' => $this->translateDay($day),
+                'name' => $this->translateDay($cleanDay),
                 'value' => $item ? ($valueField === 'revenue' ? (float) $item->{$valueField} : (int) $item->{$valueField}) : 0
             ];
         }
@@ -68,15 +71,15 @@ class DashboardService
     private function translateDay(string $day): string
     {
         $days = [
-            'Monday' => 'Seg',
-            'Tuesday' => 'Ter',
-            'Wednesday' => 'Qua',
-            'Thursday' => 'Qui',
-            'Friday' => 'Sex',
-            'Saturday' => 'Sáb',
-            'Sunday' => 'Dom',
+            'monday' => 'Seg',
+            'tuesday' => 'Ter',
+            'wednesday' => 'Qua',
+            'thursday' => 'Qui',
+            'friday' => 'Sex',
+            'saturday' => 'Sáb',
+            'sunday' => 'Dom',
         ];
 
-        return $days[$day] ?? $day;
+        return $days[strtolower($day)] ?? $day;
     }
 }

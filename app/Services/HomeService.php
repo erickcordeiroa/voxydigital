@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tenant;
@@ -12,12 +11,9 @@ class HomeService
     public function getHomeData(): array
     {
         $tenant = app('tenant');
-        $cacheKey = "home_cache:{$tenant->domain}";
-
-        // Tenta buscar do Redis
-        return Cache::remember($cacheKey, now()->addMinutes(60), function () use ($tenant) {
-            return $this->buildHomeData($tenant);
-        });
+        
+        // Busca dados diretamente do banco sem cache
+        return $this->buildHomeData($tenant);
     }
 
     protected function buildHomeData(Tenant $tenant): array
@@ -45,8 +41,5 @@ class HomeService
         ];
     }
 
-    public function clearHomeCache(Tenant $tenant): void
-    {
-        Cache::forget("home_cache:{$tenant->slug}");
-    }
+    // Método removido - não há mais cache para limpar
 }
