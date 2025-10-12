@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banner;
-use Illuminate\Http\Request;
+use App\Http\Requests\Banner\StoreBannerRequest;
+use App\Http\Requests\Banner\UpdateBannerRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -18,29 +19,18 @@ class BannerController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return Inertia::render('Banners/Index', [
+        return Inertia::render('banners/Index', [
             'banners' => $banners,
         ]);
     }
 
     public function create(): Response
     {
-        return Inertia::render('Banners/Create');
+        return Inertia::render('banners/Create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreBannerRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'image' => ['required', 'image', 'max:2048'],
-            'link_url' => ['nullable', 'url', 'max:255'],
-            'link_text' => ['nullable', 'string', 'max:50'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
-            'is_active' => ['boolean'],
-            'starts_at' => ['nullable', 'date'],
-            'ends_at' => ['nullable', 'date', 'after:starts_at'],
-        ]);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
@@ -66,31 +56,20 @@ class BannerController extends Controller
 
     public function show(Banner $banner): Response
     {
-        return Inertia::render('Banners/Show', [
+        return Inertia::render('banners/Show', [
             'banner' => $banner,
         ]);
     }
 
     public function edit(Banner $banner): Response
     {
-        return Inertia::render('Banners/Edit', [
+        return Inertia::render('banners/Edit', [
             'banner' => $banner,
         ]);
     }
 
-    public function update(Request $request, Banner $banner): RedirectResponse
+    public function update(UpdateBannerRequest $request, Banner $banner): RedirectResponse
     {
-        $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'image' => ['nullable', 'image', 'max:2048'],
-            'link_url' => ['nullable', 'url', 'max:255'],
-            'link_text' => ['nullable', 'string', 'max:50'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
-            'is_active' => ['boolean'],
-            'starts_at' => ['nullable', 'date'],
-            'ends_at' => ['nullable', 'date', 'after:starts_at'],
-        ]);
 
         $data = [
             'title' => $request->title,
