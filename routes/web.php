@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -19,6 +20,7 @@ require __DIR__.'/auth_public.php';
 Route::middleware(TenantMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::get('/product/{slug}', [ProductsController::class, 'show'])->name('product.show');
+    Route::get('/category/{slug}', [CategoriesController::class, 'showPublic'])->name('category.public.show');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     require __DIR__.'/auth.php';
 });
@@ -29,6 +31,7 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
     Route::post('orders/update-status', [OrderController::class, 'update'])->name('orders.update');
 
     Route::resource('categories', CategoriesController::class);
+    Route::resource('banners', BannerController::class);
 
     Route::get('products', [ProductsController::class, "index"])->name('products.index');
     Route::get('products/create', [ProductsController::class, "create"])->name('products.create');
