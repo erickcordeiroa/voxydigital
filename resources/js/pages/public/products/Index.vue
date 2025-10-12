@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { router } from "@inertiajs/vue3";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import CartButton from "@/components/cart/CartButton.vue";
@@ -99,7 +100,7 @@ const formatPhoneNumber = (whatsapp: string) => {
       <!-- Coluna da imagem -->
       <div class="relative flex-1 flex flex-col items-center justify-center">
         <button
-          @click="$inertia.visit('/')"
+          @click="router.visit('/')"
           class="absolute top-2 left-2 z-20 p-1 rounded transition back-btn"
           style="box-shadow: none"
         >
@@ -292,22 +293,14 @@ const formatPhoneNumber = (whatsapp: string) => {
   .shadow-lg {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
-  .back-btn {
-    background: #000 !important;
-    color: #fff !important;
-  }
-  .back-btn svg {
-    color: #fff !important;
-  }
 }
-@media (max-width: 767px) {
-  .back-btn {
-    background: #fff !important;
-    color: #222 !important;
-  }
-  .back-btn svg {
-    color: #222 !important;
-  }
+
+.back-btn {
+  background: var(--custom-button) !important;
+  color: var(--custom-button-text) !important;
+}
+.back-btn svg {
+  color: var(--custom-button-text) !important;
 }
 
 :host,

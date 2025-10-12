@@ -62,7 +62,7 @@ onUnmounted(() => {
                     :alt="banner.title"
                     class="w-full h-full object-cover"
                 />
-                <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent">
+                <!-- <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent">
                     <div class="absolute bottom-4 left-4 text-white">
                         <h3 class="text-xl md:text-2xl font-bold mb-2">{{ banner.title }}</h3>
                         <p v-if="banner.description" class="text-sm md:text-base mb-3 max-w-md">
@@ -76,7 +76,7 @@ onUnmounted(() => {
                             {{ banner.link_text || 'Ver mais' }}
                         </a>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 

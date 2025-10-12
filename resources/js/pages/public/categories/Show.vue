@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 import StoreHeader from "@/components/store/StoreHeader.vue";
 import CartButton from "@/components/cart/CartButton.vue";
 import CartSidebar from "@/components/cart/CartSidebar.vue";
@@ -8,7 +8,6 @@ import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vu
 import ProductCardCategory from "@/components/home/ProductCardCategory.vue";
 import { Toaster } from "@/components/ui/sonner";
 import { useCart } from "@/composables/useCart";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 interface Category {
@@ -119,7 +118,33 @@ onMounted(() => {
             @open-cart="isCartOpen = true"
         />
 
-        <div class="p-4 md:p-6 lg:p-10">
+        <div class="p-4 md:p-6 lg:p-10 ">
+
+            <div class="absolute top-2 left-2 z-20">
+            <!-- Botão de Voltar -->
+            <button
+                @click="router.visit('/')"
+                class="absolute top-2 left-2 z-20 p-1 rounded transition back-btn"
+                style="box-shadow: none"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                    />
+                </svg>
+            </button>
+            
+            </div>
+
             <!-- Navegação -->
             <div class="mb-6">
                 <nav class="text-sm breadcrumbs text-center ">
@@ -180,3 +205,13 @@ onMounted(() => {
         />
     </div>
 </template>
+
+<style scoped>
+.back-btn {
+  background: var(--custom-button) !important;
+  color: var(--custom-button-text) !important;
+}
+.back-btn svg {
+  color: var(--custom-button-text) !important;
+}
+</style>
