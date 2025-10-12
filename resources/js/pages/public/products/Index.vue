@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import CartButton from "@/components/cart/CartButton.vue";
 import CartSidebar from "@/components/cart/CartSidebar.vue";
 import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vue";
+import ProductCard from "@/components/home/ProductCard.vue";
 import { useCart } from "@/composables/useCart";
 import type { Product, Tenant, Category } from "@/types/cart.ts";
 
@@ -12,11 +13,13 @@ const props = defineProps<{
   product: Product;
   tenant: Tenant;
   categories: Category[];
+  relatedProducts?: Product[];
 }>();
 
 const product = ref(props.product ?? {});
 const tenant = ref(props.tenant ?? {});
 const categories = ref(props.categories ?? []);
+const relatedProducts = ref(props.relatedProducts ?? []);
 const variations = ref(
   Array.isArray(product.value.variations) ? product.value.variations : []
 );
@@ -252,6 +255,23 @@ const formatPhoneNumber = (whatsapp: string) => {
       @close="handleModalClose"
       @submit="handleModalSubmit"
     />
+
+    <!-- Produtos relacionados -->
+    <div v-if="relatedProducts.length > 0" class="w-full max-w-[1240px] mx-auto px-4 md:px-6 mt-12">
+      <h3 class="text-xl font-bold mb-4 text-gray-800">Produtos relacionados</h3>
+      <div class="flex overflow-x-auto gap-20 pb-4">
+        <div
+          v-for="relatedProduct in relatedProducts"
+          :key="relatedProduct.id"
+          class="flex-shrink-0 w-48"
+        >
+          <ProductCard
+            :product="relatedProduct"
+            @add-to-cart="addToCart"
+          />
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-white border-t py-4 text-center text-sm text-gray-600 w-full mt-8">

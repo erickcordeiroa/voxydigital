@@ -40,10 +40,22 @@ class ProductService
     public function getProductShowData(string $slug): array
     {
         $product = Product::with(['category', 'images', 'variations'])
-            ->where('slug', $slug)->first();
+            ->where('slug', $slug)
+            ->where('tenant_id', app('tenant_id'))
+            ->firstOrFail();
+
+        // Buscar produtos relacionados da mesma categoria
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('status', true)
+            ->where('tenant_id', app('tenant_id'))
+            ->with(['category', 'variations', 'images'])
+            ->limit(8)
+            ->get();
 
         return [
             'product' => $product,
+            'relatedProducts' => $relatedProducts,
             'tenant' => app('tenant'),
             'categories' => Category::all(),
         ];
