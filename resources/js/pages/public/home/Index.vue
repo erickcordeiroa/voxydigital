@@ -25,6 +25,9 @@
         />
       </div>
 
+      <!-- Banners -->
+      <BannerSlider v-if="banners && banners.length > 0" :banners="banners" />
+
       <!-- Verificação para exibir mensagem caso não haja produtos nem categorias -->
       <div
         v-if="categories.length == 0 && products.length == 0"
@@ -97,6 +100,7 @@ import CartSidebar from "@/components/cart/CartSidebar.vue";
 import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vue";
 import ProductSection from "@/components/products/ProductSection.vue";
 import CategorySlider from "@/components/home/CategorySlider.vue";
+import BannerSlider from "@/components/banners/BannerSlider.vue";
 import { Toaster } from "@/components/ui/sonner";
 import { useCart } from "@/composables/useCart";
 import type { Category, Product, Tenant } from "@/types/cart"; // Use apenas o composable
@@ -104,6 +108,7 @@ import type { Category, Product, Tenant } from "@/types/cart"; // Use apenas o c
 const { props } = usePage();
 const categories = ref<Category[]>(props.categories as Category[]);
 const products = ref<Product[]>(props.products as Product[]);
+const banners = ref(props.banners || []);
 const tenant = ref<Tenant>(props.tenant as Tenant);
 const search = ref("");
 const selectedCategory = ref<number | null>(null);

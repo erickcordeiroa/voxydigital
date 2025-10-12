@@ -41,4 +41,9 @@ class CategoryService
     {
         return Category::find($id);
     }
+
+    public function findBySlug(string $slug): ?Category
+    {
+        return Category::where('slug', $slug)->first();
+    }
 }

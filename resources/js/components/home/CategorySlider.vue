@@ -34,7 +34,7 @@ import { Category } from "@/types/cart";
 
 const props = defineProps<{
   categories: Category[];
-  selectedCategory: number;
+  selectedCategory: number | null;
 }>();
 
 const emit = defineEmits(["categorySelect"]);
