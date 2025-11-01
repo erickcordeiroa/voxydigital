@@ -65,10 +65,11 @@ function submit() {
   if (props.isEditing && props.category) {
     // Atualiza a categoria
     router.put(`/categories/${props.category.id}`, form.value, {
-      onSuccess: (response) => {
+      preserveState: false,
+      onSuccess: () => {
         toast.success('Categoria alterada com sucesso!');
         resetForm();
-        emit("category-created", response.props.categories.data); // Emite os dados atualizados
+        emit("category-created");
         emit("update:open", false);
       },
       onError: (serverErrors) => {
@@ -79,10 +80,11 @@ function submit() {
   } else {
     // Cria uma nova categoria
     router.post("/categories", form.value, {
-      onSuccess: (response) => {
+      preserveState: false,
+      onSuccess: () => {
         toast.success('Categoria criada com sucesso!');
         resetForm();
-        emit("category-created", response.props.categories.data); // Emite os dados atualizados
+        emit("category-created");
         emit("update:open", false);
       },
       onError: (serverErrors) => {

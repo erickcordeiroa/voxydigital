@@ -7,42 +7,50 @@ import CreateCategoryModal from "@/components/categories/CreateCategoryModal.vue
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import { router } from "@inertiajs/vue3";
 
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+}
+
 const props = defineProps<{
   categories: {
-    data: Array<{ id: number; name: string; description: string }>;
+    data: Array<Category>;
     current_page: number;
     last_page: number;
+    links: Array<{ url: string | null; label: string; active: boolean }>;
   };
 }>();
 
-const categories = ref(props.categories.data || []);
 const showModal = ref(false);
 const isEditing = ref(false);
-const editingCategory = ref(null);
-const categoryToDelete = ref(null);
+const editingCategory = ref<Category | null>(null);
+const categoryToDelete = ref<number | null>(null);
 
-function handleCategoryCreated(updatedCategories) {
-  categories.value = updatedCategories; // Atualiza com os dados recebidos do servidor
+function handleCategoryCreated() {
+  // Apenas fecha o modal - os dados são atualizados automaticamente pelo Inertia
   showModal.value = false;
   isEditing.value = false;
   editingCategory.value = null;
 }
 
-function updateCategory(category) {
+function updateCategory(category: Category) {
   editingCategory.value = category;
   isEditing.value = true;
   showModal.value = true;
 }
 
-function deleteCategory(categoryId) {
+function deleteCategory(categoryId: number) {
   categoryToDelete.value = categoryId;
 }
 
 function confirmDelete() {
+  console.log(categoryToDelete.value);
+
   if (categoryToDelete.value !== null) {
     router.delete(`/categories/${categoryToDelete.value}`, {
+      preserveState: false,
       onSuccess: () => {
-        categories.value = categories.value.filter((cat) => cat.id !== categoryToDelete.value);
         categoryToDelete.value = null;
       },
       onError: (errors) => {
@@ -78,7 +86,7 @@ function cancelDelete() {
     </div>
 
     <div
-      v-if="categories.length === 0"
+      v-if="props.categories.data.length === 0"
       class="flex flex-col items-center justify-center py-20 text-center text-muted-foreground"
     >
       <svg
@@ -118,7 +126,7 @@ function cancelDelete() {
 
     <ConfirmDialog
       v-if="categoryToDelete !== null"
-      :open="categoryToDelete !== null"
+      :show="categoryToDelete !== null"
       title="Excluir Categoria"
       description="Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita."
       @confirm="confirmDelete"

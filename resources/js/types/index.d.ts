@@ -18,10 +18,25 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface Tenant {
+    id: number;
+    name: string;
+    domain: string;
+    logo: string;
+    cover?: string;
+    whatsapp?: string;
+    custom_button?: string;
+    custom_button_text?: string;
+    custom_title_color?: string;
+    tax_fixed?: number;
+    status: boolean;
+}
+
 export interface SharedData extends PageProps {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    tenant: Tenant | null;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
 }

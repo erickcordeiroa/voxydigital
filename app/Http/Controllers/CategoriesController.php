@@ -57,18 +57,30 @@ class CategoriesController extends Controller
     public function store(CreateCategoryRequest $request): RedirectResponse
     {
         $this->service->create($request->validated());
-        return redirect()->route('categories.index');
+        $categories = $this->service->paginate(15);
+        
+        return redirect()->route('categories.index')->with([
+            'categories' => $categories
+        ]);
     }
 
     public function update(int $id, CreateCategoryRequest $request): RedirectResponse
     {
         $this->service->update($id, $request->validated());
-        return redirect()->route('categories.index');
+        $categories = $this->service->paginate(15);
+        
+        return redirect()->route('categories.index')->with([
+            'categories' => $categories
+        ]);
     }
 
     public function destroy(int $id): RedirectResponse
     {
         $this->service->delete($id);
-        return redirect()->route('categories.index');
+        $categories = $this->service->paginate(15);
+        
+        return redirect()->route('categories.index')->with([
+            'categories' => $categories
+        ]);
     }
 }

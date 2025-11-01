@@ -61,10 +61,10 @@ onMounted(() => {
 
 const statusString = computed({
   get() {
-    return product.value.status === 1 ? "active" : "inactive";
+    return product.value.status === true ? "active" : "inactive";
   },
   set(val: string) {
-    product.value.status = val === "active" ? 1 : 0;
+    product.value.status = val === "active" ? true : false;
   },
 });
 
@@ -273,7 +273,6 @@ function submit() {
   formData.append("category_id", product.value.category_id);
   formData.append("status", product.value.status);
   formData.append("description", product.value.description);
-  formData.append("video", product.value.video);
   formData.append("note", product.value.note);
 
   // Imagens: envia arquivos novos, e URLs das antigas
@@ -363,15 +362,6 @@ function submit() {
               v-model="product.description"
               class="w-full border rounded px-3 py-2"
               rows="3"
-            />
-          </div>
-          <div>
-            <label class="block font-semibold mb-1">Vídeo</label>
-            <input
-              v-model="product.video"
-              type="text"
-              class="w-full border rounded px-3 py-2"
-              placeholder="Link do vídeo"
             />
           </div>
           <div>

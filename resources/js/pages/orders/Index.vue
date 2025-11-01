@@ -91,19 +91,71 @@ const getStatusText = (status: string) => {
 
 const printOrder = (order: any) => {
   const printContent = `
-    <html>
+    <!DOCTYPE html>
+    <html lang="pt-BR">
       <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pedido #${order.id}</title>
         <style>
-          body { font-family: Arial, sans-serif; margin: 40px; color: #222; }
-          h2 { margin-bottom: 0; }
-          .info { margin-bottom: 20px; }
-          table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-          th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
-          th { background: #f5f5f5; }
-          .total { font-weight: bold; font-size: 1.1em; }
-          .tax { font-weight: bold; font-size: 0.975em; }
-          .label { font-weight: bold; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 40px; 
+            color: #222; 
+            line-height: 1.6;
+          }
+          h2 { 
+            margin-bottom: 20px; 
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+          }
+          .info { 
+            margin-bottom: 30px; 
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+          }
+          .info div { margin-bottom: 8px; }
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 20px; 
+          }
+          th, td { 
+            border: 1px solid #ddd; 
+            padding: 10px 12px; 
+            text-align: left; 
+          }
+          th { 
+            background: #333; 
+            color: white;
+            font-weight: 600;
+          }
+          tbody tr:nth-child(even) {
+            background: #f9f9f9;
+          }
+          .tax { 
+            font-weight: bold; 
+            font-size: 1em; 
+            margin: 15px 0;
+            text-align: right;
+          }
+          .total { 
+            font-weight: bold; 
+            font-size: 1.3em; 
+            margin: 15px 0;
+            text-align: right;
+            color: #2563eb;
+          }
+          .label { 
+            font-weight: bold; 
+            color: #555;
+          }
+          @media print {
+            body { margin: 20px; }
+            .no-print { display: none; }
+          }
         </style>
       </head>
       <body>
@@ -111,8 +163,8 @@ const printOrder = (order: any) => {
         <div class="info">
           <div><span class="label">Status:</span> ${getStatusText(order.status)}</div>
           <div><span class="label">Data:</span> ${new Date(order.created_at).toLocaleString('pt-BR')}</div>
-          <div><span class="label">Cliente:</span> ${order.customer_name || ''}</div>
-          <div><span class="label">Telefone:</span> ${order.customer_phone}</div>
+          <div><span class="label">Cliente:</span> ${order.customer_name || 'Não informado'}</div>
+          <div><span class="label">Telefone:</span> ${formatPhone(order.customer_phone)}</div>
           <div><span class="label">Endereço:</span> ${order.delivery_address}</div>
           <div><span class="label">Observações:</span> ${order.note || 'Nenhuma'}</div>
         </div>
@@ -121,36 +173,51 @@ const printOrder = (order: any) => {
             <tr>
               <th>Produto</th>
               <th>Tamanho</th>
-              <th>Qtd</th>
-              <th>Preço Unitário</th>
-              <th>Total</th>
+              <th style="text-align: center;">Qtd</th>
+              <th style="text-align: right;">Preço Unit.</th>
+              <th style="text-align: right;">Total</th>
             </tr>
           </thead>
           <tbody>
             ${order.items.map((item: any) => `
               <tr>
                 <td>${item.product.name}</td>
-                <td>${item.variation.size}</td>
-                <td>${item.quantity}</td>
-                <td>${formatCurrency(item.price / 100)}</td>
-                <td>${formatCurrency((item.price * item.quantity) / 100)}</td>
+                <td>${item.variation?.size || 'N/A'}</td>
+                <td style="text-align: center;">${item.quantity}</td>
+                <td style="text-align: right;">${formatCurrency(item.price / 100)}</td>
+                <td style="text-align: right;">${formatCurrency((item.price * item.quantity) / 100)}</td>
               </tr>
             `).join('')}
           </tbody>
         </table>
-        <div class="tax">Taxa Entrega: ${formatCurrency(order.tax_fixed / 100)}</div>
+        <div class="tax">Taxa de Entrega: ${formatCurrency(order.tax_fixed / 100)}</div>
         <div class="total">Total do Pedido: ${formatCurrency(order.total / 100)}</div>
       </body>
     </html>
   `;
-  const win = window.open('', '', 'width=800,height=700');
+  
+  // Tenta abrir a janela de impressão
+  const win = window.open('', '_blank', 'width=800,height=700,left=100,top=100');
+  
   if (win) {
+    // Escreve o conteúdo na nova janela
+    win.document.open();
     win.document.write(printContent);
     win.document.close();
-    win.focus();
-    setTimeout(() => {
-      win.print();
-    }, 300);
+    
+    // Aguarda o carregamento e imprime automaticamente
+    win.onload = function() {
+      setTimeout(() => {
+        win.print();
+        // Fecha a janela após a impressão ou cancelamento
+        win.onafterprint = function() {
+          win.close();
+        };
+      }, 500);
+    };
+  } else {
+    // Fallback: se popup foi bloqueado, avisa o usuário
+    toast.error('Popup bloqueado! Por favor, permita popups para este site e tente novamente.');
   }
 };
 
@@ -210,7 +277,32 @@ const updateStatus = (orderId: number, status: string) => {
         </div>
       </div>
 
-      <div class="grid gap-4">
+      <!-- Empty State -->
+      <div
+        v-if="orders.length === 0"
+        class="flex flex-col items-center justify-center py-20 text-center text-muted-foreground"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-20 w-20 mb-4 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+          />
+        </svg>
+        <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Nenhum pedido encontrado</h2>
+        <p class="mb-4 max-w-md text-sm text-gray-600 dark:text-gray-400">
+          Ainda não há pedidos cadastrados no sistema ou nenhum pedido corresponde à sua busca.
+        </p>
+      </div>
+
+      <div v-else class="grid gap-4">
         <div
           v-for="order in orders"
           :key="order.id"
