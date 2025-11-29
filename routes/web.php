@@ -11,7 +11,7 @@ use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::domain('voxydigital-app-j8dw7.ondigitalocean.app')->get('/', function(){
+Route::domain('voxydigital.com.br')->get('/', function(){
     return Inertia::render('Welcome');
 })->name('welcome');
 
