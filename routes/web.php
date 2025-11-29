@@ -11,7 +11,7 @@ use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::domain('localhost')->get('/', function(){
+Route::domain('voxydigital-app-j8dw7')->get('/', function(){
     return Inertia::render('Welcome');
 })->name('welcome');
 
