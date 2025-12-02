@@ -54,11 +54,12 @@ class OrderService
         $order->load(['items.product', 'items.variation']);
 
         $tenant = app('tenant');
-        if ($tenant && $tenant->whatsapp) {
-            $msg = $this->buildOrderNotificationMessage($tenant, $data, $order);
-            WhatsappService::send("+55{$tenant->whatsapp}", $msg);
-            WhatsappService::sendToClient("+55{$data['customer_phone']}");
-        }
+        // Comentado por questões de não utilização do whatsapp no momento.
+        // if ($tenant && $tenant->whatsapp) {
+        //     $msg = $this->buildOrderNotificationMessage($tenant, $data, $order);
+        //     WhatsappService::send("+55{$tenant->whatsapp}", $msg);
+        //     WhatsappService::sendToClient("+55{$data['customer_phone']}");
+        // }
     }
 
     public function updateOrderStatusWithNotification(array $data): void
