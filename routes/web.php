@@ -11,18 +11,18 @@ use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::domain('voxydigital.com.br')->get('/', function(){
+Route::domain('localhost')->get('/', function () {
     return Inertia::render('Welcome');
 })->name('welcome');
 
-require __DIR__.'/auth_public.php';
+require __DIR__ . '/auth_public.php';
 
 Route::middleware(TenantMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::get('/product/{slug}', [ProductsController::class, 'show'])->name('product.show');
     Route::get('/category/{slug}', [CategoriesController::class, 'showPublic'])->name('category.public.show');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-    require __DIR__.'/auth.php';
+    require __DIR__ . '/auth.php';
 });
 
 Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function () {
@@ -46,4 +46,4 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
 
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

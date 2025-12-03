@@ -72,7 +72,7 @@ class OrderService
         $msg .= "O seu pedido foi atualizado para *{$statusLabel}*.\n";
         $msg .= "Agradecemos pela preferência!";
 
-        WhatsappService::send("+55{$order->customer_phone}", $msg);
+        //WhatsappService::send("+55{$order->customer_phone}", $msg);
     }
 
     private function buildOrderNotificationMessage($tenant, array $data, $order): string

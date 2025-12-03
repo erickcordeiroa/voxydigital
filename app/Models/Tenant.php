@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tenant extends Model
 {
@@ -20,4 +21,9 @@ class Tenant extends Model
         'tax_fixed',
         'dt_expiration'
     ];
+
+    public function instances(): HasMany
+    {
+        return $this->hasMany(Instance::class);
+    }
 }
