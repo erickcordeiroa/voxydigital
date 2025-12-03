@@ -10,7 +10,8 @@ class DashboardService
 {
     public function getDashboardData(): array
     {
-        // Busca dados diretamente do banco sem cache
+        //TODO: MELHORAR PORQUE ISSO DA FULLSCAN E DEIXA LENTO
+        //  Busca dados diretamente do banco sem cache
         $totalProducts = Product::count();
         $totalOrdersReceived = Order::count();
         $totalOrderValues = (float) Order::sum('total');
@@ -22,13 +23,13 @@ class DashboardService
 
         // Dados semanais - compatível com PostgreSQL
         $weeklyStats = Order::selectRaw('
-                    TO_CHAR(created_at, \'Day\') as day, 
+                    DAYNAME(created_at) as day, 
                     COUNT(*) as order_count, 
                     SUM(total) as revenue
                 ')
-                ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
-                ->groupBy('day')
-                ->get();
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->groupBy('day')
+            ->get();
 
         $weeklyOrdersData = $this->formatWeeklyData($weeklyStats, 'order_count');
         $revenueData = $this->formatWeeklyData($weeklyStats, 'revenue');
@@ -48,7 +49,13 @@ class DashboardService
     {
         // PostgreSQL retorna nomes dos dias em português (com espaços extras)
         $daysOfWeek = [
-            'monday   ', 'tuesday  ', 'wednesday', 'thursday ', 'friday   ', 'saturday ', 'sunday   '
+            'monday   ',
+            'tuesday  ',
+            'wednesday',
+            'thursday ',
+            'friday   ',
+            'saturday ',
+            'sunday   '
         ];
 
         // Garante que todos os dias estejam representados (mesmo se zerados)

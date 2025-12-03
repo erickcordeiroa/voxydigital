@@ -54,7 +54,7 @@ defineEmits(["edit", "delete"]);
           </p>
           <span
             class="text-xs mt-1 inline-block px-2 py-1 rounded bg-green-100 text-green-800"
-            v-if="product.status === true"
+            v-if="product.status === 1"
             >Ativo</span
           >
           <span
