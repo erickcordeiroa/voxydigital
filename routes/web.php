@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductVariationController;
+use App\Http\Controllers\WebhookController;
 use App\Middleware\TenantMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,13 +17,18 @@ Route::domain('localhost')->get('/', function () {
     return Inertia::render('Welcome');
 })->name('welcome');
 
+// Webhook do Mercado Pago (sem middleware de autenticação)
+Route::post('/webhook/mercadopago', [WebhookController::class, 'mercadoPago'])->name('webhook.mercadopago');
+
 require __DIR__ . '/auth_public.php';
 
 Route::middleware(TenantMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::get('/product/{slug}', [ProductsController::class, 'show'])->name('product.show');
     Route::get('/category/{slug}', [CategoriesController::class, 'showPublic'])->name('category.public.show');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}/check-payment', [OrderController::class, 'checkPayment'])->name('orders.check-payment');
     require __DIR__ . '/auth.php';
 });
 

@@ -82,12 +82,6 @@
       @decrease-quantity="decreaseQuantity"
       @checkout="finalizarPedido"
     />
-
-    <OrderConfirmationModal
-      v-if="showOrderConfirmation"
-      @close="showOrderConfirmation = false"
-      @submit="submitOrder"
-    />
   </div>
 </template>
 
@@ -97,7 +91,6 @@ import { usePage } from "@inertiajs/vue3";
 import StoreHeader from "@/components/store/StoreHeader.vue";
 import CartButton from "@/components/cart/CartButton.vue";
 import CartSidebar from "@/components/cart/CartSidebar.vue";
-import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vue";
 import ProductSection from "@/components/products/ProductSection.vue";
 import CategorySlider from "@/components/home/CategorySlider.vue";
 import BannerSlider from "@/components/banners/BannerSlider.vue";
@@ -117,7 +110,6 @@ const selectedCategory = ref<number | null>(null);
 const {
   cart,
   isCartOpen,
-  showOrderConfirmation,
   cartWithCategoryNames,
   cartTotal,
   addToCart,
@@ -125,7 +117,6 @@ const {
   increaseQuantity,
   decreaseQuantity,
   finalizarPedido,
-  submitOrder,
 } = useCart(categories, tenant);
 
 const filteredCategories = computed(() => {

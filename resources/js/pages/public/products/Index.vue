@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import CartButton from "@/components/cart/CartButton.vue";
 import CartSidebar from "@/components/cart/CartSidebar.vue";
-import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vue";
 import ProductCard from "@/components/home/ProductCard.vue";
 import { useCart } from "@/composables/useCart";
 import type { Product, Tenant, Category } from "@/types/cart.ts";
@@ -48,7 +47,6 @@ const selectedVariation = computed(() =>
 const {
   cart,
   isCartOpen,
-  showOrderConfirmation,
   cartWithCategoryNames,
   cartTotal,
   addToCart,
@@ -56,25 +54,10 @@ const {
   increaseQuantity,
   decreaseQuantity,
   finalizarPedido,
-  submitOrder,
 } = useCart(categories, tenant);
 
 function handleAddToCart() {
   addToCart(product.value, selectedVariation.value);
-}
-
-function handleModalClose() {
-  showOrderConfirmation.value = false;
-}
-
-function handleModalSubmit(customerInfo: {
-  name: string;
-  phone: string;
-  address: string;
-  note?: string;
-}) {
-  submitOrder(customerInfo);
-  showOrderConfirmation.value = false;
 }
 
 const formatPhoneNumber = (whatsapp: string) => {
@@ -248,13 +231,6 @@ const formatPhoneNumber = (whatsapp: string) => {
       @increase-quantity="increaseQuantity"
       @decrease-quantity="decreaseQuantity"
       @checkout="finalizarPedido"
-    />
-
-    <!-- Modal de confirmação do pedido -->
-    <OrderConfirmationModal
-      v-if="showOrderConfirmation"
-      @close="handleModalClose"
-      @submit="handleModalSubmit"
     />
 
     <!-- Produtos relacionados -->

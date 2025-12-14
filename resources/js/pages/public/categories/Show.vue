@@ -4,7 +4,6 @@ import { router } from "@inertiajs/vue3";
 import StoreHeader from "@/components/store/StoreHeader.vue";
 import CartButton from "@/components/cart/CartButton.vue";
 import CartSidebar from "@/components/cart/CartSidebar.vue";
-import OrderConfirmationModal from "@/components/order/OrderConfirmationModal.vue";
 import ProductCardCategory from "@/components/home/ProductCardCategory.vue";
 import { Toaster } from "@/components/ui/sonner";
 import { useCart } from "@/composables/useCart";
@@ -60,7 +59,6 @@ const search = ref("");
 const {
     cart,
     isCartOpen,
-    showOrderConfirmation,
     cartWithCategoryNames,
     cartTotal,
     addToCart,
@@ -68,7 +66,6 @@ const {
     increaseQuantity,
     decreaseQuantity,
     finalizarPedido,
-    submitOrder,
 } = useCart(categories, tenant);
 
 const filteredProducts = computed(() => {
@@ -196,12 +193,6 @@ onMounted(() => {
             @increase-quantity="increaseQuantity"
             @decrease-quantity="decreaseQuantity"
             @checkout="finalizarPedido"
-        />
-
-        <OrderConfirmationModal
-            v-if="showOrderConfirmation"
-            @close="showOrderConfirmation = false"
-            @submit="submitOrder"
         />
     </div>
 </template>

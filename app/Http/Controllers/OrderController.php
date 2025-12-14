@@ -29,7 +29,19 @@ class OrderController extends Controller
 
     public function store(CreateOrderRequest $request)
     {
-        $this->orderService->createOrderWithNotification($request->validated());
+        $order = $this->orderService->createOrderWithNotification($request->validated());
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Pedido criado com sucesso',
+            'data' => [
+                'order_id' => $order->id,
+                'payment_id' => $order->payment_id,
+                'payment_status' => $order->payment_status,
+                'qr_code' => $order->qr_code,
+                'qr_code_base64' => $order->qr_code_base64,
+            ]
+        ]);
     }
 
     public function update(Request $request)
@@ -41,5 +53,20 @@ class OrderController extends Controller
         $this->orderService->updateOrderStatusWithNotification($data);
 
         return redirect()->back()->with('success', 'Pedido atualizado com sucesso!');
+    }
+
+    public function checkPayment($orderId)
+    {
+        $order = \App\Models\Order::find($orderId);
+        
+        if (!$order) {
+            return response()->json(['error' => 'Pedido não encontrado'], 404);
+        }
+        
+        return response()->json([
+            'order_id' => $order->id,
+            'payment_status' => $order->payment_status,
+            'status' => $order->status,
+        ]);
     }
 }

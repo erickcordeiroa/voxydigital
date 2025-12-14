@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\OrderItems;
 use App\Services\WhatsappService;
+use App\Services\PaymentService;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
@@ -28,19 +30,23 @@ class OrderService
         ];
     }
 
-    public function createOrderWithNotification(array $data): void
+    public function createOrderWithNotification(array $data): Order
     {
+        // Criar pedido
         $order = Order::create([
             'tenant_id' => app('tenant_id'),
             'customer_name' => $data['customer_name'],
+            'customer_email' => $data['customer_email'],
             'customer_phone' => $data['customer_phone'],
             'delivery_address' => $data['delivery_address'],
-            'note' => $data['note'],
+            'note' => $data['note'] ?? null,
             'total' => $data['total'],
             'status' => 'pending',
-            'tax_fixed' => $data['tax_fixed'],
+            'tax_fixed' => $data['tax_fixed'] ?? 0,
+            'payment_method' => $data['payment_method'],
         ]);
 
+        // Criar itens do pedido
         foreach ($data['items'] as $item) {
             OrderItems::create([
                 'order_id' => $order->id,
@@ -53,6 +59,37 @@ class OrderService
 
         $order->load(['items.product', 'items.variation']);
 
+        // Processar pagamento
+        try {
+            $paymentService = new PaymentService();
+            $paymentResult = $paymentService->processPayment(
+                $order,
+                $data['payment_method'],
+                $data['card_data'] ?? null
+            );
+
+            // Atualizar pedido com dados do pagamento
+            $order->update([
+                'payment_id' => $paymentResult['payment_id'],
+                'payment_status' => $paymentResult['status'],
+                'qr_code' => $paymentResult['qr_code'] ?? null,
+                'qr_code_base64' => $paymentResult['qr_code_base64'] ?? null,
+            ]);
+
+            // Se pagamento aprovado, atualizar status do pedido
+            if ($paymentResult['success'] && $data['payment_method'] === 'credit_card') {
+                $order->update(['status' => 'approved']);
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao processar pagamento: ' . $e->getMessage());
+            $order->update([
+                'payment_status' => 'failed',
+                'note' => ($data['note'] ?? '') . "\n\nErro no pagamento: " . $e->getMessage()
+            ]);
+            throw $e;
+        }
+
         $tenant = app('tenant');
         // Comentado por questões de não utilização do whatsapp no momento.
         // if ($tenant && $tenant->whatsapp) {
@@ -60,6 +97,8 @@ class OrderService
         //     WhatsappService::send("+55{$tenant->whatsapp}", $msg);
         //     WhatsappService::sendToClient("+55{$data['customer_phone']}");
         // }
+        
+        return $order;
     }
 
     public function updateOrderStatusWithNotification(array $data): void
@@ -80,6 +119,7 @@ class OrderService
         $msg = "*Novo pedido recebido!*\n";
         $msg .= "*Cliente:* {$data['customer_name']}\n";
         $msg .= "*Telefone:* {$data['customer_phone']}\n";
+        $msg .= "*Email:* {$data['customer_email']}\n";
         $msg .= "*Endereço:* {$data['delivery_address']}\n";
         $msg .= "*Observação:* {$data['note']}\n";
         $msg .= "*Itens:*\n";

@@ -12,12 +12,18 @@ class Order extends Model
     protected $fillable = [
         'tenant_id',
         'customer_name',
+        'customer_email',
         'customer_phone',
         'delivery_address',
         'note',
         'total',
         'status',
-        'tax_fixed'
+        'tax_fixed',
+        'payment_method',
+        'payment_id',
+        'payment_status',
+        'qr_code',
+        'qr_code_base64',
     ];
 
     public function items()
