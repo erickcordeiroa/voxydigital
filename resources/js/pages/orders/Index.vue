@@ -89,6 +89,39 @@ const getStatusText = (status: string) => {
     return statusText[status] || 'Cancelado';
 };
 
+const getPaymentStatusColor = (paymentStatus: string | null) => {
+    if (!paymentStatus) return 'bg-gray-100 text-gray-800';
+    const colors: Record<string, string> = {
+        approved: 'bg-green-100 text-green-800',
+        pending: 'bg-yellow-100 text-yellow-800',
+        rejected: 'bg-red-100 text-red-800',
+        failed: 'bg-red-100 text-red-800',
+        cancelled: 'bg-gray-100 text-gray-800',
+    };
+    return colors[paymentStatus] || 'bg-gray-100 text-gray-800';
+};
+
+const getPaymentStatusText = (paymentStatus: string | null) => {
+    if (!paymentStatus) return 'Não informado';
+    const texts: Record<string, string> = {
+        approved: 'Aprovado',
+        pending: 'Pendente',
+        rejected: 'Rejeitado',
+        failed: 'Falhou',
+        cancelled: 'Cancelado',
+    };
+    return texts[paymentStatus] || paymentStatus;
+};
+
+const getPaymentMethodText = (method: string | null) => {
+    if (!method) return 'Não informado';
+    const methods: Record<string, string> = {
+        pix: 'PIX',
+        credit_card: 'Cartão de Crédito',
+    };
+    return methods[method] || method;
+};
+
 const printOrder = (order: any) => {
   const printContent = `
     <!DOCTYPE html>
@@ -319,6 +352,14 @@ const updateStatus = (orderId: number, status: string) => {
                   >
                     {{ getStatusText(order.status) }}
                   </span>
+                  <span
+                    v-if="order.payment_status"
+                    class="ml-2 rounded-full px-3 py-1 text-xs font-medium"
+                    :class="getPaymentStatusColor(order.payment_status)"
+                    :title="`Pagamento: ${getPaymentStatusText(order.payment_status)}`"
+                  >
+                    💳 {{ getPaymentStatusText(order.payment_status) }}
+                  </span>
                 </h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
                   {{
@@ -377,6 +418,27 @@ const updateStatus = (orderId: number, status: string) => {
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
                   {{ formatCurrency(order.tax_fixed / 100) }}
                 </p>
+
+                <h3 class="mb-1 mt-4 font-semibold text-gray-700 dark:text-gray-300">
+                  Informações de Pagamento
+                </h3>
+                <div class="space-y-1 text-gray-600 dark:text-gray-300 mb-2">
+                  <p>
+                    <span class="font-medium">Método:</span> {{ getPaymentMethodText(order.payment_method) }}
+                  </p>
+                  <p>
+                    <span class="font-medium">Status:</span>
+                    <span
+                      class="ml-2 rounded-full px-2 py-1 text-xs font-medium"
+                      :class="getPaymentStatusColor(order.payment_status)"
+                    >
+                      {{ getPaymentStatusText(order.payment_status) }}
+                    </span>
+                  </p>
+                  <p v-if="order.payment_id">
+                    <span class="font-medium">ID do Pagamento:</span> {{ order.payment_id }}
+                  </p>
+                </div>
               </div>
 
               <div>

@@ -29,19 +29,34 @@ class OrderController extends Controller
 
     public function store(CreateOrderRequest $request)
     {
-        $order = $this->orderService->createOrderWithNotification($request->validated());
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Pedido criado com sucesso',
-            'data' => [
-                'order_id' => $order->id,
-                'payment_id' => $order->payment_id,
-                'payment_status' => $order->payment_status,
-                'qr_code' => $order->qr_code,
-                'qr_code_base64' => $order->qr_code_base64,
-            ]
-        ]);
+        try {
+            $order = $this->orderService->createOrderWithNotification($request->validated());
+            
+            $message = 'Pedido criado com sucesso';
+            $paymentProcessed = !empty($order->payment_id);
+            
+            if (!$paymentProcessed) {
+                $message = 'Pedido criado com sucesso. O pagamento será processado posteriormente.';
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'payment_processed' => $paymentProcessed,
+                'data' => [
+                    'order_id' => $order->id,
+                    'payment_id' => $order->payment_id,
+                    'payment_status' => $order->payment_status,
+                    'qr_code' => $order->qr_code,
+                    'qr_code_base64' => $order->qr_code_base64,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao criar pedido: ' . $e->getMessage(),
+            ], 400);
+        }
     }
 
     public function update(Request $request)

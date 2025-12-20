@@ -7,16 +7,24 @@ import { Link, usePage } from '@inertiajs/vue3';
 
 const sidebarNavItems: NavItem[] = [
     {
+        title: 'Configurações da Loja',
+        href: '/settings/appearance',
+    },
+    {
+        title: 'Exportar Produtos',
+        href: '/settings/export',
+    },
+    {
+        title: 'Assinatura',
+        href: '/settings/subscription',
+    },
+    {
         title: 'Perfil',
         href: '/settings/profile',
     },
     {
         title: 'Trocar Senha',
         href: '/settings/password',
-    },
-    {
-        title: 'Configurações da Loja',
-        href: '/settings/appearance',
     },
 ];
 

@@ -609,15 +609,30 @@ const submitOrder = async () => {
 
     const response = await axios.post(route('orders.store'), payload);
 
-    // Armazenar dados do PIX
-    pixData.value = response.data.data;
+    // Verificar se o pagamento foi processado
+    const paymentProcessed = response.data.payment_processed ?? true;
     
-    // Iniciar polling para verificar pagamento
-    startPollingPaymentStatus(response.data.data.order_id);
+    if (paymentProcessed && response.data.data.qr_code) {
+      // Pagamento processado - armazenar dados do PIX
+      pixData.value = response.data.data;
+      
+      // Iniciar polling para verificar pagamento
+      startPollingPaymentStatus(response.data.data.order_id);
 
-    toast.success('QR Code gerado com sucesso!', {
-      description: 'Escaneie o código ou copie para realizar o pagamento.',
-    });
+      toast.success('QR Code gerado com sucesso!', {
+        description: 'Escaneie o código ou copie para realizar o pagamento.',
+      });
+    } else {
+      // Pagamento não processado - pedido criado mas sem processar pagamento
+      toast.success('Pedido criado com sucesso!', {
+        description: response.data.message || 'Seu pedido foi registrado e será processado em breve.',
+      });
+      
+      // Limpar carrinho e redirecionar
+      setTimeout(() => {
+        clearCartAndRedirect();
+      }, 2000);
+    }
 
     isSubmitting.value = false;
   } catch (error: any) {

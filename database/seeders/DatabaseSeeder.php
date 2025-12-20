@@ -16,11 +16,25 @@ class DatabaseSeeder extends Seeder
     {
         $tenant = Tenant::first();
 
-        User::create([
-            "name" => "Erick Cordeiro",
-            "email" => "ferja@gmail.com",
-            "password" => "erick2020",
-            "tenant_id" => $tenant->id,
+        if (!$tenant) {
+            $this->command->error('Nenhum tenant encontrado. Por favor, crie um tenant primeiro.');
+            return;
+        }
+
+        User::firstOrCreate(
+            [
+                'email' => 'ferja@gmail.com',
+            ],
+            [
+                'name' => 'Erick Cordeiro',
+                'password' => 'erick2020',
+                'tenant_id' => $tenant->id,
+            ]
+        );
+
+        // Seed de assinaturas
+        $this->call([
+            SubscriptionSeeder::class,
         ]);
     }
 }

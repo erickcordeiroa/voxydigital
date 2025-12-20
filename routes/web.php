@@ -17,8 +17,9 @@ Route::domain('localhost')->get('/', function () {
     return Inertia::render('Welcome');
 })->name('welcome');
 
-// Webhook do Mercado Pago (sem middleware de autenticação)
+// Webhooks (sem middleware de autenticação)
 Route::post('/webhook/mercadopago', [WebhookController::class, 'mercadoPago'])->name('webhook.mercadopago');
+Route::post('/webhook/abacatepay', [WebhookController::class, 'abacatePay'])->name('webhook.abacatepay');
 
 require __DIR__ . '/auth_public.php';
 
@@ -29,6 +30,11 @@ Route::middleware(TenantMiddleware::class)->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}/check-payment', [OrderController::class, 'checkPayment'])->name('orders.check-payment');
+    
+    // Exportação pública de produtos (para Google Shopping e Meta)
+    Route::get('/settings/export/google-shopping.xml', [\App\Http\Controllers\ProductExportController::class, 'googleShopping'])->name('products.export.google-shopping.public');
+    Route::get('/settings/export/meta.xml', [\App\Http\Controllers\ProductExportController::class, 'meta'])->name('products.export.meta.public');
+    
     require __DIR__ . '/auth.php';
 });
 
@@ -50,6 +56,13 @@ Route::middleware(['auth', 'verified', TenantMiddleware::class])->group(function
     Route::post('/products/{id}/variations', [ProductVariationController::class, 'store'])->name('variations.store');
     Route::put('/products/{id}/variations', [ProductVariationController::class, 'update'])->name('variations.update');
     Route::delete('/products/{id}/variations', [ProductVariationController::class, 'destroy'])->name('variations.delete');
+
+    // Exportação de produtos
+    Route::get('/settings/export', function () {
+        return Inertia::render('settings/Export');
+    })->name('settings.export');
+    Route::get('/settings/export/google-shopping', [\App\Http\Controllers\ProductExportController::class, 'googleShopping'])->name('products.export.google-shopping');
+    Route::get('/settings/export/meta', [\App\Http\Controllers\ProductExportController::class, 'meta'])->name('products.export.meta');
 
 });
 

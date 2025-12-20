@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\PaymentGateway;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use MercadoPago\MercadoPagoConfig;
@@ -15,25 +16,33 @@ class PaymentService
     {
         $tenant = app('tenant');
         
-        if (!$tenant->mp_access_token) {
-            throw new Exception('Mercado Pago Access Token não configurado para este tenant');
+        // Buscar gateway ativo do Mercado Pago
+        $gateway = $tenant->getPaymentGateway('mercadopago');
+        
+        if (!$gateway) {
+            throw new Exception('Mercado Pago não configurado para este tenant');
         }
 
         if ($paymentMethod === 'pix') {
-            return $this->processPixPayment($order, $tenant);
+            return $this->processPixPayment($order, $tenant, $gateway);
         }
 
         throw new Exception('Método de pagamento inválido. Atualmente apenas PIX é suportado.');
     }
 
-    private function processPixPayment(Order $order, $tenant): array
+    private function processPixPayment(Order $order, $tenant, PaymentGateway $gateway): array
     {
         try {
-            // Validar access token
-            $accessToken = trim($tenant->mp_access_token);
+            // Obter access token das credenciais do gateway
+            $accessToken = trim($gateway->getCredential('access_token'));
+            
+            if (!$accessToken) {
+                throw new Exception('Mercado Pago Access Token não configurado no gateway');
+            }
             
             Log::info('Configurando Mercado Pago', [
                 'tenant_id' => $tenant->id,
+                'gateway_id' => $gateway->id,
                 'token_prefix' => substr($accessToken, 0, 15) . '...',
                 'token_length' => strlen($accessToken),
             ]);

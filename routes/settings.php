@@ -19,4 +19,9 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
 
     Route::get('settings/appearance', [TenantController::class, 'show'])->name('appearance');
     Route::post('settings/appearance', [TenantController::class, 'update']);
+
+    Route::get('settings/subscription', [\App\Http\Controllers\Settings\SubscriptionController::class, 'edit'])->name('subscription.edit');
+    Route::post('settings/subscription', [\App\Http\Controllers\Settings\SubscriptionController::class, 'store'])->name('subscription.store');
+    Route::post('settings/subscription/cancel', [\App\Http\Controllers\Settings\SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+    Route::post('settings/subscription/{id}/reactivate', [\App\Http\Controllers\Settings\SubscriptionController::class, 'reactivate'])->name('subscription.reactivate');
 });

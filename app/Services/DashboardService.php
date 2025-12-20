@@ -10,23 +10,29 @@ class DashboardService
 {
     public function getDashboardData(): array
     {
-        //TODO: MELHORAR PORQUE ISSO DA FULLSCAN E DEIXA LENTO
-        //  Busca dados diretamente do banco sem cache
-        $totalProducts = Product::count();
-        $totalOrdersReceived = Order::count();
-        $totalOrderValues = (float) Order::sum('total');
+        $tenantId = app('tenant_id');
+        
+        // Busca dados diretamente do banco com filtro de tenant_id para evitar full scan
+        $totalProducts = Product::where('tenant_id', $tenantId)->count();
+        $totalOrdersReceived = Order::where('tenant_id', $tenantId)->count();
+        $totalOrderValues = (float) Order::where('tenant_id', $tenantId)->sum('total');
 
         $averageOrderValue = $totalOrdersReceived > 0 ? $totalOrderValues / $totalOrdersReceived : 0.0;
 
-        // Busca pedidos recentes
-        $recentOrders = Order::latest()->take(10)->get();
+        // Busca pedidos recentes usando índice composto (tenant_id, status, created_at)
+        $recentOrders = Order::where('tenant_id', $tenantId)
+            ->latest()
+            ->take(10)
+            ->get();
 
         // Dados semanais - compatível com PostgreSQL
+        // Usa índice composto (tenant_id, created_at) para melhor performance
         $weeklyStats = Order::selectRaw('
                     DAYNAME(created_at) as day, 
                     COUNT(*) as order_count, 
                     SUM(total) as revenue
                 ')
+            ->where('tenant_id', $tenantId)
             ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
             ->groupBy('day')
             ->get();

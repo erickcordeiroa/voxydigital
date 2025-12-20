@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\SubscriptionService;
+use App\Services\AbacatePayService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MercadoPago\MercadoPagoConfig;
@@ -44,15 +46,29 @@ class WebhookController extends Controller
                 return response()->json(['error' => 'Order not found'], 404);
             }
 
-            // Configurar SDK do Mercado Pago
+            // Buscar gateway ativo do Mercado Pago
             $tenant = $order->tenant;
             
-            if (!$tenant || !$tenant->mp_access_token) {
-                Log::error('Tenant ou Access Token não encontrado', ['order_id' => $order->id]);
+            if (!$tenant) {
+                Log::error('Tenant não encontrado', ['order_id' => $order->id]);
                 return response()->json(['error' => 'Invalid tenant'], 400);
             }
 
-            MercadoPagoConfig::setAccessToken($tenant->mp_access_token);
+            $gateway = $tenant->getPaymentGateway('mercadopago');
+            
+            if (!$gateway) {
+                Log::error('Gateway Mercado Pago não encontrado', ['order_id' => $order->id, 'tenant_id' => $tenant->id]);
+                return response()->json(['error' => 'Payment gateway not configured'], 400);
+            }
+
+            $accessToken = $gateway->getCredential('access_token');
+            
+            if (!$accessToken) {
+                Log::error('Access Token não encontrado no gateway', ['order_id' => $order->id, 'gateway_id' => $gateway->id]);
+                return response()->json(['error' => 'Access token not configured'], 400);
+            }
+
+            MercadoPagoConfig::setAccessToken($accessToken);
 
             // Buscar informações do pagamento no Mercado Pago
             $client = new PaymentClient();
@@ -85,6 +101,44 @@ class WebhookController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Erro ao processar webhook MercadoPago', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['error' => 'Internal error'], 500);
+        }
+    }
+
+    public function abacatePay(Request $request)
+    {
+        Log::info('Webhook AbacatePay recebido', [
+            'body' => $request->all(),
+            'headers' => $request->headers->all()
+        ]);
+
+        try {
+            // Verificar assinatura do webhook (se configurado)
+            $signature = $request->header('X-AbacatePay-Signature');
+            $payload = $request->getContent();
+
+            // Buscar gateway AbacatePay para verificar assinatura
+            // Por enquanto, vamos processar sem verificação de assinatura
+            // mas isso deve ser implementado em produção
+            
+            $webhookData = $request->all();
+
+            // Processar webhook através do SubscriptionService
+            $subscriptionService = new SubscriptionService();
+            $subscriptionService->processWebhook($webhookData);
+
+            Log::info('Webhook AbacatePay processado com sucesso', [
+                'event' => $webhookData['event'] ?? $webhookData['type'] ?? 'unknown',
+            ]);
+
+            return response()->json(['status' => 'processed'], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Erro ao processar webhook AbacatePay', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);

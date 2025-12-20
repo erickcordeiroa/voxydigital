@@ -75,14 +75,6 @@ class ClientsForm
                             ->numeric()
                     ])->columns(2)->columnSpanFull(),
 
-                    Group::make()
-                    ->schema([
-                        TextInput::make('mp_public_key')
-                            ->label('Chave Pública'),
-                        TextInput::make('mp_access_token')
-                            ->label('Token de Acesso')
-                    ])->columns(2)->columnSpanFull(),
-
                 Toggle::make('status')
                     ->label('Ativo')
                     ->default(true)

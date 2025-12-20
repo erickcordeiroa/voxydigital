@@ -13,14 +13,27 @@ class OrderService
 {
     public function getPaginatedOrders(array $filters)
     {
-        $query = Order::with(['items.product', 'items.variation'])->latest();
+        $tenantId = app('tenant_id');
+        
+        // Usa índice composto (tenant_id, status, created_at) para melhor performance
+        $query = Order::where('tenant_id', $tenantId)
+            ->with(['items.product', 'items.variation'])
+            ->latest();
 
         $search = Arr::get($filters, 'search');
         if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('customer_name', 'like', "%{$search}%")
-                    ->orWhere('customer_phone', 'like', "%{$search}%")
-                    ->orWhere('id', 'like', "%{$search}%");
+            // Otimiza busca usando índices - busca por ID primeiro (mais rápido)
+            // Depois busca por nome e telefone (usando índices quando disponíveis)
+            $query->where(function ($q) use ($search, $tenantId) {
+                // Se for numérico, pode ser ID do pedido
+                if (is_numeric($search)) {
+                    $q->where('id', $search)
+                        ->orWhere('customer_phone', 'like', "%{$search}%")
+                        ->orWhere('customer_name', 'like', "%{$search}%");
+                } else {
+                    $q->where('customer_name', 'like', "%{$search}%")
+                        ->orWhere('customer_phone', 'like', "%{$search}%");
+                }
             });
         }
 
@@ -59,35 +72,53 @@ class OrderService
 
         $order->load(['items.product', 'items.variation']);
 
-        // Processar pagamento
-        try {
-            $paymentService = new PaymentService();
-            $paymentResult = $paymentService->processPayment(
-                $order,
-                $data['payment_method'],
-                $data['card_data'] ?? null
-            );
+        // Verificar se o gateway de pagamento está ativo antes de processar
+        $tenant = app('tenant');
+        $gateway = $this->getPaymentGatewayForMethod($tenant, $data['payment_method']);
 
-            // Atualizar pedido com dados do pagamento
-            $order->update([
-                'payment_id' => $paymentResult['payment_id'],
-                'payment_status' => $paymentResult['status'],
-                'qr_code' => $paymentResult['qr_code'] ?? null,
-                'qr_code_base64' => $paymentResult['qr_code_base64'] ?? null,
-            ]);
+        if ($gateway) {
+            // Gateway ativo - processar pagamento
+            try {
+                $paymentService = new PaymentService();
+                $paymentResult = $paymentService->processPayment(
+                    $order,
+                    $data['payment_method'],
+                    $data['card_data'] ?? null
+                );
 
-            // Se pagamento aprovado, atualizar status do pedido
-            if ($paymentResult['success'] && $data['payment_method'] === 'credit_card') {
-                $order->update(['status' => 'approved']);
+                // Atualizar pedido com dados do pagamento
+                $order->update([
+                    'payment_id' => $paymentResult['payment_id'],
+                    'payment_status' => $paymentResult['status'],
+                    'qr_code' => $paymentResult['qr_code'] ?? null,
+                    'qr_code_base64' => $paymentResult['qr_code_base64'] ?? null,
+                ]);
+
+                // Se pagamento aprovado, atualizar status do pedido
+                if ($paymentResult['success'] && $data['payment_method'] === 'credit_card') {
+                    $order->update(['status' => 'approved']);
+                }
+
+            } catch (\Exception $e) {
+                \Log::error('Erro ao processar pagamento: ' . $e->getMessage());
+                $order->update([
+                    'payment_status' => 'failed',
+                    'note' => ($data['note'] ?? '') . "\n\nErro no pagamento: " . $e->getMessage()
+                ]);
+                throw $e;
             }
-
-        } catch (\Exception $e) {
-            \Log::error('Erro ao processar pagamento: ' . $e->getMessage());
-            $order->update([
-                'payment_status' => 'failed',
-                'note' => ($data['note'] ?? '') . "\n\nErro no pagamento: " . $e->getMessage()
+        } else {
+            // Gateway não ativo ou não configurado - criar pedido sem processar pagamento
+            \Log::info('Gateway de pagamento não ativo ou não configurado, pedido criado sem processar pagamento', [
+                'order_id' => $order->id,
+                'payment_method' => $data['payment_method'],
+                'tenant_id' => $tenant->id,
             ]);
-            throw $e;
+
+            $order->update([
+                'payment_status' => 'pending',
+                'note' => ($data['note'] ?? '') . "\n\nPagamento não processado: Gateway de pagamento não está ativo ou configurado."
+            ]);
         }
 
         $tenant = app('tenant');
@@ -144,5 +175,26 @@ class OrderService
             'canceled' => 'Cancelado',
             default => ucfirst($status),
         };
+    }
+
+    /**
+     * Get payment gateway for the given payment method
+     */
+    private function getPaymentGatewayForMethod($tenant, string $paymentMethod): ?\App\Models\PaymentGateway
+    {
+        // Mapear método de pagamento para provider
+        $providerMap = [
+            'pix' => 'mercadopago',
+            'credit_card' => 'mercadopago',
+            // Adicionar outros métodos conforme necessário
+        ];
+
+        $provider = $providerMap[$paymentMethod] ?? null;
+
+        if (!$provider) {
+            return null;
+        }
+
+        return $tenant->getPaymentGateway($provider);
     }
 }
