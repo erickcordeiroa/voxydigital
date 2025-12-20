@@ -2,7 +2,7 @@
   <Card class="hover:shadow-lg transition-shadow w-full max-w-[250px] md: max-w-full">
     <CardHeader class="px-3">
       <img
-        :src="`/storage/${product.uri}`"
+        :src="product.uri ? `/storage/${product.uri}` : '/storage/not_found.jpg'"
         :alt="product.name"
         class="rounded-md w-full object-cover aspect-square"
       />

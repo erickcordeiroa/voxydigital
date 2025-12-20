@@ -5,4 +5,5 @@ return [
     App\Providers\EventServiceProvider::class,
     App\Providers\ExceptionServiceProvider::class,
     App\Providers\Filament\AdminPanelProvider::class,
+    App\Providers\TelescopeServiceProvider::class,
 ];

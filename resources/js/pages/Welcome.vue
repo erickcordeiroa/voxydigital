@@ -61,6 +61,30 @@
       </div>
     </section>
 
+    <!-- Números e Estatísticas (Social Proof) -->
+    <section class="py-16 bg-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div class="flex flex-col items-center">
+            <div class="text-4xl md:text-5xl font-extrabold text-black mb-2">100+</div>
+            <div class="text-gray-600 text-sm md:text-base">Empresas Ativas</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="text-4xl md:text-5xl font-extrabold text-black mb-2">50K+</div>
+            <div class="text-gray-600 text-sm md:text-base">Produtos Cadastrados</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="text-4xl md:text-5xl font-extrabold text-black mb-2">98%</div>
+            <div class="text-gray-600 text-sm md:text-base">Satisfação dos Clientes</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="text-4xl md:text-5xl font-extrabold text-black mb-2">24/7</div>
+            <div class="text-gray-600 text-sm md:text-base">Suporte Disponível</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Problema e Solução -->
     <section class="py-20 bg-gray-50 pt-12">
       <div class="max-w-5xl mx-auto px-4 text-center">
@@ -208,6 +232,148 @@
             </ul>
           </div>
         </div>
+        <!-- CTA intermediário -->
+        <div class="mt-12 text-center">
+          <a
+            href="#pre-cadastro"
+            class="inline-block bg-[#E1FF00] text-black font-bold rounded-lg px-10 py-4 shadow-xl hover:bg-yellow-300 transition text-lg"
+          >
+            Comece Agora - É Grátis!
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefícios Detalhados -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-black mb-4">
+            Por que escolher a Voxy Digital?
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Uma plataforma completa que transforma a forma como você gerencia e vende seus produtos
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="bg-[#E1FF00] rounded-full p-3 w-fit mb-4">
+              <svg class="h-6 w-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-2 text-black">Setup Rápido</h3>
+            <p class="text-gray-600">
+              Seu catálogo digital pronto em menos de 24 horas. Sem complicação, sem espera.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="bg-[#E1FF00] rounded-full p-3 w-fit mb-4">
+              <svg class="h-6 w-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-2 text-black">Economia Real</h3>
+            <p class="text-gray-600">
+              Elimine custos de impressão. Economize até 80% comparado a catálogos físicos.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="bg-[#E1FF00] rounded-full p-3 w-fit mb-4">
+              <svg class="h-6 w-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-2 text-black">Analytics em Tempo Real</h3>
+            <p class="text-gray-600">
+              Veja quais produtos são mais visualizados e otimize suas vendas com dados reais.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="bg-[#E1FF00] rounded-full p-3 w-fit mb-4">
+              <svg class="h-6 w-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-2 text-black">100% Mobile</h3>
+            <p class="text-gray-600">
+              Seus clientes acessam de qualquer dispositivo. Interface otimizada para celular.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="bg-[#E1FF00] rounded-full p-3 w-fit mb-4">
+              <svg class="h-6 w-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-2 text-black">Segurança Total</h3>
+            <p class="text-gray-600">
+              Seus dados protegidos com criptografia SSL e backups automáticos diários.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="bg-[#E1FF00] rounded-full p-3 w-fit mb-4">
+              <svg class="h-6 w-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <h3 class="font-bold text-xl mb-2 text-black">Suporte Dedicado</h3>
+            <p class="text-gray-600">
+              Equipe especializada pronta para ajudar você a maximizar seus resultados.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Como Funciona -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-black mb-4">
+            Como Funciona
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Em 3 passos simples, seu catálogo digital estará no ar
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="bg-[#E1FF00] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-black">
+              1
+            </div>
+            <h3 class="font-bold text-xl mb-3 text-black">Cadastre-se</h3>
+            <p class="text-gray-600">
+              Preencha o formulário com os dados da sua empresa. É rápido e sem compromisso.
+            </p>
+          </div>
+          <div class="text-center">
+            <div class="bg-[#E1FF00] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-black">
+              2
+            </div>
+            <h3 class="font-bold text-xl mb-3 text-black">Configure seu Catálogo</h3>
+            <p class="text-gray-600">
+              Nossa equipe ajuda você a configurar produtos, categorias e personalizar o design.
+            </p>
+          </div>
+          <div class="text-center">
+            <div class="bg-[#E1FF00] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-black">
+              3
+            </div>
+            <h3 class="font-bold text-xl mb-3 text-black">Compartilhe e Venda</h3>
+            <p class="text-gray-600">
+              Seu catálogo fica online em menos de 24h. Compartilhe o link e comece a vender!
+            </p>
+          </div>
+        </div>
+        <div class="mt-12 text-center">
+          <a
+            href="#pre-cadastro"
+            class="inline-block bg-[#E1FF00] text-black font-bold rounded-lg px-10 py-4 shadow-xl hover:bg-yellow-300 transition text-lg"
+          >
+            Começar Agora
+          </a>
+        </div>
       </div>
     </section>
 
@@ -236,6 +402,130 @@
             alt="Integração WhatsApp"
             class="w-72 md:w-96 rounded-xl shadow-md"
           />
+        </div>
+        <!-- CTA intermediário -->
+        <div class="mt-8 text-center">
+          <a
+            href="#pre-cadastro"
+            class="inline-block bg-[#E1FF00] text-black font-bold rounded-lg px-8 py-3 shadow-lg hover:bg-yellow-300 transition"
+          >
+            Quero Integrar com WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-black mb-4">
+            O que nossos clientes dizem
+          </h2>
+          <p class="text-lg text-gray-600">
+            Empresas que transformaram seus negócios com a Voxy Digital
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center mb-4">
+              <div class="flex text-[#E1FF00]">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4 italic">
+              "Reduzimos 70% dos custos com impressão e nossos clientes adoram a facilidade de navegar pelo catálogo no celular. As vendas aumentaram 40%!"
+            </p>
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-[#E1FF00] rounded-full flex items-center justify-center mr-3">
+                <span class="text-black font-bold">MC</span>
+              </div>
+              <div>
+                <div class="font-semibold text-black">Maria Costa</div>
+                <div class="text-sm text-gray-600">Diretora Comercial</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center mb-4">
+              <div class="flex text-[#E1FF00]">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4 italic">
+              "A integração com WhatsApp foi um divisor de águas. Recebemos pedidos direto no celular e o atendimento ficou muito mais ágil. Recomendo!"
+            </p>
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-[#E1FF00] rounded-full flex items-center justify-center mr-3">
+                <span class="text-black font-bold">JS</span>
+              </div>
+              <div>
+                <div class="font-semibold text-black">João Silva</div>
+                <div class="text-sm text-gray-600">CEO, Distribuidora XYZ</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center mb-4">
+              <div class="flex text-[#E1FF00]">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-4 italic">
+              "Os analytics nos mostraram produtos que não sabíamos que eram tão procurados. Ajustamos o estoque e as vendas explodiram!"
+            </p>
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-[#E1FF00] rounded-full flex items-center justify-center mr-3">
+                <span class="text-black font-bold">AS</span>
+              </div>
+              <div>
+                <div class="font-semibold text-black">Ana Santos</div>
+                <div class="text-sm text-gray-600">Gerente de Vendas</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -340,6 +630,80 @@
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="py-20 bg-white">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-black mb-4">
+            Perguntas Frequentes
+          </h2>
+          <p class="text-lg text-gray-600">
+            Tire suas dúvidas sobre a plataforma Voxy Digital
+          </p>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-bold text-lg text-black mb-2">
+              Quanto tempo leva para ter meu catálogo pronto?
+            </h3>
+            <p class="text-gray-600">
+              Após o cadastro, seu catálogo digital fica disponível em menos de 24 horas. Nossa equipe ajuda você a configurar tudo rapidamente.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-bold text-lg text-black mb-2">
+              Preciso de conhecimento técnico para usar?
+            </h3>
+            <p class="text-gray-600">
+              Não! Nossa plataforma foi desenvolvida para ser intuitiva. Qualquer pessoa consegue atualizar produtos, preços e informações facilmente.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-bold text-lg text-black mb-2">
+              Posso personalizar o design do catálogo?
+            </h3>
+            <p class="text-gray-600">
+              Sim! Você pode personalizar cores, logo, banners e muito mais. Temos templates prontos ou você pode criar seu próprio design.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-bold text-lg text-black mb-2">
+              Como funciona a integração com WhatsApp?
+            </h3>
+            <p class="text-gray-600">
+              Quando um cliente faz um pedido no catálogo, você recebe automaticamente uma mensagem no WhatsApp da sua empresa com todos os detalhes do pedido.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-bold text-lg text-black mb-2">
+              Há limite de produtos no catálogo?
+            </h3>
+            <p class="text-gray-600">
+              Não há limite! Você pode cadastrar quantos produtos precisar. Nossa plataforma é escalável e suporta desde pequenas lojas até grandes distribuidoras.
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-bold text-lg text-black mb-2">
+              O que acontece se eu precisar de suporte?
+            </h3>
+            <p class="text-gray-600">
+              Oferecemos suporte via WhatsApp, e-mail e chat. Nossa equipe está sempre pronta para ajudar você a aproveitar ao máximo a plataforma.
+            </p>
+          </div>
+        </div>
+        <div class="mt-12 text-center">
+          <p class="text-gray-600 mb-4">Ainda tem dúvidas?</p>
+          <a
+            href="https://wa.me/5513996631713"
+            target="_blank"
+            class="inline-block bg-[#E1FF00] text-black font-bold rounded-lg px-8 py-3 shadow-lg hover:bg-yellow-300 transition"
+          >
+            Fale Conosco no WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- Formulário de Pré-cadastro -->
     <section id="pre-cadastro" class="py-20 bg-gray-100 flex justify-center">
       <div
@@ -356,6 +720,9 @@
             Cadastre sua empresa e seja um dos primeiros a transformar seu catálogo físico
             em uma experiência digital inteligente, interativa e mensurável.
           </p>
+          <div class="bg-[#E1FF00] text-black px-4 py-2 rounded-lg mb-6 inline-block">
+            <span class="font-bold">⚡ Setup em menos de 24h</span>
+          </div>
           <ul class="text-white text-base space-y-2 mb-4">
             <li class="flex items-center">
               <span
@@ -438,15 +805,37 @@
               Suporte especializado
             </li>
           </ul>
-          <span class="text-sm text-white text-left">
-            Pré-cadastro sem compromisso. Nossa equipe entrará em contato!
-          </span>
+          <div class="mt-6 space-y-2">
+            <div class="flex items-center text-white text-sm">
+              <svg class="w-5 h-5 text-[#E1FF00] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Sem compromisso
+            </div>
+            <div class="flex items-center text-white text-sm">
+              <svg class="w-5 h-5 text-[#E1FF00] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Resposta em até 2 horas
+            </div>
+            <div class="flex items-center text-white text-sm">
+              <svg class="w-5 h-5 text-[#E1FF00] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Suporte especializado incluso
+            </div>
+          </div>
         </div>
         <!-- Formulário -->
         <div class="flex-1 p-8 md:p-10">
-          <h2 class="text-2xl font-bold mb-4 text-left text-black">
-            Faça o pré-cadastro da sua empresa
-          </h2>
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold mb-2 text-left text-black">
+              Faça o pré-cadastro da sua empresa
+            </h2>
+            <p class="text-sm text-gray-600">
+              Preencha o formulário e nossa equipe entrará em contato em até 2 horas
+            </p>
+          </div>
           <form class="space-y-4" @submit="sendForm">
             <div>
               <label class="block text-gray-700 mb-1 font-semibold"

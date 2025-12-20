@@ -17,7 +17,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
 ];
 
 const props = defineProps<{
-  tenant: Object
+  tenant: object
 }>();
 
 const tenant = ref(props.tenant);

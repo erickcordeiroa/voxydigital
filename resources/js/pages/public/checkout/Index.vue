@@ -99,7 +99,7 @@
                 class="flex gap-4 p-4 border rounded-lg"
               >
                 <img
-                  :src="item.imageUrl"
+                  :src="item.imageUrl != '/storage/null' ? item.imageUrl : '/storage/not_found.jpg'"
                   :alt="item.name"
                   class="w-20 h-20 object-cover rounded"
                 />
@@ -230,13 +230,15 @@
               <Button type="button" variant="outline" @click="previousStep">
                 Voltar
               </Button>
-              <Button type="submit">Continuar</Button>
+              <Button type="submit">
+                {{ hasActivePaymentGateways ? 'Continuar' : 'Finalizar Pedido' }}
+              </Button>
             </div>
           </form>
         </div>
 
         <!-- Step 3: Forma de Pagamento -->
-        <div v-if="currentStep === 2 && !pixData">
+        <div v-if="currentStep === 2 && hasActivePaymentGateways && !pixData">
           <h2 class="text-2xl font-bold mb-6">Forma de Pagamento</h2>
 
           <!-- Informação sobre PIX -->
@@ -296,7 +298,7 @@
         </div>
 
         <!-- Step 3.5: Tela do QR Code PIX -->
-        <div v-if="currentStep === 2 && pixData">
+        <div v-if="currentStep === 2 && hasActivePaymentGateways && pixData">
           <div class="text-center">
             <div v-if="pixData.payment_status === 'approved'" class="mb-6">
               <div class="w-20 h-20 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
@@ -395,9 +397,28 @@ import axios from 'axios';
 
 const { props } = usePage();
 const tenant = computed(() => props.tenant);
+const paymentGateways = computed(() => props.paymentGateways);
 const taxFixed = computed(() => Number(tenant.value?.tax_fixed || 0));
 
-const steps = ['Pedido', 'Seus Dados', 'Pagamento'];
+// Verificar se há paymentGateways ativos
+const hasActivePaymentGateways = computed(() => {
+  const gateways = paymentGateways.value;
+  if (!gateways) return false;
+  if (Array.isArray(gateways)) {
+    return gateways.length > 0;
+  }
+  // Se for um objeto/coleção, verificar se tem itens
+  return Object.keys(gateways).length > 0;
+});
+
+// Steps dinâmicos baseados na presença de paymentGateways
+const steps = computed(() => {
+  const baseSteps = ['Pedido', 'Seus Dados'];
+  if (hasActivePaymentGateways.value) {
+    baseSteps.push('Pagamento');
+  }
+  return baseSteps;
+});
 const currentStep = ref(0);
 
 const cartItems = ref<any[]>([]);
@@ -474,9 +495,15 @@ const nextStep = async () => {
     if (!validateCustomerInfo()) {
       return;
     }
+    
+    // Se não houver paymentGateways ativos, finalizar pedido no step 2
+    if (!hasActivePaymentGateways.value) {
+      await submitOrder();
+      return;
+    }
   }
   
-  if (currentStep.value < steps.length - 1) {
+  if (currentStep.value < steps.value.length - 1) {
     currentStep.value++;
   }
 };

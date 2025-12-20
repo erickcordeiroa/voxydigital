@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
         // Seed de assinaturas
         $this->call([
             SubscriptionSeeder::class,
+            CategorySeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }

@@ -26,7 +26,7 @@ export function isValidCNPJ(cnpj: string): boolean {
   if (/^(\d)\1+$/.test(cnpj)) return false;
   let length = cnpj.length - 2;
   let numbers = cnpj.substring(0, length);
-  let digits = cnpj.substring(length);
+  const digits = cnpj.substring(length);
   let sum = 0;
   let pos = length - 7;
   for (let i = length; i >= 1; i--) {

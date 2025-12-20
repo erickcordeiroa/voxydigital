@@ -13,6 +13,7 @@ class CheckoutController extends Controller
         
         return Inertia::render('public/checkout/Index', [
             'tenant' => $tenant,
+            'paymentGateways' => $tenant->activePaymentGateways,
         ]);
     }
 }

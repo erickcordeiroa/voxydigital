@@ -122,7 +122,7 @@ const formatPhoneNumber = (whatsapp: string) => {
           </svg>
         </button>
         <img
-          :src="`/storage/${images[currentImage].uri}`"
+          :src="images[currentImage].uri ? `/storage/${images[currentImage].uri}` : '/storage/not_found.jpg'"
           :alt="product.name"
           class="object-cover md:rounded-lg shadow w-full max-w-[520px] max-h-[520px] aspect-square"
         />
