@@ -14,10 +14,10 @@ const sidebarNavItems: NavItem[] = [
         title: 'Exportar Produtos',
         href: '/settings/export',
     },
-    {
-        title: 'Assinatura',
-        href: '/settings/subscription',
-    },
+    // {
+    //     title: 'Assinatura',
+    //     href: '/settings/subscription',
+    // },
     {
         title: 'Perfil',
         href: '/settings/profile',

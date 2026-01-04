@@ -18,18 +18,9 @@ defineProps({
 function getMainImage(product: any) {
   if (Array.isArray(product.images)) {
     const main = product.images.find(img => img.thumbnail === 1);
-    return main ? main.uri : (product.images[0]?.uri || product.uri);
+    return main ? main.uri : 'not_found.jpg';
   }
-
-  return product.uri;
 }
-
-function handleEditProduct(id: number) {
-  router.get(route('products.edit', id));
-}
-
-// Define os eventos emitidos
-defineEmits(["edit", "delete"]);
 </script>
 <template>
   <div class="grid gap-4 px-4 pb-6 sm:px-6">
