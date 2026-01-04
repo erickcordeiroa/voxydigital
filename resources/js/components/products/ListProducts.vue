@@ -1,31 +1,55 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
 import { Edit, Trash2 } from "lucide-vue-next";
 import { router } from "@inertiajs/vue3";
 
-// Define as props recebidas
-defineProps({
-  products: {
-    type: Array,
-    required: true,
-  },
-  pagination: {
-    type: Object,
-    required: true,
-  },
-});
+interface Product {
+  id: number;
+  name: string;
+  description?: string;
+  price: number;
+  sale?: number;
+  status: number;
+  category?: {
+    name: string;
+  };
+  images?: Array<{
+    thumbnail: number;
+    uri: string;
+  }>;
+}
 
-function getMainImage(product: any) {
+// Define as props recebidas
+const props = defineProps<{
+  products: Product[];
+  pagination: {
+    links: Array<{
+      label: string;
+      url: string | null;
+      active: boolean;
+    }>;
+  };
+}>();
+
+// Define os eventos emitidos
+const emit = defineEmits<{
+  delete: [id: number];
+}>();
+
+function getMainImage(product: Product) {
   if (Array.isArray(product.images)) {
-    const main = product.images.find(img => img.thumbnail === 1);
+    const main = product.images.find((img: { thumbnail: number }) => img.thumbnail === 1);
     return main ? main.uri : 'not_found.jpg';
   }
+}
+
+function handleEditProduct(id: number) {
+  router.get(`/products/edit/${id}`);
 }
 </script>
 <template>
   <div class="grid gap-4 px-4 pb-6 sm:px-6">
     <div
-      v-for="product in products"
+      v-for="product in props.products"
       :key="product.id"
       class="flex flex-col sm:flex-row sm:items-center justify-between rounded-lg border p-4 shadow-sm bg-white"
     >
@@ -83,7 +107,7 @@ function getMainImage(product: any) {
           </button>
           <!-- Ícone de Excluir -->
           <button
-            @click="$emit('delete', product.id)"
+            @click="emit('delete', product.id)"
             class="text-gray-500 hover:text-red-500 transition cursor-pointer"
           >
             <Trash2 class="w-5 h-5" />
@@ -94,10 +118,10 @@ function getMainImage(product: any) {
   </div>
 
   <!-- Paginação -->
-  <div v-if="pagination.links.length > 3" class="flex justify-center mt-4 mb-10">
+  <div v-if="props.pagination.links.length > 3" class="flex justify-center mt-4 mb-10">
     <nav class="flex flex-wrap gap-2 justify-center">
       <button
-        v-for="link in pagination.links"
+        v-for="link in props.pagination.links"
         :key="link.label"
         @click="link.url && router.get(link.url)"
         v-html="link.label"

@@ -14,10 +14,10 @@ const sidebarNavItems: NavItem[] = [
         title: 'Exportar Produtos',
         href: '/settings/export',
     },
-    // {
-    //     title: 'Assinatura',
-    //     href: '/settings/subscription',
-    // },
+    {
+        title: 'Meio de Pagamento',
+        href: '/settings/payment-methods',
+    },
     {
         title: 'Perfil',
         href: '/settings/profile',

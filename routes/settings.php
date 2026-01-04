@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\TenantController;
@@ -20,8 +21,14 @@ Route::middleware(['auth', TenantMiddleware::class])->group(function () {
     Route::get('settings/appearance', [TenantController::class, 'show'])->name('appearance');
     Route::post('settings/appearance', [TenantController::class, 'update']);
 
-    Route::get('settings/subscription', [\App\Http\Controllers\Settings\SubscriptionController::class, 'edit'])->name('subscription.edit');
-    Route::post('settings/subscription', [\App\Http\Controllers\Settings\SubscriptionController::class, 'store'])->name('subscription.store');
-    Route::post('settings/subscription/cancel', [\App\Http\Controllers\Settings\SubscriptionController::class, 'cancel'])->name('subscription.cancel');
-    Route::post('settings/subscription/{id}/reactivate', [\App\Http\Controllers\Settings\SubscriptionController::class, 'reactivate'])->name('subscription.reactivate');
+    Route::get('settings/payment-methods', [PaymentMethodController::class, 'index'])->name('payment-methods.index');
+    Route::post('settings/payment-methods', [PaymentMethodController::class, 'store'])->name('payment-methods.store');
+    Route::post('settings/payment-methods/{id}/toggle', [PaymentMethodController::class, 'toggle'])->name('payment-methods.toggle');
+    Route::put('settings/payment-methods/{id}', [PaymentMethodController::class, 'update'])->name('payment-methods.update');
+
+    //TODO: Implementar assinatura futuramente.
+    // Route::get('settings/subscription', [\App\Http\Controllers\Settings\SubscriptionController::class, 'edit'])->name('subscription.edit');
+    // Route::post('settings/subscription', [\App\Http\Controllers\Settings\SubscriptionController::class, 'store'])->name('subscription.store');
+    // Route::post('settings/subscription/cancel', [\App\Http\Controllers\Settings\SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+    // Route::post('settings/subscription/{id}/reactivate', [\App\Http\Controllers\Settings\SubscriptionController::class, 'reactivate'])->name('subscription.reactivate');
 });

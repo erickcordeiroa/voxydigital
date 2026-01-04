@@ -19,7 +19,7 @@ Route::domain('localhost')->get('/', function () {
 
 // Webhooks (sem middleware de autenticação)
 Route::post('/webhook/mercadopago', [WebhookController::class, 'mercadoPago'])->name('webhook.mercadopago');
-Route::post('/webhook/abacatepay', [WebhookController::class, 'abacatePay'])->name('webhook.abacatepay');
+// Route::post('/webhook/abacatepay', [WebhookController::class, 'abacatePay'])->name('webhook.abacatepay');
 
 require __DIR__ . '/auth_public.php';
 
