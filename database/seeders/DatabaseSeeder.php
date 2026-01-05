@@ -23,20 +23,19 @@ class DatabaseSeeder extends Seeder
 
         User::firstOrCreate(
             [
-                'email' => 'ferja@gmail.com',
+                'email' => 'erickcordeiroa@gmail.com',
             ],
             [
                 'name' => 'Erick Cordeiro',
-                'password' => 'erick2020',
-                'tenant_id' => $tenant->id,
+                'password' => 'erick2020@',
             ]
         );
 
         // Seed de assinaturas
         $this->call([
-            SubscriptionSeeder::class,
-            CategorySeeder::class,
-            ProductSeeder::class,
+            // SubscriptionSeeder::class,
+            // CategorySeeder::class,
+            // ProductSeeder::class,
         ]);
     }
 }

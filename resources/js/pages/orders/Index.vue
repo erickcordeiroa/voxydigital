@@ -97,6 +97,7 @@ const getPaymentStatusColor = (paymentStatus: string | null) => {
         rejected: 'bg-red-100 text-red-800',
         failed: 'bg-red-100 text-red-800',
         cancelled: 'bg-gray-100 text-gray-800',
+        seller: 'bg-blue-100 text-blue-800',
     };
     return colors[paymentStatus] || 'bg-gray-100 text-gray-800';
 };
@@ -358,7 +359,12 @@ const updateStatus = (orderId: number, status: string) => {
                     :class="getPaymentStatusColor(order.payment_status)"
                     :title="`Pagamento: ${getPaymentStatusText(order.payment_status)}`"
                   >
-                    💳 {{ getPaymentStatusText(order.payment_status) }}
+                    Pagto: {{ getPaymentStatusText(order.payment_status) }}
+                  </span>
+                  <span v-else
+                    class="ml-2 rounded-full px-3 py-1 text-xs font-medium "
+                    :class="getPaymentStatusColor('seller')">
+                    Pagto: Em Loja
                   </span>
                 </h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -422,7 +428,7 @@ const updateStatus = (orderId: number, status: string) => {
                 <h3 class="mb-1 mt-4 font-semibold text-gray-700 dark:text-gray-300">
                   Informações de Pagamento
                 </h3>
-                <div class="space-y-1 text-gray-600 dark:text-gray-300 mb-2">
+                <div v-if="order.payment_status" class="space-y-1 text-gray-600 dark:text-gray-300 mb-2">
                   <p>
                     <span class="font-medium">Método:</span> {{ getPaymentMethodText(order.payment_method) }}
                   </p>
@@ -438,6 +444,21 @@ const updateStatus = (orderId: number, status: string) => {
                   <p v-if="order.payment_id">
                     <span class="font-medium">ID do Pagamento:</span> {{ order.payment_id }}
                   </p>
+                </div>
+                <div v-else> 
+                  <p>
+                    <span class="font-medium">Método:</span> Pagamento em Loja
+                  </p>
+                  <p>
+                    <span class="font-medium">Status:</span>
+                    <span
+                      class="ml-2 rounded-full px-2 py-1 text-xs font-medium"
+                      :class="getPaymentStatusColor('seller')"
+                    >
+                      {{ getPaymentStatusText('Em Aberto') }}
+                    </span>
+                  </p>
+
                 </div>
               </div>
 
@@ -457,7 +478,7 @@ const updateStatus = (orderId: number, status: string) => {
                       <!-- Aqui você pode adicionar uma imagem do produto se disponível -->
                       <div class="flex h-full items-center justify-center text-gray-400">
                         <img
-                          :src="`/storage/${item.product.uri}`"
+                          :src="item.product.uri ? `/storage/${item.product.uri}` : '/storage/not_found.jpg'"
                           alt="Imagem do produto"
                           class="h-18 w-18 object-cover rounded-md border"
                         />
@@ -470,8 +491,8 @@ const updateStatus = (orderId: number, status: string) => {
                       <p class="text-sm text-gray-500 dark:text-gray-400">
                         {{ item.quantity }} × {{ formatCurrency(item.price / 100) }}
                       </p>
-                      <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Tamanho:  {{ item.variation?.size || 'N/A' }}
+                      <p v-if="item.variation?.size" class="text-sm text-gray-500 dark:text-gray-400">
+                        Tamanho:  {{ item.variation?.size }}
                       </p>
                     </div>
                     <div class="ml-2 font-medium text-gray-900 dark:text-white">
